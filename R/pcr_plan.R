@@ -131,8 +131,11 @@ pcr_plan_report <- function(pcr_plan, file_path = NULL) {
                           fileext = ".html")
   }
 
+  output_dir <- stringr::str_remove(file_path, "[^/]*$")
+  output_file <- stringr::str_extract(file_path, "[^/]*$")
   rmarkdown::render(system.file("rmd", "pcr_report-template.Rmd", package = "amplify"),
-                    output_file = file_path,
+                    output_dir = output_dir,
+                    output_file = output_file,
                     params = list(sample_prep = pcr_plan$sample_prep,
                                   mm_prep = pcr_plan$mm_prep,
                                   plate = pcr_plan$plate,

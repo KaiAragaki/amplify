@@ -157,8 +157,11 @@ pcr_lib_qc_report <- function(pcr_lib_qc, report_path = NULL) {
     report_path <- tempfile(pattern = paste(Sys.Date(), "pcr_lib_qc_report", sep = "_"),
                             fileext = ".html")
   }
+  output_dir <- stringr::str_remove(report_path, "[^/]*$")
+  output_file <- stringr::str_extract(report_path, "[^/]*$")
   rmarkdown::render(report,
-                    output_file = report_path,
+                    output_dir = output_dir,
+                    output_file = output_file,
                     params = list(data = pcr_lib_qc))
   report_path
 }
