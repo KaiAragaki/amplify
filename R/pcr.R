@@ -25,7 +25,7 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
 
   format <- match.arg(as.character(format), c("96", "384"))
 
-  data <- tibble::as_tibble(data) # Allows for vector input
+  data <- dplyr::as_tibble(data) # Allows for vector input
 
   if (ncol(data) == 1 & has_names) {
     stop("Data only has one column - did you mean `has_names = FALSE`?")
@@ -99,7 +99,7 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     dplyr::relocate(.data$final_vol, .after = dplyr::last_col())
 
   # Mastermix Preparation ------------------------------------------------------
-  mm <- tibble::tibble(
+  mm <- dplyr::tibble(
     reagent = c("2X RT-PCR Buffer", "Primer", "25X RT-PCR Enzyme", "Nuclease Free H2O"),
     vol = c(6.25, .625, .5, 3.125) * (n_samples + ntc + 2) * reps
   )
