@@ -92,8 +92,7 @@ pcr_lib_qc <- function(lib_calc_pcr) {
 #' @keywords internal
 #'
 #' @importFrom rlang .data
-#'
-#' @examples
+
 find_outliers <- function(dat) {
   dat |>
     tidyr::nest(reps = c("ct", "quantity", "quant_actual", "concentration")) |>
