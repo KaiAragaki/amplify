@@ -6,8 +6,10 @@
 #' @return A tibble
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
-#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
+#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "bladdr")
 #'
 #' pcr_tidy(dat_path) |>
 #' pcr_control("GAPDH")
@@ -538,7 +540,7 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
 
   # Mastermix Preparation ------------------------------------------------------
   mm <- tibble::tibble(
-    reagent = c("2X RT-PCR Buffer", "Primer", "25X Enzyme Mix", "Nuclease Free H2O"),
+    reagent = c("2X RT-PCR Buffer", "Primer", "25X RT-PCR Enzyme", "Nuclease Free H2O"),
     vol = c(6.25, .625, .5, 3.125) * (n_samples + ntc + 2) * reps
   )
 
