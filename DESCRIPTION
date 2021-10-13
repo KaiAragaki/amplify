@@ -1,13 +1,13 @@
 Package: amplify
-Title: What the Package Does (One Line, Title Case)
+Title: Automate PCR Tasks Reproducibly
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Kai",
+           family = "Aragaki",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "adamaragaki@gmail.com",
+           comment = c(ORCID = "0000-0002-9458-0426"))
+Description: PCR tasks - like plate layout planning, dilution calculations, visualization, and analysis - are often repetitive, tedious, prone to error, and poorly documented. amplify seeks to automate these tasks, as well as documenting them (through both code and generated reports) as a bonus.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
