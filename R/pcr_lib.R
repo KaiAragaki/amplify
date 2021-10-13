@@ -8,7 +8,7 @@
 #'
 #' @examples
 #'
-#' system.file("extdata", "untidy-standard-curve.xlsx", package = "bladdr") |>
+#' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_lib_calc()
 
@@ -40,7 +40,7 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 #'
 #' @examples
 #'
-#' dat_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "bladdr") |>
+#' dat_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
 #'   pcr_tidy(pad_zero = TRUE) |>
 #'   pcr_lib_calc() |>
 #'   pcr_lib_qc()

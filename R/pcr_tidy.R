@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "bladdr")
+#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 #'
 #' # Before tidying
 #' dat_dirty <- readxl::read_excel(dat_path, sheet = "Results")

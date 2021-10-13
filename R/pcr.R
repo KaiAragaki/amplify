@@ -118,7 +118,7 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
                    format = format,
                    exclude_border = exclude_border)
 
-    rmarkdown::render(system.file("rmd", "pcr_report-template.Rmd", package = "bladdr"), output_file = file_path,
+    rmarkdown::render(system.file("rmd", "pcr_report-template.Rmd", package = "amplify"), output_file = file_path,
                       params = params, envir = new.env(parent = globalenv()))
 
     return(list(master_mix_prep = mm, sample_prep = sample_prep,

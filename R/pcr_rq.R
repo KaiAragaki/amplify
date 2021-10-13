@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "bladdr")
+#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 #'
 #' pcr_tidy(dat_path) |>
 #'   pcr_rq("U6D1")

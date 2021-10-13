@@ -7,7 +7,7 @@
 #'
 #' @examples
 #'
-#' system.file("extdata", "untidy-pcr-example.xls", package = "bladdr") |>
+#' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_rq("RD1") |>
 #'   pcr_plot()

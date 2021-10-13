@@ -9,7 +9,7 @@
 #' @importFrom ggplot2 aes
 #'
 #' @examples
-#' system.file("extdata", "untidy-pcr-example.xls", package = "bladdr") |>
+#' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_plate_view()
 
