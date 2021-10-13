@@ -15,7 +15,6 @@
 #'   pcr_lib_calc()
 
 pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
-
   tidy_pcr |>
     tidyr::nest(replicates = c("well", "well_position", "ct", "quantity",
                                "well_row", "well_col",
@@ -34,10 +33,13 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
                   concentration = .data$quantity_mean * dil_factor)
 }
 
-#' Generate visual library prep pcr quality control report
+#' Create library prep quality control data
 #'
 #' @param lib_calc_pcr an output from `pcr_lib_calc`
 #' @return a list
+#' @details While the output of this function on its own is can theoretically be
+#'   used to gauge library quality, it is best used in conjunction with a
+#'   function like `pcr_lib_calc_report`
 #' @export
 #'
 #' @importFrom rlang .data
@@ -82,7 +84,16 @@ pcr_lib_qc <- function(lib_calc_pcr) {
        outliers = find_outliers(dat))
 }
 
-
+#' Mark outliers and determine means and standard deviation without them
+#'
+#' @param dat
+#'
+#' @return a tibble
+#' @keywords internal
+#'
+#' @importFrom rlang .data
+#'
+#' @examples
 find_outliers <- function(dat) {
   dat |>
     tidyr::nest(reps = c("ct", "quantity", "quant_actual", "concentration")) |>
@@ -104,43 +115,52 @@ find_outliers <- function(dat) {
                   z = (.data$ct-.data$adj_mean)/.data$adj_sd)
 }
 
-find_mean <- function(df){
-  if(nrow(df) >= 3 & !all(is.na(df$ct))) {
-    hc <- df$ct |>
-      stats::dist() |>
-      stats::hclust()
-    possible_outlier <- hc$merge[nrow(df) - 1, 1] |>
-      abs()
-    no_po <- df$ct[-possible_outlier]
-    no_po_mean <- mean(no_po)
-    no_po_sd <- stats::sd(no_po)
-    list(no_po_mean = no_po_mean, no_po_sd = no_po_sd)
-  } else {
-    no_po_mean <- mean(df$ct)
-    no_po_sd <- stats::sd(df$ct, na.rm = T)
-    list(no_po_mean = no_po_mean, no_po_sd = no_po_sd)
+#' Find mean of ct without putative outlier
+#'
+#' @param df a data.frame containing a numeric column named ct
+#'
+#' @return a list, with the mean and sd of ct without the putative outlier
+#' @details if there are fewer than three rows, or if all values are NA, the
+#'   function will simply return the mean and standard deviation without
+#'   removing a putative outlier.
+#'
+#' @keywords internal
+find_mean <- function(df) {
+  cts <- df$ct
+  if (nrow(df) >= 3 & !all(is.na(cts))) {
+    hc <- cts |> stats::dist() |> stats::hclust()
+    possible_outlier <- hc$merge[nrow(df) - 1, 1] |> abs()
+    cts <- cts[-possible_outlier]
   }
+  no_po_mean <- mean(cts, na.rm = TRUE)
+  no_po_sd <- stats::sd(cts, na.rm = TRUE)
+  list(no_po_mean = no_po_mean, no_po_sd = no_po_sd)
 }
 
 
-pcr_lib_qc_report <- function(pcr_lib_qc) {
+#' Generate visual library prep pcr quality control report
+#'
+#' @param pcr_lib_qc output from `pcr_lib_qc`
+#' @param report_path the name of the report as well as where it should be
+#'   output. If NULL, it will export to a temp directory
+#' @return The path to the report
+#' @export
+#' @examples
+#' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
+#'   pcr_tidy() |>
+#'   pcr_lib_calc() |>
+#'   pcr_lib_qc() |>
+#'   pcr_lib_qc_report()
 
-  report <- system.file("rmd", "lib-qc.Rmd", package = "amplify")
-
-  # If there's a user supplied filename, use that. If not, use current date and time.
-  if (is.null(report_name)) {
-    report_name <- paste0(gsub(":", "-", gsub("\\s", "_", Sys.time())),"_report.html")
-  } else {
-    report_name <- paste0(report_name, ".html")
+pcr_lib_qc_report <- function(pcr_lib_qc, report_path = NULL) {
+  report <- system.file("rmd", "pcr-lib-qc.Rmd", package = "amplify")
+  if (missing(report_path)) {
+    report_path <- tempfile(pattern = paste(Sys.Date(), "pcr_lib_qc_report", sep = "_"),
+                            fileext = ".html")
   }
-
-  # Generate report
+  print(report_path)
   rmarkdown::render(report,
-                    output_dir = "./pcr_qc_reports",
-                    output_file = report_name,
-                    params = list(
-                      out = make_outlier_plot(dat),
-                      samp = table_samples,
-                      conc = make_conc_plot(table_samples),
-                      slope = make_slope_plot(standards, slope_text)))
+                    output_file = report_path,
+                    params = list(data = pcr_lib_qc))
+  report_path
 }
