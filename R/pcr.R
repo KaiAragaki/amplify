@@ -10,6 +10,8 @@
 #' @param make_report logical. Should an HTML report be written?
 #' @param file_path Optional path to where the report should be written, as well as the file name. Defaults to temp file.
 #'
+#' @importFrom rlang .data
+#'
 #' @return a list
 #' @export
 pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,

@@ -6,6 +6,8 @@
 #' @return a list, containing the original dataframe, data on the standards, and data on the samples.
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
 #'
 #' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
@@ -37,6 +39,8 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 #' @param lib_calc_pcr an output from `pcr_lib_calc`
 #' @return a list
 #' @export
+#'
+#' @importFrom rlang .data
 #'
 #' @examples
 #'

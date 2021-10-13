@@ -6,6 +6,8 @@
 #' @return A tibble
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
 #' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 #'

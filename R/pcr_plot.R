@@ -5,6 +5,8 @@
 #' @return a ggplot
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
 #'
 #' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
