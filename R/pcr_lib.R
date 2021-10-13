@@ -157,7 +157,6 @@ pcr_lib_qc_report <- function(pcr_lib_qc, report_path = NULL) {
     report_path <- tempfile(pattern = paste(Sys.Date(), "pcr_lib_qc_report", sep = "_"),
                             fileext = ".html")
   }
-  print(report_path)
   rmarkdown::render(report,
                     output_file = report_path,
                     params = list(data = pcr_lib_qc))
