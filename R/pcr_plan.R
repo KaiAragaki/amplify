@@ -10,8 +10,12 @@
 #'
 #' @importFrom rlang .data
 #'
-#' @return a list
+#' @return a named list
 #' @export
+#'
+#' @examples
+#' dummy_rna_conc |>
+#'   pcr_plan(n_primers = 3)
 pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
                      primer_names = NULL, headless = TRUE, has_names = TRUE) {
 
@@ -103,27 +107,41 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     vol = c(6.25, .625, .5, 3.125) * (n_samples + ntc + 2) * reps
   )
 
-  if (make_report) {
-    if (missing(file_path)) {
-      file_path <- tempfile(pattern = paste0(Sys.Date(), "_pcr-report_"),
-                            fileext = ".html")
-    }
+  list(mm_prep = mm, sample_prep = sample_prep, plate = plate,
+       n_primers = n_primers, format = format, exclude_border = exclude_border,
+       primer_names = primer_names)
+}
 
-    params <- list(sample_prep = sample_prep,
-                   mm_prep = mm,
-                   plate = plate,
-                   n_primers = n_primers,
-                   primer_names = primer_names,
-                   format = format,
-                   exclude_border = exclude_border)
+#' Create a report from a PCR plan
+#'
+#' @param pcr_plan output from `pcr_plan`
+#' @param file_path  Where the report should be written, as well as the file name. Defaults to temp file.
+#'
+#' @return a named list, like the output of `pcr_plan`, but with the output file path appended.
+#' @export
+#'
+#' @examples
+#' dummy_rna_conc |>
+#'   pcr_plan(n_primers = 3) |>
+#'   pcr_plan_report()
+pcr_plan_report <- function(pcr_plan, file_path = NULL) {
 
-    rmarkdown::render(system.file("rmd", "pcr_report-template.Rmd", package = "amplify"), output_file = file_path,
-                      params = params, envir = new.env(parent = globalenv()))
-
-    return(list(master_mix_prep = mm, sample_prep = sample_prep,
-                plate = plate, report_path = file_path))
+  if (missing(file_path)) {
+    file_path <- tempfile(pattern = paste0(Sys.Date(), "_pcr-report_"),
+                          fileext = ".html")
   }
-  list(master_mix_prep = mm, sample_prep = sample_prep, plate = plate)
+
+  rmarkdown::render(system.file("rmd", "pcr_report-template.Rmd", package = "amplify"),
+                    output_file = file_path,
+                    params = list(sample_prep = pcr_plan$sample_prep,
+                                  mm_prep = pcr_plan$mm_prep,
+                                  plate = pcr_plan$plate,
+                                  n_primers = pcr_plan$n_primers,
+                                  primer_names = pcr_plan$primer_names,
+                                  format = pcr_plan$format,
+                                  exclude_border = pcr_plan$exclude_border))
+
+  c(pcr_plan, list(file_path = file_path))
 }
 
 #' Get or make sample names
