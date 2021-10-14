@@ -1,18 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# amplify
-
-<!-- badges: start -->
-
 # amplify <img src='man/figures/logo.png' align="right" height="138" />
 
+<!-- badges: start -->
 <!-- badges: end -->
 
-{amplify} automates routine pcr-based tasks - including plate planning,
-dilution making, visualizing, and analyzing - so rather than thinking
-about your experiments themselves, you can think about what your
-experiments *mean*.
+**amplify** automates routine pcr-based tasks - including plate
+planning, dilution making, visualizing, and analyzing - so rather than
+thinking about your experiments themselves, you can think about what
+your experiments *mean*.
 
 ## Installation
 
