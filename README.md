@@ -4,6 +4,9 @@
 # amplify
 
 <!-- badges: start -->
+
+# amplify <img src='man/figures/logo.png' align="right" height="138" />
+
 <!-- badges: end -->
 
 {amplify} automates routine pcr-based tasks - including plate planning,
