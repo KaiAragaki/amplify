@@ -3,5 +3,8 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   analyzing-ddctqrtpcr: analyzing-ddctqrtpcr.html
-last_built: 2021-10-13T22:31Z
+last_built: 2021-10-14T14:58Z
+urls:
+  reference: https://kaiaragaki.github.io/amplify//reference
+  article: https://kaiaragaki.github.io/amplify//articles
 

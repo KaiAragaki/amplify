@@ -8,6 +8,13 @@
 
 <title>(Re)calculate Delta Ct mean based on given control probe — pcr_control • amplify</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -41,6 +48,7 @@
 
 <meta property="og:title" content="(Re)calculate Delta Ct mean based on given control probe — pcr_control" />
 <meta property="og:description" content="(Re)calculate Delta Ct mean based on given control probe" />
+<meta property="og:image" content="https://kaiaragaki.github.io/amplify/logo.png" />
 
 
 
@@ -155,7 +163,7 @@
 #&gt; <span class='message'>* `` -&gt; ...5</span>
 #&gt; <span class='message'>* `` -&gt; ...6</span>
 #&gt; <span class='message'>* `` -&gt; ...7</span>
-#&gt; <span class='message'>* ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 282 × 39</span>
+#&gt; <span class='message'>* ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 282 x 39</span>
 #&gt; <span style='color: #949494;'># Groups:   sample_name [19]</span>
 #&gt;    omit  sample_name target_name task    reporter quencher quantity quantity_mean
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
@@ -169,13 +177,13 @@
 #&gt; <span style='color: #BCBCBC;'> 8</span> FALSE RD1         GATA3       UNKNOWN FAM      NFQ-MGB        <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>
 #&gt; <span style='color: #BCBCBC;'> 9</span> FALSE RD1         GATA3       UNKNOWN FAM      NFQ-MGB        <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>
 #&gt; <span style='color: #BCBCBC;'>10</span> FALSE RD1         DLC1        UNKNOWN FAM      NFQ-MGB        <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>
-#&gt; <span style='color: #949494;'># … with 272 more rows, and 31 more variables: quantity_sd &lt;dbl&gt;, rq &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'># ... with 272 more rows, and 31 more variables: quantity_sd &lt;dbl&gt;, rq &lt;dbl&gt;,</span>
 #&gt; <span style='color: #949494;'>#   rq_min &lt;dbl&gt;, rq_max &lt;dbl&gt;, ct_mean &lt;dbl&gt;, ct_sd &lt;dbl&gt;, delta_ct &lt;dbl&gt;,</span>
 #&gt; <span style='color: #949494;'>#   delta_ct_mean &lt;chr&gt;, delta_ct_se &lt;dbl&gt;, delta_delta_ct &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   automatic_ct_threshold &lt;chr&gt;, ct_threshold &lt;dbl&gt;, automatic_baseline &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   comments &lt;chr&gt;, analysis_type &lt;chr&gt;, control &lt;chr&gt;, conf_int &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   ref_samp &lt;chr&gt;, plate_type &lt;chr&gt;, exp_type &lt;chr&gt;, rep &lt;int&gt;, ct &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   well &lt;chr&gt;, well_row &lt;dbl&gt;, well_col &lt;dbl&gt;, well_position &lt;chr&gt;, …</span></div></pre>
+#&gt; <span style='color: #949494;'>#   well &lt;chr&gt;, well_row &lt;dbl&gt;, well_col &lt;dbl&gt;, well_position &lt;chr&gt;, ...</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
