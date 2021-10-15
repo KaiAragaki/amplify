@@ -51,7 +51,7 @@ pcr_tidy <- function(file_path, pad_zero = FALSE) {
     stringr::str_replace_all("\\(superscript_2\\)", "2") |>
     tolower()
 
-  dat1 <- dat |>
+  dat <- dat |>
     stats::setNames(names) |>
     dplyr::slice(-1) |>
     dplyr::mutate(dplyr::across(dplyr::matches("^(delta_)*ct.*|^rq|quantity|^baseline|y_intercept|r2|slope|efficiency"), \(x) suppressWarnings(as.numeric(x))),
