@@ -27,5 +27,5 @@ pcr_plate_view <- function(tidy_pcr, fill = .data$target_name) {
     ggplot2::scale_y_continuous(breaks = 1:(x*8), labels = LETTERS[1:(x*8)]) +
     ggplot2::scale_x_continuous(breaks = 1:(x*12), minor_breaks = NULL) +
     ggplot2::labs(fill = deparse(usr_fill)) +
-    ggplot2::guides(size = FALSE)
+    ggplot2::guides(size = "none")
 }

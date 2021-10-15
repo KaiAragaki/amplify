@@ -35,20 +35,80 @@ Data from the QuantStudio software is exported in a fairly non-standard format:
 ```{r untidy_pcr}
 library(amplify)
 library(readxl)
+library(knitr)
+library(dplyr)
 
 untidy_file_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 
 untidy_file_path |> 
-  readxl::read_excel() |> 
+  read_excel() |> 
   head() |> 
-  knitr::kable()
+  kable()
 ```
 
 amplify provides `pcr_tidy` to automatically tidy these files:
 
 ```{r tidy_pcr}
-untidy_file_path |> 
-  pcr_tidy() |> 
+tidy_pcr <- untidy_file_path |> 
+  pcr_tidy()
+
+tidy_pcr |> 
   head() |> 
   knitr::kable()
+```
+
+This can be done for both $\Delta\Delta$Ct qPCR or standard curve qPCR.
+
+## Plotting qPCR results
+
+Tidied results can be plotted using `pcr_plot`
+
+```{r pcr_plot}
+tidy_pcr |> 
+  pcr_plot()
+```
+
+Additionally, overviews of plate features can be done using `pcr_plate`
+
+```{r}
+tidy_pcr |> 
+  pcr_plate_view(target_name)
+```
+
+More details can be found in the "Analyzing ddCt qPCR with amplify" vignette.
+
+## Library Preparation Quantification
+
+### Library Preparation Quantification Calculation
+
+RNA library preparation results output from Quantstudio can be tidied using `pcr_tidy`:
+
+```{r}
+untidy_lib_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify")
+tidy_lib <- pcr_tidy(untidy_lib_path) 
+tidy_lib |> head() |> kable()
+```
+
+Calculating the concentration of library can be performed using `pcr_lib_calc`:
+
+```{r}
+calc_lib <- tidy_lib |> 
+  pcr_lib_calc()
+
+calc_lib |> select(task, sample_name, concentration) |> head() |> kable()
+```
+### Library preparation quantification quality control
+
+We can generate useful plots to determine the quality of the quantification run by first using `pcr_lib_qc`:
+
+```{r}
+qc <- calc_lib |> 
+  pcr_lib_qc()
+qc
+```
+These data, by themselves, are not particularly useful. However, they can be used for more elucidative downstream analyses like `pcr_qc_report`
+
+```{r}
+# Generates a file - not run
+# qc |> pcr_lib_qc_report()
 ```
