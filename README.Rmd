@@ -28,11 +28,27 @@ You can install this package from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("KaiAragaki/amplify")
 ```
-## Example
+## Tidying qPCR data
 
-This is a basic example which shows you how to solve a common problem:
+Data from the QuantStudio software is exported in a fairly non-standard format:
 
-```{r example}
+```{r untidy_pcr}
 library(amplify)
-## basic example code
+library(readxl)
+
+untidy_file_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
+
+untidy_file_path |> 
+  readxl::read_excel() |> 
+  head() |> 
+  knitr::kable()
+```
+
+amplify provides `pcr_tidy` to automatically tidy these files:
+
+```{r tidy_pcr}
+untidy_file_path |> 
+  pcr_tidy() |> 
+  head() |> 
+  knitr::kable()
 ```

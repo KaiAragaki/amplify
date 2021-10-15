@@ -93,13 +93,465 @@
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"KaiAragaki/amplify"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="tidying-qpcr-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<a href="#tidying-qpcr-data" class="anchor"></a>Tidying qPCR data</h2>
+<p>Data from the QuantStudio software is exported in a fairly non-standard format:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">amplify</span><span class="op">)</span>
-<span class="co">## basic example code</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span>
+
+<span class="va">untidy_file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"untidy-pcr-example.xls"</span>, package <span class="op">=</span> <span class="st">"amplify"</span><span class="op">)</span>
+
+<span class="va">untidy_file_path</span> |&gt; 
+  <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; New names:</span>
+<span class="co">#&gt; * `` -&gt; ...3</span>
+<span class="co">#&gt; * `` -&gt; ...4</span>
+<span class="co">#&gt; * `` -&gt; ...5</span>
+<span class="co">#&gt; * `` -&gt; ...6</span>
+<span class="co">#&gt; * `` -&gt; ...7</span>
+<span class="co">#&gt; * ...</span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="40%">
+<col width="13%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Block Type</th>
+<th align="left">384-Well Block</th>
+<th align="left">…3</th>
+<th align="left">…4</th>
+<th align="left">…5</th>
+<th align="left">…6</th>
+<th align="left">…7</th>
+<th align="left">…8</th>
+<th align="left">…9</th>
+<th align="left">…10</th>
+<th align="left">…11</th>
+<th align="left">…12</th>
+<th align="left">…13</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Calibration Background is expired</td>
+<td align="left">Yes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Calibration Background performed on</td>
+<td align="left">01-13-2020</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Calibration Normalization FAM-ROX is expired</td>
+<td align="left">Yes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Calibration Normalization FAM-ROX performed on</td>
+<td align="left">01-13-2020</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Calibration Normalization VIC-ROX is expired</td>
+<td align="left">Yes</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Calibration Normalization VIC-ROX performed on</td>
+<td align="left">01-13-2020</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p>amplify provides <code>pcr_tidy</code> to automatically tidy these files:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">untidy_file_path</span> |&gt; 
+  <span class="fu"><a href="reference/pcr_tidy.html">pcr_tidy</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; New names:</span>
+<span class="co">#&gt; * `` -&gt; ...3</span>
+<span class="co">#&gt; * `` -&gt; ...4</span>
+<span class="co">#&gt; * `` -&gt; ...5</span>
+<span class="co">#&gt; * `` -&gt; ...6</span>
+<span class="co">#&gt; * `` -&gt; ...7</span>
+<span class="co">#&gt; * ...</span>
+<span class="co">#&gt; Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="1%">
+<col width="3%">
+<col width="1%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="3%">
+<col width="2%">
+<col width="1%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="4%">
+<col width="5%">
+<col width="3%">
+<col width="5%">
+<col width="3%">
+<col width="4%">
+<col width="3%">
+<col width="3%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="3%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="3%">
+<col width="2%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">well</th>
+<th align="left">well_position</th>
+<th align="left">omit</th>
+<th align="left">sample_name</th>
+<th align="left">target_name</th>
+<th align="left">task</th>
+<th align="left">reporter</th>
+<th align="left">quencher</th>
+<th align="right">quantity</th>
+<th align="right">quantity_mean</th>
+<th align="right">quantity_sd</th>
+<th align="right">rq</th>
+<th align="right">rq_min</th>
+<th align="right">rq_max</th>
+<th align="right">ct</th>
+<th align="right">ct_mean</th>
+<th align="right">ct_sd</th>
+<th align="left">delta_ct</th>
+<th align="left">delta_ct_mean</th>
+<th align="left">delta_ct_se</th>
+<th align="left">delta_delta_ct</th>
+<th align="left">automatic_ct_threshold</th>
+<th align="right">ct_threshold</th>
+<th align="left">automatic_baseline</th>
+<th align="right">baseline_start</th>
+<th align="right">baseline_end</th>
+<th align="left">comments</th>
+<th align="right">well_row</th>
+<th align="right">well_col</th>
+<th align="left">analysis_type</th>
+<th align="left">control</th>
+<th align="left">conf_int</th>
+<th align="left">ref_samp</th>
+<th align="left">plate_type</th>
+<th align="left">exp_type</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">26</td>
+<td align="left">B2</td>
+<td align="left">FALSE</td>
+<td align="left">RD1</td>
+<td align="left">KRT14</td>
+<td align="left">UNKNOWN</td>
+<td align="left">FAM</td>
+<td align="left">NFQ-MGB</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0.9316003</td>
+<td align="right">1.073422</td>
+<td align="right">29.70135</td>
+<td align="right">29.74859</td>
+<td align="right">0.0474225</td>
+<td align="left">NA</td>
+<td align="left">7.8036408424377441</td>
+<td align="left">0.036815796047449112</td>
+<td align="left">0</td>
+<td align="left">TRUE</td>
+<td align="right">0.2075911</td>
+<td align="left">TRUE</td>
+<td align="right">3</td>
+<td align="right">24</td>
+<td align="left">NA</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="left">Singleplex</td>
+<td align="left">GAPDH</td>
+<td align="left">95.0</td>
+<td align="left">RD1</td>
+<td align="left">384-Well Block</td>
+<td align="left">comp</td>
+</tr>
+<tr class="even">
+<td align="left">27</td>
+<td align="left">B3</td>
+<td align="left">FALSE</td>
+<td align="left">RD1</td>
+<td align="left">KRT14</td>
+<td align="left">UNKNOWN</td>
+<td align="left">FAM</td>
+<td align="left">NFQ-MGB</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0.9316003</td>
+<td align="right">1.073422</td>
+<td align="right">29.79619</td>
+<td align="right">29.74859</td>
+<td align="right">0.0474225</td>
+<td align="left">NA</td>
+<td align="left">7.8036408424377441</td>
+<td align="left">0.036815796047449112</td>
+<td align="left">0</td>
+<td align="left">TRUE</td>
+<td align="right">0.2075911</td>
+<td align="left">TRUE</td>
+<td align="right">3</td>
+<td align="right">23</td>
+<td align="left">NA</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="left">Singleplex</td>
+<td align="left">GAPDH</td>
+<td align="left">95.0</td>
+<td align="left">RD1</td>
+<td align="left">384-Well Block</td>
+<td align="left">comp</td>
+</tr>
+<tr class="odd">
+<td align="left">28</td>
+<td align="left">B4</td>
+<td align="left">FALSE</td>
+<td align="left">RD1</td>
+<td align="left">KRT14</td>
+<td align="left">UNKNOWN</td>
+<td align="left">FAM</td>
+<td align="left">NFQ-MGB</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0.9316003</td>
+<td align="right">1.073422</td>
+<td align="right">29.74823</td>
+<td align="right">29.74859</td>
+<td align="right">0.0474225</td>
+<td align="left">NA</td>
+<td align="left">7.8036408424377441</td>
+<td align="left">0.036815796047449112</td>
+<td align="left">0</td>
+<td align="left">TRUE</td>
+<td align="right">0.2075911</td>
+<td align="left">TRUE</td>
+<td align="right">3</td>
+<td align="right">24</td>
+<td align="left">NA</td>
+<td align="right">2</td>
+<td align="right">4</td>
+<td align="left">Singleplex</td>
+<td align="left">GAPDH</td>
+<td align="left">95.0</td>
+<td align="left">RD1</td>
+<td align="left">384-Well Block</td>
+<td align="left">comp</td>
+</tr>
+<tr class="even">
+<td align="left">29</td>
+<td align="left">B5</td>
+<td align="left">FALSE</td>
+<td align="left">RD1</td>
+<td align="left">CDH3</td>
+<td align="left">UNKNOWN</td>
+<td align="left">FAM</td>
+<td align="left">NFQ-MGB</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0.9305190</td>
+<td align="right">1.074669</td>
+<td align="right">28.92050</td>
+<td align="right">28.89161</td>
+<td align="right">0.0488189</td>
+<td align="left">NA</td>
+<td align="left">6.946662425994873</td>
+<td align="left">0.037419259548187256</td>
+<td align="left">0</td>
+<td align="left">TRUE</td>
+<td align="right">0.5056610</td>
+<td align="left">TRUE</td>
+<td align="right">3</td>
+<td align="right">23</td>
+<td align="left">NA</td>
+<td align="right">2</td>
+<td align="right">5</td>
+<td align="left">Singleplex</td>
+<td align="left">GAPDH</td>
+<td align="left">95.0</td>
+<td align="left">RD1</td>
+<td align="left">384-Well Block</td>
+<td align="left">comp</td>
+</tr>
+<tr class="odd">
+<td align="left">30</td>
+<td align="left">B6</td>
+<td align="left">FALSE</td>
+<td align="left">RD1</td>
+<td align="left">CDH3</td>
+<td align="left">UNKNOWN</td>
+<td align="left">FAM</td>
+<td align="left">NFQ-MGB</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0.9305190</td>
+<td align="right">1.074669</td>
+<td align="right">28.91909</td>
+<td align="right">28.89161</td>
+<td align="right">0.0488189</td>
+<td align="left">NA</td>
+<td align="left">6.946662425994873</td>
+<td align="left">0.037419259548187256</td>
+<td align="left">0</td>
+<td align="left">TRUE</td>
+<td align="right">0.5056610</td>
+<td align="left">TRUE</td>
+<td align="right">3</td>
+<td align="right">22</td>
+<td align="left">NA</td>
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="left">Singleplex</td>
+<td align="left">GAPDH</td>
+<td align="left">95.0</td>
+<td align="left">RD1</td>
+<td align="left">384-Well Block</td>
+<td align="left">comp</td>
+</tr>
+<tr class="even">
+<td align="left">31</td>
+<td align="left">B7</td>
+<td align="left">FALSE</td>
+<td align="left">RD1</td>
+<td align="left">CDH3</td>
+<td align="left">UNKNOWN</td>
+<td align="left">FAM</td>
+<td align="left">NFQ-MGB</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">1</td>
+<td align="right">0.9305190</td>
+<td align="right">1.074669</td>
+<td align="right">28.83525</td>
+<td align="right">28.89161</td>
+<td align="right">0.0488189</td>
+<td align="left">NA</td>
+<td align="left">6.946662425994873</td>
+<td align="left">0.037419259548187256</td>
+<td align="left">0</td>
+<td align="left">TRUE</td>
+<td align="right">0.5056610</td>
+<td align="left">TRUE</td>
+<td align="right">3</td>
+<td align="right">22</td>
+<td align="left">NA</td>
+<td align="right">2</td>
+<td align="right">7</td>
+<td align="left">Singleplex</td>
+<td align="left">GAPDH</td>
+<td align="left">95.0</td>
+<td align="left">RD1</td>
+<td align="left">384-Well Block</td>
+<td align="left">comp</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
   </div>
