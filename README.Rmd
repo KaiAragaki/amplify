@@ -57,7 +57,7 @@ tidy_pcr |>
   knitr::kable()
 ```
 
-This can be done for both $\Delta\Delta$Ct qPCR or standard curve qPCR.
+This can be done for both $\Delta \Delta$Ct qPCR or standard curve qPCR.
 
 ## Plotting qPCR results
 

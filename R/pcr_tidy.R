@@ -46,14 +46,16 @@ pcr_tidy <- function(file_path, pad_zero = FALSE) {
     dat <- dat_og[-c(1:(ind_start-1), (ind_end-1):nrow(dat_og)),]
   }
 
-  names <- gsub(" ", "_", dat[1,])
-  names <- gsub("-", "_", names)
-  names <- gsub("\\(superscript_2\\)", "2", names)
-  names <- tolower(names)
-  colnames(dat) <- names
+  names <- dat[1,] |>
+    stringr::str_replace_all("[[:space:]-]", "_") |>
+    stringr::str_replace_all("\\(superscript_2\\)", "2") |>
+    tolower()
 
-  dat <- dat[-1,] |>
-    dplyr::mutate(dplyr::across(dplyr::matches("^(delta )*ct.*|^rq|quantity|^baseline|y_intercept|r2|slope|efficiency"), as.numeric),
+  dat1 <- dat |>
+    stats::setNames(names) |>
+    dplyr::slice(-1) |>
+    dplyr::mutate(dplyr::across(dplyr::matches("^(delta_)*ct.*|^rq|quantity|^baseline|y_intercept|r2|slope|efficiency"), \(x) suppressWarnings(as.numeric(x))),
+                  dplyr::across(dplyr::matches("^automatic|omit"), as.logical),
                   well_row = stringr::str_extract(.data$well_position, "^.{1}"),
                   well_col = as.numeric(stringr::str_extract(.data$well_position, "[:digit:]{1,2}$")),
                   well_row = as.numeric(factor(.data$well_row, levels = LETTERS)))

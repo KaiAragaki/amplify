@@ -68,13 +68,6 @@ amplify provides `pcr_tidy` to automatically tidy these files:
 ``` r
 tidy_pcr <- untidy_file_path |> 
   pcr_tidy()
-#> New names:
-#> * `` -> ...3
-#> * `` -> ...4
-#> * `` -> ...5
-#> * `` -> ...6
-#> * `` -> ...7
-#> * ...
 #> Warning in mask$eval_all_mutate(quo): NAs introduced by coercion
 
 tidy_pcr |> 
@@ -110,8 +103,6 @@ Additionally, overviews of plate features can be done using `pcr_plate`
 ``` r
 tidy_pcr |> 
   pcr_plate_view(target_name)
-#> Warning: `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> =
-#> "none")` instead.
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
@@ -129,13 +120,6 @@ using `pcr_tidy`:
 ``` r
 untidy_lib_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify")
 tidy_lib <- pcr_tidy(untidy_lib_path) 
-#> New names:
-#> * `` -> ...3
-#> * `` -> ...4
-#> * `` -> ...5
-#> * `` -> ...6
-#> * `` -> ...7
-#> * ...
 #> Warning in mask$eval_all_mutate(quo): NAs introduced by coercion
 tidy_lib |> head() |> kable()
 ```
