@@ -170,28 +170,20 @@
 </h1>
 <p><code>pcr_tidy</code> also adds two features derived from the <code>well_position</code> feature into two separate features - <code>well_row</code> and <code>well_col</code>. This makes downstream plotting particularly easy. A built in function can do this automatically for us:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
-<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
-<span class="co">#&gt; "none")` instead.</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></code></pre></div>
 <p><img src="analyzing-ddctqrtpcr_files/figure-html/plot_plate_target-1.png" width="100%"></p>
 <p>This high level overview lets us see there’s something curious going on with A1. Additionally, some wells at the bottom - likely non-targeting controls - only have two instead of three wells ascribed to them.</p>
 <p>What about the <em>sample</em> layout?</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">sample_name</span><span class="op">)</span>
-<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
-<span class="co">#&gt; "none")` instead.</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">sample_name</span><span class="op">)</span></code></pre></div>
 <p><img src="analyzing-ddctqrtpcr_files/figure-html/plot_plate_sample-1.png" width="100%"></p>
 <p>We can also look at CT:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span>, fill <span class="op">=</span> <span class="va">ct</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
-<span class="co">#&gt; "none")` instead.</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span>, fill <span class="op">=</span> <span class="va">ct</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="analyzing-ddctqrtpcr_files/figure-html/plot_plate_ct-1.png" width="100%"></p>
 <p>Looks like some didn’t amplify at all. You might consider looking at it with <code>rq</code> but…</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span>, fill <span class="op">=</span> <span class="va">rq</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
-<span class="co">#&gt; "none")` instead.</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pcr_plate_view.html">pcr_plate_view</a></span><span class="op">(</span><span class="va">dat</span>, fill <span class="op">=</span> <span class="va">rq</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="analyzing-ddctqrtpcr_files/figure-html/plot_plate_rq-1.png" width="100%"></p>
 <p>Immediately we see a loss of information: Not only are the scales between cell lines wildly different, but some of the targets aren’t even there! What’s going on?</p>
 <p>If we remember back, our reference sample was RT112, which does not appear to express one of the targets at all. Therefore a quantity relative to 0 doesn’t make any sense!</p>

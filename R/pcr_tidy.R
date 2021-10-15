@@ -25,7 +25,7 @@
 
 pcr_tidy <- function(file_path, pad_zero = FALSE) {
 
-  dat_og <- readxl::read_excel(file_path, sheet = "Results")
+  dat_og <- readxl::read_excel(file_path, sheet = "Results", .name_repair = ~ vctrs::vec_as_names(..., repair = "unique", quiet = TRUE))
 
   exp_type <- substr(dat_og[which(dat_og$`Block Type`=="Experiment Type"),2], 0, 4)
 
