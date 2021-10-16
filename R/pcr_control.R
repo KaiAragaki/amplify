@@ -1,17 +1,15 @@
 #' (Re)calculate Delta Ct mean based on given control probe
 #'
-#' @param data A dataset output from pcr_tidy
+#' @param data A dataset output from `pcr_tidy`
 #' @param control_probe A probe to be used as an endogenous control (eg GAPDH)
 #'
-#' @return A tibble
+#' @return A `tibble`
 #' @export
 #'
 #' @importFrom rlang .data
 #'
 #' @examples
-#' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
-#'
-#' dat_path |>
+#' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_control("GAPDH")
 pcr_control <- function(data, control_probe) {

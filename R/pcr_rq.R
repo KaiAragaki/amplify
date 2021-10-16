@@ -3,7 +3,7 @@
 #' @param data A dataset output from pcr_tidy/pcr_control
 #' @param relative_sample A sample to set others relative to (eg my_dmso_sample)
 #'
-#' @return A tibble
+#' @return A `tibble`
 #' @export
 #'
 #' @importFrom rlang .data

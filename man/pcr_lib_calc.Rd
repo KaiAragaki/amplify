@@ -7,12 +7,18 @@
 pcr_lib_calc(tidy_pcr, dil_factor = 1000)
 }
 \arguments{
-\item{tidy_pcr}{a dataset run that has been run through \code{pcr_tidy()}}
+\item{tidy_pcr}{an output of \code{pcr_tidy}}
 
-\item{dil_factor}{the factor to which the libraries were diluted for pcr}
+\item{dil_factor}{integer. The factor to which the libraries were diluted for pcr}
 }
 \value{
-a list, containing the original dataframe, data on the standards, and data on the samples.
+a \code{tibble}, containing the input columns as well as:
+\itemize{
+\item{\code{standard_diff}} {The difference between the \code{ct_mean} of a standard and one step up in the dilution (ie more concentrated, lower Ct). The most concentrated dilution has a value of 0}
+\item{\code{dil}} {2^(\code{standard_diff}). The accuracy of this metric assumes that the efficiency of the PCR is 100\%, which is likely good but not perfect!. In the case of the first standard, \code{dil} = 0}
+\item{\code{quant_actual}} {For standards, the presumed quantity of standard, calculated from \code{dil}. For samples, \code{quantity}}
+\item{\code{concentration}} {The concentration of library, before dilution}
+}
 }
 \description{
 Calculate library PCR concentrations
@@ -20,6 +26,6 @@ Calculate library PCR concentrations
 \examples{
 
 system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
-  pcr_tidy() |>
+  pcr_tidy(pad_zero = TRUE) |>
   pcr_lib_calc()
 }

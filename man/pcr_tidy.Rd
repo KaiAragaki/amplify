@@ -10,10 +10,10 @@ pcr_tidy(file_path, pad_zero = FALSE)
 \item{file_path}{Path to an excel file containing the results of a qPCR
 run.}
 
-\item{pad_zero}{Should 'Sample 1' become 'Sample 01'?}
+\item{pad_zero}{logical. Should 'Sample 1' become 'Sample 01'?}
 }
 \value{
-Tidy results dataframe
+A \code{tibble}
 }
 \description{
 Takes in a fresh results output from qPCR and converts it into a tidy
@@ -24,9 +24,9 @@ dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify"
 
 # Before tidying
 dat_dirty <- readxl::read_excel(dat_path, sheet = "Results")
-dat_dirty[1:10]
+dat_dirty[1:10, 1:5]
 
 # After tidying
 dat_clean <- pcr_tidy(dat_path)
-dat_clean[1:10]
+dat_clean[1:10, 1:5]
 }

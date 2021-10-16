@@ -12,7 +12,7 @@ pcr_rq(data, relative_sample)
 \item{relative_sample}{A sample to set others relative to (eg my_dmso_sample)}
 }
 \value{
-A tibble
+A \code{tibble}
 }
 \description{
 (Re)calculate rq for a given sample

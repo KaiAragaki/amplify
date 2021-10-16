@@ -139,40 +139,46 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>tidy_pcr</th>
-      <td><p>a dataset run that has been run through <code><a href='pcr_tidy.html'>pcr_tidy()</a></code></p></td>
+      <td><p>an output of <code>pcr_tidy</code></p></td>
     </tr>
     <tr>
       <th>dil_factor</th>
-      <td><p>the factor to which the libraries were diluted for pcr</p></td>
+      <td><p>integer. The factor to which the libraries were diluted for pcr</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list, containing the original dataframe, data on the standards, and data on the samples.</p>
+    <p>a <code>tibble</code>, containing the input columns as well as:</p><ul>
+<li><p><code>standard_diff</code> The difference between the <code>ct_mean</code> of a standard and one step up in the dilution (ie more concentrated, lower Ct). The most concentrated dilution has a value of 0</p></li>
+<li><p><code>dil</code> 2^(<code>standard_diff</code>). The accuracy of this metric assumes that the efficiency of the PCR is 100%, which is likely good but not perfect!. In the case of the first standard, <code>dil</code> = 0</p></li>
+<li><p><code>quant_actual</code> For standards, the presumed quantity of standard, calculated from <code>dil</code>. For samples, <code>quantity</code></p></li>
+<li><p><code>concentration</code> The concentration of library, before dilution</p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"untidy-standard-curve.xlsx"</span>, package <span class='op'>=</span> <span class='st'>"amplify"</span><span class='op'>)</span> |&gt;
-  <span class='fu'><a href='pcr_tidy.html'>pcr_tidy</a></span><span class='op'>(</span><span class='op'>)</span> |&gt;
+  <span class='fu'><a href='pcr_tidy.html'>pcr_tidy</a></span><span class='op'>(</span>pad_zero <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> |&gt;
   <span class='fu'>pcr_lib_calc</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 58 × 32</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 58 x 32</span>
 #&gt; <span style='color: #949494;'># Groups:   task [3]</span>
 #&gt;    omit  sample_name target_name task     reporter quencher ct_mean  ct_sd
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> FALSE <span style='color: #BB0000;'>NA</span>          Target 1    STANDARD FAM      NFQ-MGB     15.4 0.072<span style='text-decoration: underline;'>6</span>
 #&gt; <span style='color: #BCBCBC;'> 2</span> FALSE <span style='color: #BB0000;'>NA</span>          Target 1    STANDARD FAM      NFQ-MGB     15.4 0.072<span style='text-decoration: underline;'>6</span>
 #&gt; <span style='color: #BCBCBC;'> 3</span> FALSE <span style='color: #BB0000;'>NA</span>          Target 1    STANDARD FAM      NFQ-MGB     15.4 0.072<span style='text-decoration: underline;'>6</span>
-#&gt; <span style='color: #BCBCBC;'> 4</span> FALSE Sample 6    Target 1    UNKNOWN  FAM      NFQ-MGB     17.1 0.067<span style='text-decoration: underline;'>7</span>
-#&gt; <span style='color: #BCBCBC;'> 5</span> FALSE Sample 6    Target 1    UNKNOWN  FAM      NFQ-MGB     17.1 0.067<span style='text-decoration: underline;'>7</span>
-#&gt; <span style='color: #BCBCBC;'> 6</span> FALSE Sample 6    Target 1    UNKNOWN  FAM      NFQ-MGB     17.1 0.067<span style='text-decoration: underline;'>7</span>
+#&gt; <span style='color: #BCBCBC;'> 4</span> FALSE Sample 06   Target 1    UNKNOWN  FAM      NFQ-MGB     17.1 0.067<span style='text-decoration: underline;'>7</span>
+#&gt; <span style='color: #BCBCBC;'> 5</span> FALSE Sample 06   Target 1    UNKNOWN  FAM      NFQ-MGB     17.1 0.067<span style='text-decoration: underline;'>7</span>
+#&gt; <span style='color: #BCBCBC;'> 6</span> FALSE Sample 06   Target 1    UNKNOWN  FAM      NFQ-MGB     17.1 0.067<span style='text-decoration: underline;'>7</span>
 #&gt; <span style='color: #BCBCBC;'> 7</span> FALSE Sample 12   Target 1    UNKNOWN  FAM      NFQ-MGB     17.3 0.028<span style='text-decoration: underline;'>6</span>
 #&gt; <span style='color: #BCBCBC;'> 8</span> FALSE Sample 12   Target 1    UNKNOWN  FAM      NFQ-MGB     17.3 0.028<span style='text-decoration: underline;'>6</span>
 #&gt; <span style='color: #BCBCBC;'> 9</span> FALSE Sample 12   Target 1    UNKNOWN  FAM      NFQ-MGB     17.3 0.028<span style='text-decoration: underline;'>6</span>
-#&gt; <span style='color: #BCBCBC;'>10</span> FALSE Sample 4    Target 1    UNKNOWN  FAM      NFQ-MGB     17.4 0.110 
-#&gt; <span style='color: #949494;'># … with 48 more rows, and 24 more variables: quantity_mean &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   quantity_sd &lt;dbl&gt;, automatic_ct_threshold &lt;chr&gt;, ct_threshold &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   automatic_baseline &lt;chr&gt;, baseline_start &lt;dbl&gt;, baseline_end &lt;dbl&gt;,</span>
+#&gt; <span style='color: #BCBCBC;'>10</span> FALSE Sample 04   Target 1    UNKNOWN  FAM      NFQ-MGB     17.4 0.110 
+#&gt; <span style='color: #949494;'># ... with 48 more rows, and 24 more variables: quantity_mean &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   quantity_sd &lt;dbl&gt;, automatic_ct_threshold &lt;lgl&gt;, ct_threshold &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   automatic_baseline &lt;lgl&gt;, baseline_start &lt;dbl&gt;, baseline_end &lt;dbl&gt;,</span>
 #&gt; <span style='color: #949494;'>#   comments &lt;chr&gt;, y_intercept &lt;dbl&gt;, r2 &lt;dbl&gt;, slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span>
 #&gt; <span style='color: #949494;'>#   plate_type &lt;chr&gt;, exp_type &lt;chr&gt;, well &lt;chr&gt;, well_position &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   ct &lt;dbl&gt;, quantity &lt;dbl&gt;, well_row &lt;dbl&gt;, well_col &lt;dbl&gt;,</span>

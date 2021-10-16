@@ -1,19 +1,17 @@
 #' Plot qPCR results
 #'
-#' @param tidy_pcr an output from the `pcr_tidy` function, or some derivative thereof
+#' @param tidy_pcr output from the `pcr_tidy` function, or some derivative (eg `pcr_rq`) thereof
 #'
-#' @return a ggplot
+#' @return a `ggplot`
 #' @export
 #'
 #' @importFrom rlang .data
 #'
 #' @examples
-#'
 #' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_rq("RD1") |>
 #'   pcr_plot()
-#'
 
 pcr_plot <- function(tidy_pcr) {
   tidy_pcr |>

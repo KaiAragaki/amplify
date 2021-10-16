@@ -1,9 +1,15 @@
 #' Calculate library PCR concentrations
 #'
-#' @param tidy_pcr a dataset run that has been run through `pcr_tidy()`
-#' @param dil_factor the factor to which the libraries were diluted for pcr
+#' @param tidy_pcr an output of `pcr_tidy`
+#' @param dil_factor integer. The factor to which the libraries were diluted for pcr
 #'
-#' @return a list, containing the original dataframe, data on the standards, and data on the samples.
+#' @return a `tibble`, containing the input columns as well as:
+#' \itemize{
+#'   \item{`standard_diff`} {The difference between the `ct_mean` of a standard and one step up in the dilution (ie more concentrated, lower Ct). The most concentrated dilution has a value of 0}
+#'   \item{`dil`} {2^(`standard_diff`). The accuracy of this metric assumes that the efficiency of the PCR is 100%, which is likely good but not perfect!. In the case of the first standard, `dil` = 0}
+#'   \item{`quant_actual`} {For standards, the presumed quantity of standard, calculated from `dil`. For samples, `quantity`}
+#'   \item{`concentration`} {The concentration of library, before dilution}
+#' }
 #' @export
 #'
 #' @importFrom rlang .data
@@ -11,7 +17,7 @@
 #' @examples
 #'
 #' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
-#'   pcr_tidy() |>
+#'   pcr_tidy(pad_zero = TRUE) |>
 #'   pcr_lib_calc()
 
 pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
@@ -36,7 +42,14 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 #' Create library prep quality control data
 #'
 #' @param lib_calc_pcr an output from `pcr_lib_calc`
-#' @return a list
+#' @return a named list with:
+#' \itemize{
+#'   \item{standards} {Data for individual standards, including calculated dilutions, given and calculated quantities, raw Ct, etc.}
+#'   \item{samples} {Data for individual samples, including calculated concentrations, raw Ct, etc.}
+#'   \item{sample_summary} {Summary statistics for samples grouped by replicates}
+#'   \item{standard_summary} {Summary statistics for standards groupd by replicates}
+#'   \item{outliers} {Data for individual samples and standards with and without their putative outliers (`po`) per replicate group}
+#' }
 #' @details While the output of this function on its own is can theoretically be
 #'   used to gauge library quality, it is best used in conjunction with a
 #'   function like `pcr_lib_calc_report`
@@ -46,7 +59,7 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 #'
 #' @examples
 #'
-#' dat_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
+#' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
 #'   pcr_tidy(pad_zero = TRUE) |>
 #'   pcr_lib_calc() |>
 #'   pcr_lib_qc()
@@ -350,3 +363,4 @@ pcr_lib_qc_plot_slope <- function(lib_qc) {
     ggplot2::geom_text(data = slope_text, aes(x = .data$x,  y = .data$y, label = .data$label), size = 8) +
     ggplot2::xlab("Log10(Quantity)") +
     ggplot2::ylab("CT")
+}

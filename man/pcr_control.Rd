@@ -7,20 +7,18 @@
 pcr_control(data, control_probe)
 }
 \arguments{
-\item{data}{A dataset output from pcr_tidy}
+\item{data}{A dataset output from \code{pcr_tidy}}
 
 \item{control_probe}{A probe to be used as an endogenous control (eg GAPDH)}
 }
 \value{
-A tibble
+A \code{tibble}
 }
 \description{
 (Re)calculate Delta Ct mean based on given control probe
 }
 \examples{
-dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
-
-dat_path |>
+system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
   pcr_tidy() |>
   pcr_control("GAPDH")
 }

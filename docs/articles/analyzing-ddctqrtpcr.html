@@ -76,7 +76,7 @@
 
       
 
-      </header><script src="analyzing-ddctqrtpcr_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><script src="analyzing-ddctqrtpcr_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Analyzing ddCt qPCR with amplify</h1>
@@ -117,11 +117,10 @@
 <code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"untidy-pcr-example-2.xlsx"</span>, package <span class="op">=</span> <span class="st">"amplify"</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="../reference/pcr_tidy.html">pcr_tidy</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning in mask$eval_all_mutate(quo): NAs introduced by coercion</span>
 <span class="va">dat</span>
-<span class="co">#&gt; # A tibble: 159 × 40</span>
+<span class="co">#&gt; # A tibble: 159 x 40</span>
 <span class="co">#&gt;    well  well_position omit  sample_name target_name task    reporter quencher</span>
-<span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   </span>
+<span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;         &lt;lgl&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   </span>
 <span class="co">#&gt;  1 2     A2            FALSE UC3 PBS     CDH1        UNKNOWN FAM      NFQ-MGB </span>
 <span class="co">#&gt;  2 3     A3            FALSE UC3 PBS     CDH1        UNKNOWN FAM      NFQ-MGB </span>
 <span class="co">#&gt;  3 4     A4            FALSE UC3 Drug    CDH1        UNKNOWN FAM      NFQ-MGB </span>
@@ -132,17 +131,17 @@
 <span class="co">#&gt;  8 9     A9            FALSE T24 PBS     CDH1        UNKNOWN FAM      NFQ-MGB </span>
 <span class="co">#&gt;  9 10    A10           FALSE T24 Drug    CDH1        UNKNOWN FAM      NFQ-MGB </span>
 <span class="co">#&gt; 10 11    A11           FALSE T24 Drug    CDH1        UNKNOWN FAM      NFQ-MGB </span>
-<span class="co">#&gt; # … with 149 more rows, and 32 more variables: quantity &lt;dbl&gt;,</span>
+<span class="co">#&gt; # ... with 149 more rows, and 32 more variables: quantity &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   quantity_mean &lt;dbl&gt;, quantity_sd &lt;dbl&gt;, rq &lt;dbl&gt;, rq_min &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   rq_max &lt;dbl&gt;, ct &lt;dbl&gt;, ct_mean &lt;dbl&gt;, ct_sd &lt;dbl&gt;, delta_ct &lt;chr&gt;,</span>
-<span class="co">#&gt; #   delta_ct_mean &lt;chr&gt;, delta_ct_sd &lt;chr&gt;, delta_ct_se &lt;chr&gt;,</span>
-<span class="co">#&gt; #   delta_delta_ct &lt;chr&gt;, automatic_ct_threshold &lt;chr&gt;, ct_threshold &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   automatic_baseline &lt;chr&gt;, baseline_start &lt;dbl&gt;, baseline_end &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   comments &lt;chr&gt;, expfail &lt;chr&gt;, highsd &lt;chr&gt;, noamp &lt;chr&gt;, …</span></code></pre></div>
+<span class="co">#&gt; #   rq_max &lt;dbl&gt;, ct &lt;dbl&gt;, ct_mean &lt;dbl&gt;, ct_sd &lt;dbl&gt;, delta_ct &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   delta_ct_mean &lt;dbl&gt;, delta_ct_sd &lt;dbl&gt;, delta_ct_se &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   delta_delta_ct &lt;dbl&gt;, automatic_ct_threshold &lt;lgl&gt;, ct_threshold &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   automatic_baseline &lt;lgl&gt;, baseline_start &lt;dbl&gt;, baseline_end &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   comments &lt;chr&gt;, expfail &lt;chr&gt;, highsd &lt;chr&gt;, noamp &lt;chr&gt;, ...</span></code></pre></div>
 <p>The typical format of PCR data is woefully non-rectangular. <code>pcr_tidy</code> fixes this by skipping to the good bits, but also pulling out useful metadata supplied in the header and footer of the dataset - like the last few columns:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">dat</span>, <span class="va">plate_type</span><span class="op">:</span><span class="va">ref_samp</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 159 × 2</span>
+<span class="co">#&gt; # A tibble: 159 x 2</span>
 <span class="co">#&gt;    plate_type     ref_samp  </span>
 <span class="co">#&gt;    &lt;chr&gt;          &lt;chr&gt;     </span>
 <span class="co">#&gt;  1 384-Well Block RT112 Drug</span>
@@ -155,7 +154,7 @@
 <span class="co">#&gt;  8 384-Well Block RT112 Drug</span>
 <span class="co">#&gt;  9 384-Well Block RT112 Drug</span>
 <span class="co">#&gt; 10 384-Well Block RT112 Drug</span>
-<span class="co">#&gt; # … with 149 more rows</span></code></pre></div>
+<span class="co">#&gt; # ... with 149 more rows</span></code></pre></div>
 </div>
 <div id="plate-plotting-with-pcr_plate_view" class="section level1">
 <h1 class="hasAnchor">

@@ -7,19 +7,17 @@
 pcr_plot(tidy_pcr)
 }
 \arguments{
-\item{tidy_pcr}{an output from the \code{pcr_tidy} function, or some derivative thereof}
+\item{tidy_pcr}{output from the \code{pcr_tidy} function, or some derivative (eg \code{pcr_rq}) thereof}
 }
 \value{
-a ggplot
+a \code{ggplot}
 }
 \description{
 Plot qPCR results
 }
 \examples{
-
 system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
   pcr_tidy() |>
   pcr_rq("RD1") |>
   pcr_plot()
-
 }

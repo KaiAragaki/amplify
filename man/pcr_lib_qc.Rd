@@ -10,7 +10,14 @@ pcr_lib_qc(lib_calc_pcr)
 \item{lib_calc_pcr}{an output from \code{pcr_lib_calc}}
 }
 \value{
-a list
+a named list with:
+\itemize{
+\item{standards} {Data for individual standards, including calculated dilutions, given and calculated quantities, raw Ct, etc.}
+\item{samples} {Data for individual samples, including calculated concentrations, raw Ct, etc.}
+\item{sample_summary} {Summary statistics for samples grouped by replicates}
+\item{standard_summary} {Summary statistics for standards groupd by replicates}
+\item{outliers} {Data for individual samples and standards with and without their putative outliers (\code{po}) per replicate group}
+}
 }
 \description{
 Create library prep quality control data
@@ -22,7 +29,7 @@ function like \code{pcr_lib_calc_report}
 }
 \examples{
 
-dat_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
+system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
   pcr_tidy(pad_zero = TRUE) |>
   pcr_lib_calc() |>
   pcr_lib_qc()
