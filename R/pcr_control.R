@@ -30,5 +30,6 @@ pcr_control <- function(data, control_probe) {
                   delta_ct_se  = .data$delta_ct_sd/sqrt(.data$rep),
                   df           = max(1, .data$rep + .data$rep[.data$target_name == control_probe] - 2),
                   t            = stats::qt(.05/2, .data$df, lower.tail = F)) |>
-    tidyr::unnest(.data$sample_nest)
+    tidyr::unnest(.data$sample_nest) |>
+    dplyr::ungroup()
 }
