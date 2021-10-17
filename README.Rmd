@@ -28,22 +28,25 @@ You can install this package from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("KaiAragaki/amplify")
 ```
-## Tidying qPCR data
-
-Data from the QuantStudio software is exported in a fairly non-standard format:
-
-```{r untidy_pcr}
+```{r message=FALSE, warning=FALSE}
 library(amplify)
 library(readxl)
 library(knitr)
 library(dplyr)
+```
 
+
+## Tidying qPCR data
+
+Data exported from QuantStudio is fairly non-standard:
+
+```{r untidy_pcr}
 untidy_file_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 
 untidy_file_path |> 
-  read_excel() |> 
-  head() |> 
-  kable()
+  read_excel() |>
+  select(1:10) |> 
+  head()
 ```
 
 amplify provides `pcr_tidy` to automatically tidy these files:
@@ -52,12 +55,12 @@ amplify provides `pcr_tidy` to automatically tidy these files:
 tidy_pcr <- untidy_file_path |> 
   pcr_tidy()
 
-tidy_pcr |> 
-  head() |> 
-  knitr::kable()
+tidy_pcr |>
+  select(1:10) |> 
+  head()
 ```
 
-This can be done for both $\Delta \Delta$Ct qPCR or standard curve qPCR.
+`pcr_tidy` works with both ddCt or standard curve result files.
 
 ## Plotting qPCR results
 
@@ -75,7 +78,7 @@ tidy_pcr |>
   pcr_plate_view(target_name)
 ```
 
-More details can be found in the "Analyzing ddCt qPCR with amplify" vignette.
+More details can be found in the **Analyzing ddCt qPCR with amplify** vignette.
 
 ## Library Preparation Quantification
 
@@ -85,17 +88,20 @@ RNA library preparation results output from Quantstudio can be tidied using `pcr
 
 ```{r}
 untidy_lib_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify")
-tidy_lib <- pcr_tidy(untidy_lib_path) 
-tidy_lib |> head() |> kable()
+tidy_lib <- pcr_tidy(untidy_lib_path, pad_zero = TRUE) 
+tidy_lib |>
+  select(1:10) |> 
+  head()
 ```
 
-Calculating the concentration of library can be performed using `pcr_lib_calc`:
+Calculating the concentration of library (before dilution) can be performed using `pcr_lib_calc`:
 
 ```{r}
-calc_lib <- tidy_lib |> 
-  pcr_lib_calc()
+calc_lib <- pcr_lib_calc(tidy_lib) 
 
-calc_lib |> select(task, sample_name, concentration) |> head() |> kable()
+calc_lib |> 
+  select(task, sample_name, concentration) |> 
+  head()
 ```
 ### Library preparation quantification quality control
 
@@ -106,9 +112,18 @@ qc <- calc_lib |>
   pcr_lib_qc()
 qc
 ```
-These data, by themselves, are not particularly useful. However, they can be used for more elucidative downstream analyses like `pcr_qc_report`
+These data, by themselves, are not particularly useful. However, a suite of QC plotting functions can be used upon these data to give insight, such as:
+
+```{r}
+qc |> pcr_lib_qc_plot_conc()
+```
+
+All QC plotting functions can be run and generate a report using `pcr_lib_qc_report`.
+
 
 ```{r}
 # Generates a file - not run
 # qc |> pcr_lib_qc_report()
 ```
+
+More information about the plots available, as well as their interpretations, can be found in **Performing Library Quantification QC**
