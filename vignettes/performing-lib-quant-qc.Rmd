@@ -1,8 +1,8 @@
 ---
-title: "Performing Library Qunatification QC"
+title: "Performing Library Quantification QC"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Performing Library Qunatification QC}
+  %\VignetteIndexEntry{Performing Library Quantification QC}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,4 +16,41 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(amplify)
+library(dplyr)
 ```
+
+# Introduction
+
+When RNA libraries are generated, their absolute concentrations need to be established so they can be evenly loaded onto the chip with the correct concentration. In order to measure RNA library concentration, qPCR with a standard curve is performed. amplify offers several functions to both:
+
+  1. Determine the quality of the assay and, if the assay went well,
+  2. Determine the concentration of RNA libraries.
+
+
+# Reading and Tidying Data
+
+amplify takes 'results' `.xls(x)` files exported from QuantStudio. They can be tidied easily by providing a path to `pcr_tidy`. We also add `pad_zero = TRUE`, which changes the default value of, say `Sample 1` to `Sample 01`. This will help with out plotting order down the line.
+
+```{r tidy}
+tidy_lib <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |> 
+  pcr_tidy(pad_zero = TRUE)
+
+tidy_lib |> 
+  select(1:10) |> 
+  head()
+```
+
+# Calculating Library Concentration
+
+Before we can perform quality control, we first need to calculate the concentration of RNA library in our samples. We supply a dilution factor to calculate the concentration of the original libraries from the concentration of libraries in the assay
+
+
+```{r}
+lib_conc <- tidy_lib |> 
+  pcr_lib_calc(dil_factor = 1000)
+
+lib_conc |>
+  select(sample_name, concentration)
+  
+```
+
