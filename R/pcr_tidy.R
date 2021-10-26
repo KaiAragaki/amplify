@@ -67,6 +67,17 @@ pcr_tidy <- function(file_path, pad_zero = FALSE) {
     dat$ref_samp <- exp_dat$Reference.Sample
   }
 
+  if (exp_type == "Stan") {
+    dat <- dat |>
+      mutate(sample_name = dplyr::case_when(is.na(.data$sample_name) & .data$quantity > 6.0000 ~ "1",
+                                            is.na(.data$sample_name) & .data$quantity > 0.6000 ~ "1:10",
+                                            is.na(.data$sample_name) & .data$quantity > 0.0600 ~ "1:100",
+                                            is.na(.data$sample_name) & .data$quantity > 0.0060 ~ "1:1000",
+                                            is.na(.data$sample_name) & .data$quantity > 0.0006 ~ "1:10000",
+                                            TRUE ~ .data$sample_name))
+  }
+
+
   if (pad_zero) {
     dat$sample_name <- pad_zero(dat$sample_name)
   }

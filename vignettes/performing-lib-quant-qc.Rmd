@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, warning=FALSE, message=FALSE}
 library(amplify)
 library(dplyr)
 ```
@@ -29,7 +29,7 @@ When RNA libraries are generated, their absolute concentrations need to be estab
 
 # Reading and Tidying Data
 
-amplify takes 'results' `.xls(x)` files exported from QuantStudio. They can be tidied easily by providing a path to `pcr_tidy`. We also add `pad_zero = TRUE`, which changes the default value of, say `Sample 1` to `Sample 01`. This will help with out plotting order down the line.
+amplify takes 'results' (`.xls(x)`) files exported from QuantStudio. They can be tidied easily by providing a path to `pcr_tidy`. We also add `pad_zero = TRUE`, which changes the default value of, say `Sample 1` to `Sample 01`. This will help with out plotting order down the line.
 
 ```{r tidy}
 tidy_lib <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |> 
@@ -40,9 +40,10 @@ tidy_lib |>
   head()
 ```
 
+
 # Calculating Library Concentration
 
-Before we can perform quality control, we first need to calculate the concentration of RNA library in our samples. We supply a dilution factor to calculate the concentration of the original libraries from the concentration of libraries in the assay
+Before we can perform quality control, we first need to calculate the concentration of RNA library in our samples. We supply a dilution factor to calculate the concentration of the original libraries from the concentration of libraries in the assay (here we diluted them 1:1000).
 
 
 ```{r}
@@ -53,4 +54,66 @@ lib_conc |>
   select(sample_name, concentration)
   
 ```
+
+
+# Generating Quality Control Data
+
+Quality control metrics also need to be calculated. We can do this by calling `pcr_lib_qc` on data output from `pcr_lib_calc`:
+
+```{r}
+lib_qc <- lib_conc |> 
+  pcr_lib_qc()
+
+lib_qc
+```
+
+This output is generally not useful by itself. Using `pcr_lib_qc_plot_*` functions on it, however, generates plots that display valuable visual QC summaries
+
+
+## Standard Dilution Plot
+
+Making standard curve for libraries requires making a serial dilution of standards. It is important we determine that this serial dilution was diluted properly, or the results calculated from it will be unreliable. The standard dilution plot helps with this:
+
+```{r}
+lib_qc |> 
+  pcr_lib_qc_plot_dil()
+```
+
+From this plot, we can see the relative dilution factors between samples. From this example, we can see a 9.3x dilution between the first and second, 12.2x dilution between second and third, etc. They gray dots represent where our blue dots should land if all the dilutions are perfect AND if efficiency is 100%. The red dots represent where the samples lie. 
+
+This plot can catch three sources of issues:
+
+1. Inconsistent pipetting, which would show dilution factors widely varying from 10x or
+2. Systematically incorrect pipetting, which would show dilutions consistently below or above 10x or
+3. Poor efficiency of the enzyme, which would *appear* to show dilutions consistently above 10x. 
+
+Determining efficiency issues vs consistently under-pipetting is impossible to determine with the data alone. Ensure you have calibrated pipettes and are practicing proper pipetting techniques to ensure not only consistent, but accurate volumes.
+
+## Standard Slope Plot
+
+```{r}
+lib_qc |> 
+  pcr_lib_qc_plot_slope()
+```
+
+In this plot, the log10 of the theoretical values of the standards is plotted against the Ct values of the standards. In a perfect world, we would expect that a standard 1/10th of the concentration would reach the same level of amplification in around 3.3 cycles. Why? Because in a perfect world, we expect perfect doubling of the product. $2^{3.3}\approx 10$. 
+
+Thus, in a perfect world we expect to see a slope of -3.3, an $R^2$ of 1, and an efficiency of 100%.
+
+Things are rarely perfect, however. 100% efficiency is an upper bound. Therefore, an efficiency >80% is considered acceptable. 
+
+If there is an outlier in your standards it may make the efficiency artificially low or high. In this instance, manually fitting the data without the outlier may be necessary to calculate an accurate slope and efficiency. If your samples are within the range that has not been 'tainted' by the outlier, you may be able to salvage your run (though manual calculations will be required).
+
+## Plot Outliers
+
+```{r}
+lib_qc |> 
+  pcr_lib_qc_plot_outliers()
+```
+
+It's often best to remove technical replicate outliers in order to obtain an accurate estimate of concentration. A point is deemed an outlier if it is >3Z away from the mean of the other two. Shown above, the outliers are in gray, and the zone of inclusion is in blue. Particularly egregious outliers are shown with (<<<) or (>>>) and the number of standard deviations away they are. In the instance above, 463Z away!
+
+
+
+
 

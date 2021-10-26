@@ -108,22 +108,18 @@ pcr_lib_qc <- function(lib_calc_pcr) {
 
 find_outliers <- function(dat) {
   dat |>
-    tidyr::nest(reps = c("ct", "quantity", "quant_actual", "concentration")) |>
-    dplyr::mutate(mean_wo_outlier = purrr::map(.data$reps, find_mean)) |>
+    dplyr::group_by(sample_name) |>
+    tidyr::nest() |>
+    dplyr::mutate(mean_wo_outlier = purrr::map(.data$data, find_mean)) |>
     tidyr::unnest_wider(.data$mean_wo_outlier) |>
-    tidyr::unnest(cols = c("no_po_mean", "no_po_sd", "reps")) |>
+    tidyr::unnest(cols = c(data)) |>
     dplyr::mutate(keep = dplyr::case_when(.data$no_po_mean - (3*.data$no_po_sd) < .data$ct & .data$no_po_mean + (3 * .data$no_po_sd) > .data$ct ~ TRUE,
                                           is.na(.data$no_po_sd) ~ TRUE,
-                                          TRUE ~ NA),
-                  sample_name = dplyr::case_when(is.na(.data$sample_name) & .data$quantity > 6.0000 ~ "1",
-                                                 is.na(.data$sample_name) & .data$quantity > 0.6000 ~ "1:10",
-                                                 is.na(.data$sample_name) & .data$quantity > 0.0600 ~ "1:100",
-                                                 is.na(.data$sample_name) & .data$quantity > 0.0060 ~ "1:1000",
-                                                 is.na(.data$sample_name) & .data$quantity > 0.0006 ~ "1:10000",
-                                                 TRUE ~ .data$sample_name)) |>
+                                          TRUE ~ FALSE),
+                  keep_temp = if_else(keep, keep, NA)) |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::mutate(adj_mean = mean(.data$keep * .data$ct, na.rm = TRUE),
-                  adj_sd   = stats::sd(.data$keep * .data$ct, na.rm = TRUE),
+    dplyr::mutate(adj_mean = mean(.data$keep_temp * .data$ct, na.rm = TRUE),
+                  adj_sd   = stats::sd(.data$keep_temp * .data$ct, na.rm = TRUE),
                   z = (.data$ct-.data$adj_mean)/.data$adj_sd)
 }
 
