@@ -17,7 +17,7 @@
 
 pad_zero <- function(sample_names) {
 
-  nums <- stringr::str_extract(sample_names, "(?<=^Sample )[:digit:]{1,2}$")
+  nums <- stringr::str_extract(sample_names, "(?<=^(Sample|Standard) )[:digit:]{1,2}$")
 
   unique_nums <- unique(nums)
 

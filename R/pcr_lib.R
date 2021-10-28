@@ -20,7 +20,7 @@
 #'   pcr_tidy(pad_zero = TRUE) |>
 #'   pcr_lib_calc()
 
-pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
+pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000, init_conc = 6.8, serial_dil_factor = 10) {
   tidy_pcr |>
     tidyr::nest(replicates = c("well", "well_position", "ct", "quantity",
                                "well_row", "well_col",

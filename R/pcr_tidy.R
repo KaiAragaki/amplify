@@ -1,11 +1,28 @@
 #' Tidy a PCR Excel File
 #'
-#' Takes in a fresh results output from qPCR and converts it into a tidy
-#' format. Useful for downstream analyses.
+#' Takes in a fresh results output from qPCR and converts it into a tidy format.
+#' Useful for downstream analyses.
 #'
-#' @param file_path Path to an excel file containing the results of a qPCR
-#'   run.
+#' @param file_path Path to an excel file containing the results of a qPCR run.
+#' @param usr_standards optional numeric vector specifying standard concentrations.
+#'   If not supplied, if they exist they will be guessed. See details.
 #' @param pad_zero logical. Should 'Sample 1' become 'Sample 01'?
+#'
+#' @details If a standards argument is not supplied AND if the experiment uses
+#'   standards (ie is not a comparative Ct experiment), the standards will be
+#'   guessed from the unique quantities with a 'STANDARD' task.
+#'
+#'   If standards ARE supplied, they will be matched to their nearest quantity,
+#'   rounding UP. That is, if 1, .1, .01... and the actual quantities are 6.8,
+#'   .68, .068..., 1 will be rounded to 6.8, .1 will be rounded to .68, etc
+#'   (despite being numerically closer were they rounded down).
+#'
+#'   If standards are missing, (ie, only 1 and .01 are supplied), they will be
+#'   dropped with a message. This is useful if you want to exclude an outlier
+#'   sample from downstream analysis.
+#'
+#'
+#'
 #'
 #' @return A `tibble`
 #' @export
@@ -23,7 +40,7 @@
 #' dat_clean <- pcr_tidy(dat_path)
 #' dat_clean[1:10, 1:5]
 
-pcr_tidy <- function(file_path, pad_zero = FALSE) {
+pcr_tidy <- function(file_path, pad_zero = FALSE, usr_standards = NULL) {
 
   dat_og <- readxl::read_excel(file_path, sheet = "Results", .name_repair = ~ vctrs::vec_as_names(..., repair = "unique", quiet = TRUE))
 
@@ -68,13 +85,53 @@ pcr_tidy <- function(file_path, pad_zero = FALSE) {
   }
 
   if (exp_type == "Stan") {
-    dat <- dat |>
-      mutate(sample_name = dplyr::case_when(is.na(.data$sample_name) & .data$quantity > 6.0000 ~ "1",
-                                            is.na(.data$sample_name) & .data$quantity > 0.6000 ~ "1:10",
-                                            is.na(.data$sample_name) & .data$quantity > 0.0600 ~ "1:100",
-                                            is.na(.data$sample_name) & .data$quantity > 0.0060 ~ "1:1000",
-                                            is.na(.data$sample_name) & .data$quantity > 0.0006 ~ "1:10000",
-                                            TRUE ~ .data$sample_name))
+
+    standards <- dat |>
+      dplyr::select(quantity, task) |>
+      dplyr::filter(task == "STANDARD") |>
+      dplyr::arrange(quantity) |> # for findInterval
+      dplyr::pull(quantity) |>
+      unique()
+
+    if (is.null(usr_standards)) {
+      usr_standards <- 10^(0:-4) * 6
+    }
+
+    usr_standards <- usr_standards |>
+      tibble::enframe(name = "name", value = "usr_quantity") |>
+      dplyr::mutate(name = paste("Standard", 1:length(usr_standards))) |>
+      dplyr::arrange(usr_quantity)
+
+    if (nrow(usr_standards) > length(standards)) {
+      stop("More standards supplied than exist in dataset")
+    }
+
+    if (max(usr_standards$usr_quantity) >= max(standards)) {
+      stop("Largest standard supplied is greater than largest standard in dataset. \nSupplied standards are rounded up.")
+    }
+
+    fi_standards <- standards * 1.000001 # in case largest usr_stan = stan, this lets it get in between the interval
+
+    intervals <- findInterval(usr_standards$usr_quantity, fi_standards)
+    positions <- intervals + 1
+
+    final <-
+      tibble(positions,
+             quantity = standards[positions],
+             task = "STANDARD") |>
+      bind_cols(usr_standards)
+
+    dat <- left_join(dat, final, by = c("task", "quantity")) |>
+      mutate(sample_name = if_else(is.na(sample_name), name, sample_name))
+
+    dropping <- dat |>
+      dplyr::filter(is.na(sample_name) & task == "STANDARD")
+
+    if (nrow(dropping) > 0) {
+      dat <- dat |>
+        dplyr::filter(!is.na(sample_name) | task != "STANDARD")
+      message(nrow(dropping), " rows of standards did not have a matching value in 'standards' and have been dropped")
+    }
   }
 
 
