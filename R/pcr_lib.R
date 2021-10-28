@@ -20,7 +20,13 @@
 #'   pcr_tidy(pad_zero = TRUE) |>
 #'   pcr_lib_calc()
 
-pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000, init_conc = 6.8, serial_dil_factor = 10) {
+pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
+  max_standard <- tidy_pcr |>
+    dplyr::select(quantity, task) |>
+    dplyr::filter(task == "STANDARD") |>
+    dplyr::pull(quantity) |>
+    max(na.rm = TRUE)
+
   tidy_pcr |>
     tidyr::nest(replicates = c("well", "well_position", "ct", "quantity",
                                "well_row", "well_col",
@@ -30,7 +36,7 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000, init_conc = 6.8, serial_di
     dplyr::arrange(.data$ct_mean) |>
     dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
                   dil = 2^.data$standard_diff,
-                  quant_actual = 6.8/cumprod(.data$dil),
+                  quant_actual = max_standard/cumprod(.data$dil),
                   dil = dplyr::if_else(.data$dil == 1, 0, .data$dil)) |>
     tidyr::unnest(cols = .data$replicates) |>
     dplyr::mutate(dil = dplyr::if_else(.data$task == "STANDARD", .data$dil, NA_real_),
@@ -207,13 +213,17 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
   #       |______________|      |------------- dilution_lines
   #             10.3
 
+
+  n_stans <- lib_qc$standard_summary$quantity |> unique() |> length()
+
   dilution_lines <- lib_qc$standard_summary |>
     dplyr::filter(.data$name == "quant_actual") |>
     dplyr::mutate(line_start = 1/.data$value,
                   line_end = dplyr::lag(.data$line_start),
-                  dil = dplyr::lag(.data$dil),
-                  y = rep_len(c(1.1, 0.9), 5),
-                  y_text = rep_len(c(1.15, 0.85), 5)) |>
+                  dil = dplyr::lag(.data$dil)) |>
+    dplyr::arrange(dplyr::desc(value)) |>
+    dplyr::mutate(y = rep_len(c(1.1, 0.9), n_stans),
+                  y_text = rep_len(c(1.15, 0.85), n_stans)) |>
     dplyr::filter(!is.na(.data$line_end)) |>
     dplyr::rowwise() |>
     dplyr::mutate(mid = sqrt(.data$line_start * .data$line_end))
@@ -221,8 +231,8 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
   vert_lines <-
     dplyr::tibble(x = c(dilution_lines$line_start, dilution_lines$line_end)) |>
     dplyr::arrange(.data$x) |>
-    dplyr::mutate(y = rep(c(1.1, 0.9, 1.1, 0.9), each = 2),
-                  yend = rep(c(1.05, 0.95, 1.05, 0.95), each = 2))
+    dplyr::mutate(y = rep(rep(c(1.1, 0.9), length.out = n_stans - 1), each = 2),
+                  yend = rep(rep(c(1.05, 0.98), length.out = n_stans - 1), each = 2))
 
   lib_qc$standard_summary |>
     ggplot2::ggplot(aes(x = 1/.data$value, y = 1, color = .data$name)) +
