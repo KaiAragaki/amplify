@@ -116,13 +116,13 @@ pcr_tidy <- function(file_path, pad_zero = FALSE, usr_standards = NULL) {
     positions <- intervals + 1
 
     final <-
-      tibble(positions,
+      tibble::tibble(positions,
              quantity = standards[positions],
              task = "STANDARD") |>
-      bind_cols(usr_standards)
+      dplyr::bind_cols(usr_standards)
 
-    dat <- left_join(dat, final, by = c("task", "quantity")) |>
-      mutate(sample_name = if_else(is.na(sample_name), name, sample_name))
+    dat <- dplyr::left_join(dat, final, by = c("task", "quantity")) |>
+      dplyr::mutate(sample_name = ifelse(is.na(sample_name), name, sample_name))
 
     dropping <- dat |>
       dplyr::filter(is.na(sample_name) & task == "STANDARD")
@@ -131,7 +131,9 @@ pcr_tidy <- function(file_path, pad_zero = FALSE, usr_standards = NULL) {
       dat <- dat |>
         dplyr::filter(!is.na(sample_name) | task != "STANDARD")
       message(nrow(dropping), " rows of standards did not have a matching value in 'standards' and have been dropped")
+      dat$slope <- lm(ct~log10(quantity), data = dat)$coefficients[2]
     }
+
   }
 
 
