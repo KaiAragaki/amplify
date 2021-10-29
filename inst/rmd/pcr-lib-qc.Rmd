@@ -74,11 +74,7 @@ Log of library quantities vs CT values. An optimal slope is -3.32. An optimal ef
 ::::
 
 ```{r sample_summary, echo = FALSE}
-df$sample_summary |> 
-  dplyr::select(-"quantity_mean") |>
-  dplyr::rename("Sample Name" = .data$sample_name,
-                "Concentration" = .data$concentration_mean) |> 
-  knitr::kable()
+df$sample_summary |> kable()
 ```
 
 
