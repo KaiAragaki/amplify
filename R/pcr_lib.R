@@ -216,17 +216,20 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
   #             10.3
 
 
-  n_stans <- lib_qc$standard_summary$quantity |> unique() |> length()
+  n_stans <- nrow(lib_qc$standard_summary)
 
-  dilution_lines <- lib_qc$standard_summary |>
+  ss <- lib_qc$standard_summary |>
+    tidyr::pivot_longer(cols = c("quantity_mean", "quant_actual"))
+
+  dilution_lines <- ss |>
     dplyr::filter(.data$name == "quant_actual") |>
     dplyr::mutate(line_start = 1/.data$value,
                   line_end = dplyr::lag(.data$line_start),
                   dil = dplyr::lag(.data$dil)) |>
     dplyr::arrange(dplyr::desc(value)) |>
-    dplyr::mutate(y = rep_len(c(1.1, 0.9), n_stans),
-                  y_text = rep_len(c(1.15, 0.85), n_stans)) |>
     dplyr::filter(!is.na(.data$line_end)) |>
+    dplyr::mutate(y = rep_len(c(1.1, 0.9), n_stans-1),
+                  y_text = rep_len(c(1.15, 0.85), n_stans-1)) |>
     dplyr::rowwise() |>
     dplyr::mutate(mid = sqrt(.data$line_start * .data$line_end))
 
@@ -236,7 +239,7 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
     dplyr::mutate(y = rep(rep(c(1.1, 0.9), length.out = n_stans - 1), each = 2),
                   yend = rep(rep(c(1.05, 0.98), length.out = n_stans - 1), each = 2))
 
-  lib_qc$standard_summary |>
+  ss |>
     ggplot2::ggplot(aes(x = 1/.data$value, y = 1, color = .data$name)) +
     ggplot2::geom_point(size = 10, alpha = 0.7) +
     ggplot2::scale_color_manual(values = c("#00AAAA", "#222222")) +
