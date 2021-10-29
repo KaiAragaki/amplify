@@ -77,25 +77,25 @@ pcr_lib_qc <- function(lib_calc_pcr) {
     dplyr::select(c("task", "sample_name", "quantity_mean", "concentration", "quantity",
                     "quant_actual", "dil", "slope", "efficiency", "r2", "ct"))
 
-  standards <- dat |>
-    dplyr::filter(.data$task == "STANDARD") |>
-    dplyr::select(-c("sample_name", "quantity_mean", "concentration"))
+  outliers <- find_outliers(dat)
 
-  samples <- dat |>
-    dplyr::filter(.data$task == "UNKNOWN") |>
-    dplyr::select(-c("dil"))
-
-  sample_summary <- samples |>
-    dplyr::group_by(.data$sample_name) |>
-    dplyr::summarize(quantity_mean = mean(.data$quantity_mean),
-                     concentration_mean = mean(.data$concentration))
+  standards <- outliers |>
+    dplyr::filter(.data$task == "STANDARD")
 
   standard_summary <- standards |>
-    dplyr::group_by(.data$quantity) |>
-    dplyr::summarize(quantity_mean = mean(.data$quantity),
-                     quant_actual = mean(.data$quant_actual),
-                     dil = mean(.data$dil)) |>
-    tidyr::pivot_longer(cols = c(.data$quantity_mean, .data$quant_actual))
+    dplyr::group_by(.data$sample_name) |>
+    dplyr::summarize(dil = mean(.data$dil, na.rm = TRUE),
+                     quantity_mean = mean(.data$quantity, na.rm = TRUE),
+                     quant_actual = mean(.data$quant_actual, na.rm = TRUE))
+
+  samples <- outliers |>
+    dplyr::filter(.data$task == "UNKNOWN")
+
+  sample_summary <- samples  |>
+    dplyr::select(sample_name, keep, quantity, quantity_mean, quant_adj) |>
+    dplyr::group_by(.data$sample_name) |>
+    dplyr::summarize(quantity_mean = mean(.data$quantity_mean, na.rm = TRUE),
+                     quant_adj = mean(.data$quant_adj, na.rm = TRUE))
 
   list(standards = standards,
        samples = samples,
