@@ -22,6 +22,7 @@
 
 pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
   max_standard <- tidy_pcr |>
+    pcr_calc_slope() |>
     dplyr::select(quantity, task) |>
     dplyr::filter(task == "STANDARD") |>
     dplyr::pull(quantity) |>
