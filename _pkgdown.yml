@@ -1,1 +1,32 @@
 url: https://kaiaragaki.github.io/amplify/
+reference:
+- title: "Reading in Data"
+  desc: One-stop-shop for reading in and tidying PCR result files
+- contents:
+  - pcr_tidy
+
+- title: "Visualizing the Plate"
+  desc: Functions to visualize a variable - like Ct or sample name - as though you were looking at the plate
+- contents:
+  - pcr_plate_view
+
+- title: "Comparative (ddCT) qPCR"
+  desc: Functions to calculate relative quantities, reset control samples/genes, plot data, plan experiments, etc.
+- contents:
+  - pcr_plan
+  - pcr_plan_report
+  - pcr_plot
+  - pcr_control
+  - pcr_rq
+
+- title: "Standard Curve qPCR"
+  desc: Functions to calculate concentrations as well as assess quality of standard curve and efficiency.
+- contents:
+  - starts_with("pcr_lib")
+  - pcr_calc_slope
+
+- title: "Miscellaneous"
+  desc: Miscellaneous Utilities
+- contents:
+  - pad_zero
+  - dummy_rna_conc

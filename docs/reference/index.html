@@ -139,8 +139,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-reading-in-data" class="hasAnchor"><a href="#section-reading-in-data" class="anchor"></a>Reading in Data</h2>
+          <p class="section-desc"><p>One-stop-shop for reading in and tidying PCR result files</p></p>
         </th>
       </tr>
       
@@ -151,21 +151,59 @@
       <tr>
         
         <td>
-          <p><code><a href="dummy_rna_conc.html">dummy_rna_conc</a></code> </p>
+          <p><code><a href="pcr_tidy.html">pcr_tidy()</a></code> </p>
         </td>
-        <td><p>Example data of RNA samples with concentrations</p></td>
+        <td><p>Tidy a PCR Excel File</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-visualizing-the-plate" class="hasAnchor"><a href="#section-visualizing-the-plate" class="anchor"></a>Visualizing the Plate</h2>
+          <p class="section-desc"><p>Functions to visualize a variable - like Ct or sample name - as though you were looking at the plate</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pcr_plate_view.html">pcr_plate_view()</a></code> </p>
+        </td>
+        <td><p>View sample plating layout</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-comparative-ddct-qpcr" class="hasAnchor"><a href="#section-comparative-ddct-qpcr" class="anchor"></a>Comparative (ddCT) qPCR</h2>
+          <p class="section-desc"><p>Functions to calculate relative quantities, reset control samples/genes, plot data, plan experiments, etc.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pcr_plan.html">pcr_plan()</a></code> </p>
+        </td>
+        <td><p>Plan PCR experiment</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="pad_zero.html">pad_zero()</a></code> </p>
+          <p><code><a href="pcr_plan_report.html">pcr_plan_report()</a></code> </p>
         </td>
-        <td><p>Add leading 0 to sample names</p></td>
+        <td><p>Create a report from a PCR plan</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="pcr_calc_slope.html">pcr_calc_slope()</a></code> </p>
+          <p><code><a href="pcr_plot.html">pcr_plot()</a></code> </p>
         </td>
-        <td><p>Recalcuate standard slope of quantity vs Ct</p></td>
+        <td><p>Plot qPCR results</p></td>
       </tr><tr>
         
         <td>
@@ -173,6 +211,25 @@
         </td>
         <td><p>(Re)calculate Delta Ct mean based on given control probe</p></td>
       </tr><tr>
+        
+        <td>
+          <p><code><a href="pcr_rq.html">pcr_rq()</a></code> </p>
+        </td>
+        <td><p>(Re)calculate rq for a given sample</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-standard-curve-qpcr" class="hasAnchor"><a href="#section-standard-curve-qpcr" class="anchor"></a>Standard Curve qPCR</h2>
+          <p class="section-desc"><p>Functions to calculate concentrations as well as assess quality of standard curve and efficiency.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
           <p><code><a href="pcr_lib_calc.html">pcr_lib_calc()</a></code> </p>
@@ -217,39 +274,34 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="pcr_plan.html">pcr_plan()</a></code> </p>
+          <p><code><a href="pcr_calc_slope.html">pcr_calc_slope()</a></code> </p>
         </td>
-        <td><p>Plan PCR experiment</p></td>
+        <td><p>Recalcuate standard slope of quantity vs Ct</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-miscellaneous" class="hasAnchor"><a href="#section-miscellaneous" class="anchor"></a>Miscellaneous</h2>
+          <p class="section-desc"><p>Miscellaneous Utilities</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="pad_zero.html">pad_zero()</a></code> </p>
+        </td>
+        <td><p>Add leading 0 to sample names</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="pcr_plan_report.html">pcr_plan_report()</a></code> </p>
+          <p><code><a href="dummy_rna_conc.html">dummy_rna_conc</a></code> </p>
         </td>
-        <td><p>Create a report from a PCR plan</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pcr_plate_view.html">pcr_plate_view()</a></code> </p>
-        </td>
-        <td><p>View sample plating layout</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pcr_plot.html">pcr_plot()</a></code> </p>
-        </td>
-        <td><p>Plot qPCR results</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pcr_rq.html">pcr_rq()</a></code> </p>
-        </td>
-        <td><p>(Re)calculate rq for a given sample</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pcr_tidy.html">pcr_tidy()</a></code> </p>
-        </td>
-        <td><p>Tidy a PCR Excel File</p></td>
+        <td><p>Example data of RNA samples with concentrations</p></td>
       </tr>
     </tbody>
     </table>
