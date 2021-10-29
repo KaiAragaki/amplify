@@ -54,7 +54,7 @@ pcr_lib_qc_plot_conc(df)
 :::
 
 ::: {style="flex-basis: 100px; flex-grow: 1"}
-Library concentrations across samples
+Library concentrations across samples. Sample concentrations before outlier removal are in gray, after outlier removal are in blue.
 :::
 
 ::::
