@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  dpi = 200
 )
 ```
 
@@ -75,7 +76,7 @@ Additionally, overviews of plate features can be done using `pcr_plate`
 
 ```{r}
 tidy_pcr |> 
-  pcr_plate_view(target_name)
+  pcr_plate_view("target_name")
 ```
 
 More details can be found in the **Analyzing ddCt qPCR with amplify** vignette.
@@ -121,9 +122,8 @@ qc |> pcr_lib_qc_plot_conc()
 All QC plotting functions can be run and generate a report using `pcr_lib_qc_report`.
 
 
-```{r}
-# Generates a file - not run
-# qc |> pcr_lib_qc_report()
+```{r eval = FALSE}
+qc |> pcr_lib_qc_report("path/to/my/report.html")
 ```
 
 More information about the plots available, as well as their interpretations, can be found in **Performing Library Quantification QC**

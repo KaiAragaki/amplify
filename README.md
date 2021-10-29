@@ -45,15 +45,15 @@ untidy_file_path |>
 #> * `` -> ...6
 #> * `` -> ...7
 #> * ...
-#> # A tibble: 6 x 10
+#> # A tibble: 6 × 10
 #>   `Block Type`  `384-Well Block` ...3  ...4  ...5  ...6  ...7  ...8  ...9  ...10
 #>   <chr>         <chr>            <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>
-#> 1 Calibration ~ Yes              <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
-#> 2 Calibration ~ 01-13-2020       <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
-#> 3 Calibration ~ Yes              <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
-#> 4 Calibration ~ 01-13-2020       <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
-#> 5 Calibration ~ Yes              <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
-#> 6 Calibration ~ 01-13-2020       <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
+#> 1 Calibration … Yes              <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
+#> 2 Calibration … 01-13-2020       <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
+#> 3 Calibration … Yes              <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
+#> 4 Calibration … 01-13-2020       <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
+#> 5 Calibration … Yes              <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA> 
+#> 6 Calibration … 01-13-2020       <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
 ```
 
 amplify provides `pcr_tidy` to automatically tidy these files:
@@ -65,16 +65,16 @@ tidy_pcr <- untidy_file_path |>
 tidy_pcr |>
   select(1:10) |> 
   head()
-#> # A tibble: 6 x 10
+#> # A tibble: 6 × 10
 #>   well  well_position omit  sample_name target_name task    reporter quencher
 #>   <chr> <chr>         <lgl> <chr>       <chr>       <chr>   <chr>    <chr>   
-#> 1 26    B2            FALSE RD1         KRT14       UNKNOWN FAM      NFQ-MGB 
-#> 2 27    B3            FALSE RD1         KRT14       UNKNOWN FAM      NFQ-MGB 
-#> 3 28    B4            FALSE RD1         KRT14       UNKNOWN FAM      NFQ-MGB 
-#> 4 29    B5            FALSE RD1         CDH3        UNKNOWN FAM      NFQ-MGB 
-#> 5 30    B6            FALSE RD1         CDH3        UNKNOWN FAM      NFQ-MGB 
-#> 6 31    B7            FALSE RD1         CDH3        UNKNOWN FAM      NFQ-MGB 
-#> # ... with 2 more variables: quantity <dbl>, quantity_mean <dbl>
+#> 1 26    B2            FALSE RD1         GENE1       UNKNOWN FAM      NFQ-MGB 
+#> 2 27    B3            FALSE RD1         GENE1       UNKNOWN FAM      NFQ-MGB 
+#> 3 28    B4            FALSE RD1         GENE1       UNKNOWN FAM      NFQ-MGB 
+#> 4 29    B5            FALSE RD1         GENE2       UNKNOWN FAM      NFQ-MGB 
+#> 5 30    B6            FALSE RD1         GENE2       UNKNOWN FAM      NFQ-MGB 
+#> 6 31    B7            FALSE RD1         GENE2       UNKNOWN FAM      NFQ-MGB 
+#> # … with 2 more variables: quantity <dbl>, quantity_mean <dbl>
 ```
 
 `pcr_tidy` works with both ddCt or standard curve result files.
@@ -95,7 +95,7 @@ Additionally, overviews of plate features can be done using `pcr_plate`
 
 ``` r
 tidy_pcr |> 
-  pcr_plate_view(target_name)
+  pcr_plate_view("target_name")
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
@@ -116,16 +116,16 @@ tidy_lib <- pcr_tidy(untidy_lib_path, pad_zero = TRUE)
 tidy_lib |>
   select(1:10) |> 
   head()
-#> # A tibble: 6 x 10
+#> # A tibble: 6 × 10
 #>   well  well_position omit  sample_name target_name task     reporter quencher
 #>   <chr> <chr>         <lgl> <chr>       <chr>       <chr>    <chr>    <chr>   
-#> 1 1     A1            FALSE <NA>        Target 1    STANDARD FAM      NFQ-MGB 
-#> 2 2     A2            FALSE <NA>        Target 1    STANDARD FAM      NFQ-MGB 
-#> 3 3     A3            FALSE <NA>        Target 1    STANDARD FAM      NFQ-MGB 
+#> 1 1     A1            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB 
+#> 2 2     A2            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB 
+#> 3 3     A3            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB 
 #> 4 5     A5            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB 
 #> 5 6     A6            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB 
 #> 6 8     A8            FALSE Sample 09   Target 1    UNKNOWN  FAM      NFQ-MGB 
-#> # ... with 2 more variables: ct <dbl>, ct_mean <dbl>
+#> # … with 2 more variables: ct <dbl>, ct_mean <dbl>
 ```
 
 Calculating the concentration of library (before dilution) can be
@@ -137,13 +137,13 @@ calc_lib <- pcr_lib_calc(tidy_lib)
 calc_lib |> 
   select(task, sample_name, concentration) |> 
   head()
-#> # A tibble: 6 x 3
+#> # A tibble: 6 × 3
 #> # Groups:   task [2]
 #>   task     sample_name concentration
 #>   <chr>    <chr>               <dbl>
-#> 1 STANDARD <NA>                  NA 
-#> 2 STANDARD <NA>                  NA 
-#> 3 STANDARD <NA>                  NA 
+#> 1 STANDARD Standard 01           NA 
+#> 2 STANDARD Standard 01           NA 
+#> 3 STANDARD Standard 01           NA 
 #> 4 UNKNOWN  Sample 06           2039.
 #> 5 UNKNOWN  Sample 06           2039.
 #> 6 UNKNOWN  Sample 06           2039.
@@ -159,96 +159,95 @@ qc <- calc_lib |>
   pcr_lib_qc()
 qc
 #> $standards
-#> # A tibble: 13 x 8
-#> # Groups:   task [1]
-#>    task     quantity quant_actual   dil slope efficiency    r2    ct
-#>    <chr>       <dbl>        <dbl> <dbl> <dbl>      <dbl> <dbl> <dbl>
-#>  1 STANDARD 6.80         6.8       0    -3.48       93.7 0.999  15.4
-#>  2 STANDARD 6.80         6.8       0    -3.48       93.7 0.999  15.5
-#>  3 STANDARD 6.80         6.8       0    -3.48       93.7 0.999  15.5
-#>  4 STANDARD 0.680        0.734     9.27 -3.48       93.7 0.999  18.7
-#>  5 STANDARD 0.680        0.734     9.27 -3.48       93.7 0.999  18.6
-#>  6 STANDARD 0.0680       0.0603   12.2  -3.48       93.7 0.999  22.3
-#>  7 STANDARD 0.0680       0.0603   12.2  -3.48       93.7 0.999  22.2
-#>  8 STANDARD 0.0680       0.0603   12.2  -3.48       93.7 0.999  22.3
-#>  9 STANDARD 0.00680      0.00568  10.6  -3.48       93.7 0.999  25.7
-#> 10 STANDARD 0.00680      0.00568  10.6  -3.48       93.7 0.999  25.6
-#> 11 STANDARD 0.00680      0.00568  10.6  -3.48       93.7 0.999  25.7
-#> 12 STANDARD 0.000680     0.000417 13.6  -3.48       93.7 0.999  29.4
-#> 13 STANDARD 0.000680     0.000417 13.6  -3.48       93.7 0.999  29.4
+#> # A tibble: 13 × 19
+#> # Groups:   sample_name [5]
+#>    sample_name task     quantity_mean concentration quantity quant_actual   dil
+#>    <chr>       <chr>            <dbl>         <dbl>    <dbl>        <dbl> <dbl>
+#>  1 Standard 01 STANDARD            NA            NA 6.80         6.80      0   
+#>  2 Standard 01 STANDARD            NA            NA 6.80         6.80      0   
+#>  3 Standard 01 STANDARD            NA            NA 6.80         6.80      0   
+#>  4 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27
+#>  5 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27
+#>  6 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 
+#>  7 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 
+#>  8 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 
+#>  9 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 
+#> 10 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 
+#> 11 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 
+#> 12 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 
+#> 13 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 
+#> # … with 12 more variables: slope <dbl>, efficiency <dbl>, r2 <dbl>, ct <dbl>,
+#> #   no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>, keep_temp <lgl>,
+#> #   mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
 #> 
 #> $samples
-#> # A tibble: 42 x 10
-#> # Groups:   task [1]
-#>    task    sample_name quantity_mean concentration quantity quant_actual slope
-#>    <chr>   <chr>               <dbl>         <dbl>    <dbl>        <dbl> <dbl>
-#>  1 UNKNOWN Sample 06            2.04         2039.     2.06         2.06 -3.48
-#>  2 UNKNOWN Sample 06            2.04         2039.     2.12         2.12 -3.48
-#>  3 UNKNOWN Sample 06            2.04         2039.     1.94         1.94 -3.48
-#>  4 UNKNOWN Sample 12            1.89         1893.     1.93         1.93 -3.48
-#>  5 UNKNOWN Sample 12            1.89         1893.     1.88         1.88 -3.48
-#>  6 UNKNOWN Sample 12            1.89         1893.     1.87         1.87 -3.48
-#>  7 UNKNOWN Sample 04            1.69         1694.     1.62         1.62 -3.48
-#>  8 UNKNOWN Sample 04            1.69         1694.     1.84         1.84 -3.48
-#>  9 UNKNOWN Sample 04            1.69         1694.     1.62         1.62 -3.48
-#> 10 UNKNOWN Sample 16            1.49         1493.     1.46         1.46 -3.48
-#> # ... with 32 more rows, and 3 more variables: efficiency <dbl>, r2 <dbl>,
-#> #   ct <dbl>
+#> # A tibble: 42 × 19
+#> # Groups:   sample_name [16]
+#>    sample_name task    quantity_mean concentration quantity quant_actual   dil
+#>    <chr>       <chr>           <dbl>         <dbl>    <dbl>        <dbl> <dbl>
+#>  1 Sample 06   UNKNOWN          2.04         2039.     2.06         2.06    NA
+#>  2 Sample 06   UNKNOWN          2.04         2039.     2.12         2.12    NA
+#>  3 Sample 06   UNKNOWN          2.04         2039.     1.94         1.94    NA
+#>  4 Sample 12   UNKNOWN          1.89         1893.     1.93         1.93    NA
+#>  5 Sample 12   UNKNOWN          1.89         1893.     1.88         1.88    NA
+#>  6 Sample 12   UNKNOWN          1.89         1893.     1.87         1.87    NA
+#>  7 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA
+#>  8 Sample 04   UNKNOWN          1.69         1694.     1.84         1.84    NA
+#>  9 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA
+#> 10 Sample 16   UNKNOWN          1.49         1493.     1.46         1.46    NA
+#> # … with 32 more rows, and 12 more variables: slope <dbl>, efficiency <dbl>,
+#> #   r2 <dbl>, ct <dbl>, no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>,
+#> #   keep_temp <lgl>, mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
 #> 
 #> $sample_summary
-#> # A tibble: 16 x 3
-#>    sample_name quantity_mean concentration_mean
-#>    <chr>               <dbl>              <dbl>
-#>  1 Sample 01           0.599               599.
-#>  2 Sample 02           1.05               1052.
-#>  3 Sample 03           1.37               1367.
-#>  4 Sample 04           1.69               1694.
-#>  5 Sample 05           0.903               903.
-#>  6 Sample 06           2.04               2039.
-#>  7 Sample 07           1.13               1132.
-#>  8 Sample 08           1.09               1088.
-#>  9 Sample 09           1.22               1218.
-#> 10 Sample 10           1.07               1066.
-#> 11 Sample 11           1.03               1031.
-#> 12 Sample 12           1.89               1893.
-#> 13 Sample 13           0.583               583.
-#> 14 Sample 14           1.22               1216.
-#> 15 Sample 15           0.713               713.
-#> 16 Sample 16           1.49               1493.
+#> # A tibble: 16 × 3
+#>    sample_name quantity_mean quant_adj
+#>    <chr>               <dbl>     <dbl>
+#>  1 Sample 01           0.599     0.599
+#>  2 Sample 02           1.05      1.05 
+#>  3 Sample 03           1.37      1.39 
+#>  4 Sample 04           1.69      1.62 
+#>  5 Sample 05           0.903     0.888
+#>  6 Sample 06           2.04      2.09 
+#>  7 Sample 07           1.13      1.15 
+#>  8 Sample 08           1.09      1.09 
+#>  9 Sample 09           1.22      1.22 
+#> 10 Sample 10           1.07      1.07 
+#> 11 Sample 11           1.03      1.03 
+#> 12 Sample 12           1.89      1.87 
+#> 13 Sample 13           0.583     0.583
+#> 14 Sample 14           1.22      1.17 
+#> 15 Sample 15           0.713     0.713
+#> 16 Sample 16           1.49      1.42 
 #> 
 #> $standard_summary
-#> # A tibble: 10 x 4
-#>    quantity   dil name             value
-#>       <dbl> <dbl> <chr>            <dbl>
-#>  1 0.000680 13.6  quantity_mean 0.000680
-#>  2 0.000680 13.6  quant_actual  0.000417
-#>  3 0.00680  10.6  quantity_mean 0.00680 
-#>  4 0.00680  10.6  quant_actual  0.00568 
-#>  5 0.0680   12.2  quantity_mean 0.0680  
-#>  6 0.0680   12.2  quant_actual  0.0603  
-#>  7 0.680     9.27 quantity_mean 0.680   
-#>  8 0.680     9.27 quant_actual  0.734   
-#>  9 6.80      0    quantity_mean 6.80    
-#> 10 6.80      0    quant_actual  6.8     
+#> # A tibble: 5 × 4
+#>   sample_name   dil quantity_mean quant_actual
+#>   <chr>       <dbl>         <dbl>        <dbl>
+#> 1 Standard 01  0         6.80         6.80    
+#> 2 Standard 02  9.27      0.680        0.734   
+#> 3 Standard 03 12.2       0.0680       0.0603  
+#> 4 Standard 04 10.6       0.00680      0.00568 
+#> 5 Standard 05 13.6       0.000680     0.000417
 #> 
 #> $outliers
-#> # A tibble: 58 x 17
+#> # A tibble: 58 × 19
 #> # Groups:   sample_name [22]
-#>    task     sample_name quantity_mean   dil slope efficiency    r2    ct quantity
-#>    <chr>    <chr>               <dbl> <dbl> <dbl>      <dbl> <dbl> <dbl>    <dbl>
-#>  1 STANDARD 1                   NA        0 -3.48       93.7 0.999  15.4     6.80
-#>  2 STANDARD 1                   NA        0 -3.48       93.7 0.999  15.5     6.80
-#>  3 STANDARD 1                   NA        0 -3.48       93.7 0.999  15.5     6.80
-#>  4 UNKNOWN  Sample 06            2.04    NA -3.48       93.7 0.999  17.1     2.06
-#>  5 UNKNOWN  Sample 06            2.04    NA -3.48       93.7 0.999  17.1     2.12
-#>  6 UNKNOWN  Sample 06            2.04    NA -3.48       93.7 0.999  17.2     1.94
-#>  7 UNKNOWN  Sample 12            1.89    NA -3.48       93.7 0.999  17.2     1.93
-#>  8 UNKNOWN  Sample 12            1.89    NA -3.48       93.7 0.999  17.3     1.88
-#>  9 UNKNOWN  Sample 12            1.89    NA -3.48       93.7 0.999  17.3     1.87
-#> 10 UNKNOWN  Sample 04            1.69    NA -3.48       93.7 0.999  17.5     1.62
-#> # ... with 48 more rows, and 8 more variables: quant_actual <dbl>,
-#> #   concentration <dbl>, no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>,
-#> #   adj_mean <dbl>, adj_sd <dbl>, z <dbl>
+#>    sample_name task     quantity_mean concentration quantity quant_actual   dil
+#>    <chr>       <chr>            <dbl>         <dbl>    <dbl>        <dbl> <dbl>
+#>  1 Standard 01 STANDARD         NA              NA      6.80         6.80     0
+#>  2 Standard 01 STANDARD         NA              NA      6.80         6.80     0
+#>  3 Standard 01 STANDARD         NA              NA      6.80         6.80     0
+#>  4 Sample 06   UNKNOWN           2.04         2039.     2.06         2.06    NA
+#>  5 Sample 06   UNKNOWN           2.04         2039.     2.12         2.12    NA
+#>  6 Sample 06   UNKNOWN           2.04         2039.     1.94         1.94    NA
+#>  7 Sample 12   UNKNOWN           1.89         1893.     1.93         1.93    NA
+#>  8 Sample 12   UNKNOWN           1.89         1893.     1.88         1.88    NA
+#>  9 Sample 12   UNKNOWN           1.89         1893.     1.87         1.87    NA
+#> 10 Sample 04   UNKNOWN           1.69         1694.     1.62         1.62    NA
+#> # … with 48 more rows, and 12 more variables: slope <dbl>, efficiency <dbl>,
+#> #   r2 <dbl>, ct <dbl>, no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>,
+#> #   keep_temp <lgl>, mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
 ```
 
 These data, by themselves, are not particularly useful. However, a suite
@@ -261,7 +260,13 @@ qc |> pcr_lib_qc_plot_conc()
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
+All QC plotting functions can be run and generate a report using
+`pcr_lib_qc_report`.
+
 ``` r
-# Generates a file - not run
-# qc |> pcr_lib_qc_report()
+qc |> pcr_lib_qc_report("path/to/my/report.html")
 ```
+
+More information about the plots available, as well as their
+interpretations, can be found in **Performing Library Quantification
+QC**
