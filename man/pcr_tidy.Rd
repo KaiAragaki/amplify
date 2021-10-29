@@ -4,20 +4,36 @@
 \alias{pcr_tidy}
 \title{Tidy a PCR Excel File}
 \usage{
-pcr_tidy(file_path, pad_zero = FALSE)
+pcr_tidy(file_path, pad_zero = FALSE, usr_standards = NULL)
 }
 \arguments{
-\item{file_path}{Path to an excel file containing the results of a qPCR
-run.}
+\item{file_path}{Path to an excel file containing the results of a qPCR run.}
 
 \item{pad_zero}{logical. Should 'Sample 1' become 'Sample 01'?}
+
+\item{usr_standards}{optional numeric vector specifying standard concentrations.
+If not supplied, if they exist they will be guessed. See details.}
 }
 \value{
 A \code{tibble}
 }
 \description{
-Takes in a fresh results output from qPCR and converts it into a tidy
-format. Useful for downstream analyses.
+Takes in a fresh results output from qPCR and converts it into a tidy format.
+Useful for downstream analyses.
+}
+\details{
+If a standards argument is not supplied AND if the experiment uses
+standards (ie is not a comparative Ct experiment), the standards will be
+guessed from the unique quantities with a 'STANDARD' task.
+
+If standards ARE supplied, they will be matched to their nearest quantity,
+rounding UP. That is, if 1, .1, .01... and the actual quantities are 6.8,
+.68, .068..., 1 will be rounded to 6.8, .1 will be rounded to .68, etc
+(despite being numerically closer were they rounded down).
+
+If standards are missing, (ie, only 1 and .01 are supplied), they will be
+dropped with a message. This is useful if you want to exclude an outlier
+sample from downstream analysis.
 }
 \examples{
 dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
