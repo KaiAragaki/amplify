@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="Tidy a PCR Excel File — pcr_tidy" />
-<meta property="og:description" content="Takes in a fresh results output from qPCR and converts it into a tidy
-format. Useful for downstream analyses." />
+<meta property="og:description" content="Takes in a fresh results output from qPCR and converts it into a tidy format.
+Useful for downstream analyses." />
 <meta property="og:image" content="https://kaiaragaki.github.io/amplify/logo.png" />
 
 
@@ -106,6 +106,9 @@ format. Useful for downstream analyses." />
     <li>
       <a href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
     </li>
+    <li>
+      <a href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -130,29 +133,45 @@ format. Useful for downstream analyses." />
     </div>
 
     <div class="ref-description">
-    <p>Takes in a fresh results output from qPCR and converts it into a tidy
-format. Useful for downstream analyses.</p>
+    <p>Takes in a fresh results output from qPCR and converts it into a tidy format.
+Useful for downstream analyses.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pcr_tidy</span><span class='op'>(</span><span class='va'>file_path</span>, pad_zero <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pcr_tidy</span><span class='op'>(</span><span class='va'>file_path</span>, pad_zero <span class='op'>=</span> <span class='cn'>FALSE</span>, usr_standards <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>file_path</th>
-      <td><p>Path to an excel file containing the results of a qPCR
-run.</p></td>
+      <td><p>Path to an excel file containing the results of a qPCR run.</p></td>
     </tr>
     <tr>
       <th>pad_zero</th>
       <td><p>logical. Should 'Sample 1' become 'Sample 01'?</p></td>
+    </tr>
+    <tr>
+      <th>usr_standards</th>
+      <td><p>optional numeric vector specifying standard concentrations.
+If not supplied, if they exist they will be guessed. See details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tibble</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If a standards argument is not supplied AND if the experiment uses
+standards (ie is not a comparative Ct experiment), the standards will be
+guessed from the unique quantities with a 'STANDARD' task.</p>
+<p>If standards ARE supplied, they will be matched to their nearest quantity,
+rounding UP. That is, if 1, .1, .01... and the actual quantities are 6.8,
+.68, .068..., 1 will be rounded to 6.8, .1 will be rounded to .68, etc
+(despite being numerically closer were they rounded down).</p>
+<p>If standards are missing, (ie, only 1 and .01 are supplied), they will be
+dropped with a message. This is useful if you want to exclude an outlier
+sample from downstream analysis.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>dat_path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"untidy-pcr-example.xls"</span>, package <span class='op'>=</span> <span class='st'>"amplify"</span><span class='op'>)</span>
@@ -166,15 +185,15 @@ run.</p></td>
 #&gt; <span class='message'>* `` -&gt; ...6</span>
 #&gt; <span class='message'>* `` -&gt; ...7</span>
 #&gt; <span class='message'>* ...</span></div><div class='input'><span class='va'>dat_dirty</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 5</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 × 5</span>
 #&gt;    `Block Type`                               `384-Well Block` ...3  ...4  ...5 
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                                      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>
 #&gt; <span style='color: #BCBCBC;'> 1</span> Calibration Background is expired          Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
 #&gt; <span style='color: #BCBCBC;'> 2</span> Calibration Background performed on        01-13-2020       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
-#&gt; <span style='color: #BCBCBC;'> 3</span> Calibration Normalization FAM-ROX is expi~ Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
-#&gt; <span style='color: #BCBCBC;'> 4</span> Calibration Normalization FAM-ROX perform~ 01-13-2020       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
-#&gt; <span style='color: #BCBCBC;'> 5</span> Calibration Normalization VIC-ROX is expi~ Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
-#&gt; <span style='color: #BCBCBC;'> 6</span> Calibration Normalization VIC-ROX perform~ 01-13-2020       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 3</span> Calibration Normalization FAM-ROX is expi… Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 4</span> Calibration Normalization FAM-ROX perform… 01-13-2020       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 5</span> Calibration Normalization VIC-ROX is expi… Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 6</span> Calibration Normalization VIC-ROX perform… 01-13-2020       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
 #&gt; <span style='color: #BCBCBC;'> 7</span> Calibration Pure Dye FAM is expired        Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
 #&gt; <span style='color: #BCBCBC;'> 8</span> Calibration Pure Dye FAM performed on      01-13-2020       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
 #&gt; <span style='color: #BCBCBC;'> 9</span> Calibration Pure Dye NED is expired        Yes              <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   
@@ -182,19 +201,19 @@ run.</p></td>
 <span class='co'># After tidying</span>
 <span class='va'>dat_clean</span> <span class='op'>&lt;-</span> <span class='fu'>pcr_tidy</span><span class='op'>(</span><span class='va'>dat_path</span><span class='op'>)</span>
 <span class='va'>dat_clean</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 5</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 × 5</span>
 #&gt;    well  well_position omit  sample_name target_name
 #&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;lgl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      
-#&gt; <span style='color: #BCBCBC;'> 1</span> 26    B2            FALSE RD1         KRT14      
-#&gt; <span style='color: #BCBCBC;'> 2</span> 27    B3            FALSE RD1         KRT14      
-#&gt; <span style='color: #BCBCBC;'> 3</span> 28    B4            FALSE RD1         KRT14      
-#&gt; <span style='color: #BCBCBC;'> 4</span> 29    B5            FALSE RD1         CDH3       
-#&gt; <span style='color: #BCBCBC;'> 5</span> 30    B6            FALSE RD1         CDH3       
-#&gt; <span style='color: #BCBCBC;'> 6</span> 31    B7            FALSE RD1         CDH3       
-#&gt; <span style='color: #BCBCBC;'> 7</span> 32    B8            FALSE RD1         GATA3      
-#&gt; <span style='color: #BCBCBC;'> 8</span> 33    B9            FALSE RD1         GATA3      
-#&gt; <span style='color: #BCBCBC;'> 9</span> 34    B10           FALSE RD1         GATA3      
-#&gt; <span style='color: #BCBCBC;'>10</span> 35    B11           FALSE RD1         DLC1       </div></pre>
+#&gt; <span style='color: #BCBCBC;'> 1</span> 26    B2            FALSE RD1         GENE1      
+#&gt; <span style='color: #BCBCBC;'> 2</span> 27    B3            FALSE RD1         GENE1      
+#&gt; <span style='color: #BCBCBC;'> 3</span> 28    B4            FALSE RD1         GENE1      
+#&gt; <span style='color: #BCBCBC;'> 4</span> 29    B5            FALSE RD1         GENE2      
+#&gt; <span style='color: #BCBCBC;'> 5</span> 30    B6            FALSE RD1         GENE2      
+#&gt; <span style='color: #BCBCBC;'> 6</span> 31    B7            FALSE RD1         GENE2      
+#&gt; <span style='color: #BCBCBC;'> 7</span> 32    B8            FALSE RD1         GENE3      
+#&gt; <span style='color: #BCBCBC;'> 8</span> 33    B9            FALSE RD1         GENE3      
+#&gt; <span style='color: #BCBCBC;'> 9</span> 34    B10           FALSE RD1         GENE3      
+#&gt; <span style='color: #BCBCBC;'>10</span> 35    B11           FALSE RD1         GENE4      </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -105,6 +105,9 @@
     <li>
       <a href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
     </li>
+    <li>
+      <a href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -158,32 +161,10 @@ output. If NULL, it will export to a temp directory</p></td>
   <span class='fu'><a href='pcr_lib_calc.html'>pcr_lib_calc</a></span><span class='op'>(</span><span class='op'>)</span> |&gt;
   <span class='fu'><a href='pcr_lib_qc.html'>pcr_lib_qc</a></span><span class='op'>(</span><span class='op'>)</span> |&gt;
   <span class='fu'>pcr_lib_qc_report</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir '', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: path[1]="": The filename, directory name, or volume label syntax is incorrect</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>processing file: pcr-lib-qc.Rmd</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |.....                                                                 |   8%
-#&gt;    inline R code fragments
-#&gt; 
-#&gt;   |                                                                              |...........                                                           |  15%
-#&gt; label: unnamed-chunk-1 (with options) 
-#&gt; List of 2
-#&gt;  $ echo   : logi FALSE
-#&gt;  $ message: logi FALSE
-#&gt; </div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'dplyr'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt;   |                                                                              |................                                                      |  23%
-#&gt;   ordinary text without R code
-#&gt; 
-#&gt;   |                                                                              |......................                                                |  31%
-#&gt; label: standards_plot (with options) 
-#&gt; List of 4
-#&gt;  $ echo      : logi FALSE
-#&gt;  $ warning   : logi FALSE
-#&gt;  $ fig.height: num 3
-#&gt;  $ out.width : chr "100%"
-#&gt; </div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir '\\2021-10-15_pcr_lib_qc_reportccc1e103253_files\figure-html', reason 'Invalid argument'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unable to open file '//2021-10-15_pcr_lib_qc_reportccc1e103253_files/figure-html/standards_plot-1.png' for writing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: opening device failed</span></div><div class='output co'>#&gt; <span class='message'>Quitting from lines 21-22 (pcr-lib-qc.Rmd) </span></div><div class='output co'>#&gt; <span class='error'>Error in png(..., res = dpi, units = "in"): unable to start png() device</span></div><div class='output co'>#&gt; </div></pre>
+</div><div class='output co'>#&gt; <span class='error'>Error: Problem with `mutate()` column `keep_temp`.</span>
+#&gt; <span class='error'><span style='color: #0000BB;'>ℹ</span> `keep_temp = if_else(keep, keep, NA)`.</span>
+#&gt; <span class='error'><span style='color: #BB0000;'>x</span> could not find function "if_else"</span>
+#&gt; <span class='error'><span style='color: #0000BB;'>ℹ</span> The error occurred in group 1: sample_name = "Sample 1".</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -25,6 +25,9 @@
     <loc>https://kaiaragaki.github.io/amplify//reference/pad_zero.html</loc>
   </url>
   <url>
+    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_calc_slope.html</loc>
+  </url>
+  <url>
     <loc>https://kaiaragaki.github.io/amplify//reference/pcr_control.html</loc>
   </url>
   <url>
@@ -74,5 +77,8 @@
   </url>
   <url>
     <loc>https://kaiaragaki.github.io/amplify//articles/analyzing-ddctqrtpcr.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify//articles/performing-lib-quant-qc.html</loc>
   </url>
 </urlset>

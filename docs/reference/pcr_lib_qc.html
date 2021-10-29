@@ -105,6 +105,9 @@
     <li>
       <a href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
     </li>
+    <li>
+      <a href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -165,98 +168,10 @@ function like <code>pcr_lib_calc_report</code></p>
   <span class='fu'><a href='pcr_tidy.html'>pcr_tidy</a></span><span class='op'>(</span>pad_zero <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> |&gt;
   <span class='fu'><a href='pcr_lib_calc.html'>pcr_lib_calc</a></span><span class='op'>(</span><span class='op'>)</span> |&gt;
   <span class='fu'>pcr_lib_qc</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $standards
-#&gt; <span style='color: #949494;'># A tibble: 13 x 8</span>
-#&gt; <span style='color: #949494;'># Groups:   task [1]</span>
-#&gt;    task     quantity quant_actual   dil slope efficiency    r2    ct
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> STANDARD 6.80         6.8       0    -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  15.4
-#&gt; <span style='color: #BCBCBC;'> 2</span> STANDARD 6.80         6.8       0    -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  15.5
-#&gt; <span style='color: #BCBCBC;'> 3</span> STANDARD 6.80         6.8       0    -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  15.5
-#&gt; <span style='color: #BCBCBC;'> 4</span> STANDARD 0.680        0.734     9.27 -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  18.7
-#&gt; <span style='color: #BCBCBC;'> 5</span> STANDARD 0.680        0.734     9.27 -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  18.6
-#&gt; <span style='color: #BCBCBC;'> 6</span> STANDARD 0.068<span style='text-decoration: underline;'>0</span>       0.060<span style='text-decoration: underline;'>3</span>   12.2  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  22.3
-#&gt; <span style='color: #BCBCBC;'> 7</span> STANDARD 0.068<span style='text-decoration: underline;'>0</span>       0.060<span style='text-decoration: underline;'>3</span>   12.2  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  22.2
-#&gt; <span style='color: #BCBCBC;'> 8</span> STANDARD 0.068<span style='text-decoration: underline;'>0</span>       0.060<span style='text-decoration: underline;'>3</span>   12.2  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  22.3
-#&gt; <span style='color: #BCBCBC;'> 9</span> STANDARD 0.006<span style='text-decoration: underline;'>80</span>      0.005<span style='text-decoration: underline;'>68</span>  10.6  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  25.7
-#&gt; <span style='color: #BCBCBC;'>10</span> STANDARD 0.006<span style='text-decoration: underline;'>80</span>      0.005<span style='text-decoration: underline;'>68</span>  10.6  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  25.6
-#&gt; <span style='color: #BCBCBC;'>11</span> STANDARD 0.006<span style='text-decoration: underline;'>80</span>      0.005<span style='text-decoration: underline;'>68</span>  10.6  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  25.7
-#&gt; <span style='color: #BCBCBC;'>12</span> STANDARD 0.000<span style='text-decoration: underline;'>680</span>     0.000<span style='text-decoration: underline;'>417</span> 13.6  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  29.4
-#&gt; <span style='color: #BCBCBC;'>13</span> STANDARD 0.000<span style='text-decoration: underline;'>680</span>     0.000<span style='text-decoration: underline;'>417</span> 13.6  -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  29.4
-#&gt; 
-#&gt; $samples
-#&gt; <span style='color: #949494;'># A tibble: 42 x 10</span>
-#&gt; <span style='color: #949494;'># Groups:   task [1]</span>
-#&gt;    task    sample_name quantity_mean concentration quantity quant_actual slope
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>        <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> UNKNOWN Sample 06            2.04         <span style='text-decoration: underline;'>2</span>039.     2.06         2.06 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 2</span> UNKNOWN Sample 06            2.04         <span style='text-decoration: underline;'>2</span>039.     2.12         2.12 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 3</span> UNKNOWN Sample 06            2.04         <span style='text-decoration: underline;'>2</span>039.     1.94         1.94 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 4</span> UNKNOWN Sample 12            1.89         <span style='text-decoration: underline;'>1</span>893.     1.93         1.93 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 5</span> UNKNOWN Sample 12            1.89         <span style='text-decoration: underline;'>1</span>893.     1.88         1.88 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 6</span> UNKNOWN Sample 12            1.89         <span style='text-decoration: underline;'>1</span>893.     1.87         1.87 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 7</span> UNKNOWN Sample 04            1.69         <span style='text-decoration: underline;'>1</span>694.     1.62         1.62 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 8</span> UNKNOWN Sample 04            1.69         <span style='text-decoration: underline;'>1</span>694.     1.84         1.84 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'> 9</span> UNKNOWN Sample 04            1.69         <span style='text-decoration: underline;'>1</span>694.     1.62         1.62 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #BCBCBC;'>10</span> UNKNOWN Sample 16            1.49         <span style='text-decoration: underline;'>1</span>493.     1.46         1.46 -<span style='color: #BB0000;'>3.48</span>
-#&gt; <span style='color: #949494;'># ... with 32 more rows, and 3 more variables: efficiency &lt;dbl&gt;, r2 &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   ct &lt;dbl&gt;</span>
-#&gt; 
-#&gt; $sample_summary
-#&gt; <span style='color: #949494;'># A tibble: 16 x 3</span>
-#&gt;    sample_name quantity_mean concentration_mean
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> Sample 01           0.599               599.
-#&gt; <span style='color: #BCBCBC;'> 2</span> Sample 02           1.05               <span style='text-decoration: underline;'>1</span>052.
-#&gt; <span style='color: #BCBCBC;'> 3</span> Sample 03           1.37               <span style='text-decoration: underline;'>1</span>367.
-#&gt; <span style='color: #BCBCBC;'> 4</span> Sample 04           1.69               <span style='text-decoration: underline;'>1</span>694.
-#&gt; <span style='color: #BCBCBC;'> 5</span> Sample 05           0.903               903.
-#&gt; <span style='color: #BCBCBC;'> 6</span> Sample 06           2.04               <span style='text-decoration: underline;'>2</span>039.
-#&gt; <span style='color: #BCBCBC;'> 7</span> Sample 07           1.13               <span style='text-decoration: underline;'>1</span>132.
-#&gt; <span style='color: #BCBCBC;'> 8</span> Sample 08           1.09               <span style='text-decoration: underline;'>1</span>088.
-#&gt; <span style='color: #BCBCBC;'> 9</span> Sample 09           1.22               <span style='text-decoration: underline;'>1</span>218.
-#&gt; <span style='color: #BCBCBC;'>10</span> Sample 10           1.07               <span style='text-decoration: underline;'>1</span>066.
-#&gt; <span style='color: #BCBCBC;'>11</span> Sample 11           1.03               <span style='text-decoration: underline;'>1</span>031.
-#&gt; <span style='color: #BCBCBC;'>12</span> Sample 12           1.89               <span style='text-decoration: underline;'>1</span>893.
-#&gt; <span style='color: #BCBCBC;'>13</span> Sample 13           0.583               583.
-#&gt; <span style='color: #BCBCBC;'>14</span> Sample 14           1.22               <span style='text-decoration: underline;'>1</span>216.
-#&gt; <span style='color: #BCBCBC;'>15</span> Sample 15           0.713               713.
-#&gt; <span style='color: #BCBCBC;'>16</span> Sample 16           1.49               <span style='text-decoration: underline;'>1</span>493.
-#&gt; 
-#&gt; $standard_summary
-#&gt; <span style='color: #949494;'># A tibble: 10 x 4</span>
-#&gt;    quantity   dil name             value
-#&gt;       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> 0.000<span style='text-decoration: underline;'>680</span> 13.6  quantity_mean 0.000<span style='text-decoration: underline;'>680</span>
-#&gt; <span style='color: #BCBCBC;'> 2</span> 0.000<span style='text-decoration: underline;'>680</span> 13.6  quant_actual  0.000<span style='text-decoration: underline;'>417</span>
-#&gt; <span style='color: #BCBCBC;'> 3</span> 0.006<span style='text-decoration: underline;'>80</span>  10.6  quantity_mean 0.006<span style='text-decoration: underline;'>80</span> 
-#&gt; <span style='color: #BCBCBC;'> 4</span> 0.006<span style='text-decoration: underline;'>80</span>  10.6  quant_actual  0.005<span style='text-decoration: underline;'>68</span> 
-#&gt; <span style='color: #BCBCBC;'> 5</span> 0.068<span style='text-decoration: underline;'>0</span>   12.2  quantity_mean 0.068<span style='text-decoration: underline;'>0</span>  
-#&gt; <span style='color: #BCBCBC;'> 6</span> 0.068<span style='text-decoration: underline;'>0</span>   12.2  quant_actual  0.060<span style='text-decoration: underline;'>3</span>  
-#&gt; <span style='color: #BCBCBC;'> 7</span> 0.680     9.27 quantity_mean 0.680   
-#&gt; <span style='color: #BCBCBC;'> 8</span> 0.680     9.27 quant_actual  0.734   
-#&gt; <span style='color: #BCBCBC;'> 9</span> 6.80      0    quantity_mean 6.80    
-#&gt; <span style='color: #BCBCBC;'>10</span> 6.80      0    quant_actual  6.8     
-#&gt; 
-#&gt; $outliers
-#&gt; <span style='color: #949494;'># A tibble: 58 x 17</span>
-#&gt; <span style='color: #949494;'># Groups:   sample_name [22]</span>
-#&gt;    task     sample_name quantity_mean   dil slope efficiency    r2    ct quantity
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>               <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'> 1</span> STANDARD 1                   <span style='color: #BB0000;'>NA</span>        0 -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  15.4     6.80
-#&gt; <span style='color: #BCBCBC;'> 2</span> STANDARD 1                   <span style='color: #BB0000;'>NA</span>        0 -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  15.5     6.80
-#&gt; <span style='color: #BCBCBC;'> 3</span> STANDARD 1                   <span style='color: #BB0000;'>NA</span>        0 -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  15.5     6.80
-#&gt; <span style='color: #BCBCBC;'> 4</span> UNKNOWN  Sample 06            2.04    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.1     2.06
-#&gt; <span style='color: #BCBCBC;'> 5</span> UNKNOWN  Sample 06            2.04    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.1     2.12
-#&gt; <span style='color: #BCBCBC;'> 6</span> UNKNOWN  Sample 06            2.04    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.2     1.94
-#&gt; <span style='color: #BCBCBC;'> 7</span> UNKNOWN  Sample 12            1.89    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.2     1.93
-#&gt; <span style='color: #BCBCBC;'> 8</span> UNKNOWN  Sample 12            1.89    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.3     1.88
-#&gt; <span style='color: #BCBCBC;'> 9</span> UNKNOWN  Sample 12            1.89    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.3     1.87
-#&gt; <span style='color: #BCBCBC;'>10</span> UNKNOWN  Sample 04            1.69    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>3.48</span>       93.7 0.999  17.5     1.62
-#&gt; <span style='color: #949494;'># ... with 48 more rows, and 8 more variables: quant_actual &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   concentration &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   adj_mean &lt;dbl&gt;, adj_sd &lt;dbl&gt;, z &lt;dbl&gt;</span>
-#&gt; </div><div class='input'>
+</div><div class='output co'>#&gt; <span class='error'>Error: Problem with `mutate()` column `keep_temp`.</span>
+#&gt; <span class='error'><span style='color: #0000BB;'>ℹ</span> `keep_temp = if_else(keep, keep, NA)`.</span>
+#&gt; <span class='error'><span style='color: #BB0000;'>x</span> could not find function "if_else"</span>
+#&gt; <span class='error'><span style='color: #0000BB;'>ℹ</span> The error occurred in group 1: sample_name = "Sample 01".</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

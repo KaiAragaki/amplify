@@ -105,6 +105,9 @@
     <li>
       <a href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
     </li>
+    <li>
+      <a href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -147,6 +150,19 @@
 
     <p>A sample name with up to one zero padded</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"blueberry"</span>, <span class='st'>"Sample 1"</span>, <span class='st'>"Sample 10"</span>, <span class='st'>"sample 2"</span>, <span class='st'>"john"</span>, <span class='st'>"larry"</span>, <span class='st'>"toxic waste"</span>, <span class='st'>"Sample 02"</span><span class='op'>)</span> |&gt;
+  <span class='fu'>pad_zero</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "blueberry"   "Sample 01"   "Sample 10"   "sample 2"    "john"       
+#&gt; [6] "larry"       "toxic waste" "Sample 02"  </div><div class='input'>
+<span class='co'># pad_zero will not pad if it doesn't need to:</span>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Sample 1"</span>, <span class='st'>"Sample 2"</span>, <span class='st'>"Sample 9"</span><span class='op'>)</span> |&gt; <span class='fu'>pad_zero</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Sample 1" "Sample 2" "Sample 9"</div><div class='input'>
+<span class='co'># pad_zero is case sensitive, since these will be coming off a machine in a standardized format</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sample 10"</span>, <span class='st'>"sample 1"</span><span class='op'>)</span> |&gt; <span class='fu'>pad_zero</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "sample 10" "sample 1" </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Sample 10"</span>, <span class='st'>"Sample 1"</span><span class='op'>)</span> |&gt; <span class='fu'>pad_zero</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Sample 10" "Sample 01"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a plate with given well format — get_plate • amplify</title>
+<title>Recalcuate standard slope of quantity vs Ct — pcr_calc_slope • amplify</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Create a plate with given well format — get_plate" />
-<meta property="og:description" content="Create a plate with given well format" />
+<meta property="og:title" content="Recalcuate standard slope of quantity vs Ct — pcr_calc_slope" />
+<meta property="og:description" content="Recalcuate standard slope of quantity vs Ct" />
 <meta property="og:image" content="https://kaiaragaki.github.io/amplify/logo.png" />
 
 
@@ -126,36 +126,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a plate with given well format</h1>
+    <h1>Recalcuate standard slope of quantity vs Ct</h1>
     
-    <div class="hidden name"><code>get_plate.Rd</code></div>
+    <div class="hidden name"><code>pcr_calc_slope.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a plate with given well format</p>
+    <p>Recalcuate standard slope of quantity vs Ct</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_plate</span><span class='op'>(</span><span class='va'>format</span>, <span class='va'>no_border</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pcr_calc_slope</span><span class='op'>(</span><span class='va'>tidy_pcr</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>format</th>
-      <td><p>integer. How many wells should this plate have?</p></td>
-    </tr>
-    <tr>
-      <th>no_border</th>
-      <td><p>logical. Will the user omit filling the edge wells of the
-plate (to avoid edge effects)?</p></td>
+      <th>tidy_pcr</th>
+      <td><p>a object that has been tidied by <code>tidy_pcr</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tibble with <code>col</code> (number, factor, denotes plate column from
-left to right) and <code>row</code> (character, factor, denotes plate row from top to
-bottom). If <code>no_border = TRUE</code>, the edges of the plate will not be included.</p>
+    <p>a tibble with an updated <code>slope</code> column</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

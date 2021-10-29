@@ -3,7 +3,8 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   analyzing-ddctqrtpcr: analyzing-ddctqrtpcr.html
-last_built: 2021-10-16T03:30Z
+  performing-lib-quant-qc: performing-lib-quant-qc.html
+last_built: 2021-10-29T15:00Z
 urls:
   reference: https://kaiaragaki.github.io/amplify//reference
   article: https://kaiaragaki.github.io/amplify//articles

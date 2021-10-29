@@ -105,6 +105,9 @@
     <li>
       <a href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
     </li>
+    <li>
+      <a href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -132,7 +135,7 @@
     <p>View sample plating layout</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pcr_plate_view</span><span class='op'>(</span><span class='va'>tidy_pcr</span>, fill <span class='op'>=</span> <span class='va'>.data</span><span class='op'>$</span><span class='va'>target_name</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pcr_plate_view</span><span class='op'>(</span><span class='va'>tidy_pcr</span>, fill <span class='op'>=</span> <span class='st'>"target_name"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,7 +146,7 @@
     </tr>
     <tr>
       <th>fill</th>
-      <td><p>a column in <code>tidy_pcr</code> used to use to fill the geom_tiles</p></td>
+      <td><p>character. A column in <code>tidy_pcr</code> used to use to fill the geom_tiles</p></td>
     </tr>
     </table>
 
