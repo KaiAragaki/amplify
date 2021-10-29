@@ -124,9 +124,10 @@ find_outliers <- function(dat) {
                                           TRUE ~ FALSE),
                   keep_temp = if_else(keep, keep, NA)) |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::mutate(adj_mean = mean(.data$keep_temp * .data$ct, na.rm = TRUE),
-                  adj_sd   = stats::sd(.data$keep_temp * .data$ct, na.rm = TRUE),
-                  z = (.data$ct-.data$adj_mean)/.data$adj_sd)
+    dplyr::mutate(mean_adj = mean(.data$keep_temp * .data$ct, na.rm = TRUE),
+                  sd_adj   = stats::sd(.data$keep_temp * .data$ct, na.rm = TRUE),
+                  quant_adj = mean(.data$keep_temp * .data$quantity, na.rm = TRUE),
+                  z = (.data$ct-.data$mean_adj)/.data$sd_adj)
 }
 
 #' Find mean of ct without putative outlier
@@ -284,8 +285,7 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
 pcr_lib_qc_plot_outliers <- function(lib_qc) {
   lib_qc$outliers |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::mutate(keep_logi = !is.na(.data$keep),
-                  z = (.data$ct-.data$adj_mean)/.data$adj_sd,
+    dplyr::mutate(z = (.data$ct-.data$mean_adj)/.data$sd_adj,
                   overflow = abs(.data$z) > 10,
                   z_plot = dplyr::case_when(.data$z > 10 ~ 10,
                                             .data$z < -10 ~ -10,
@@ -294,7 +294,7 @@ pcr_lib_qc_plot_outliers <- function(lib_qc) {
                                            .data$z < -10 ~ paste("<<<", as.character(round(.data$z, 0))),
                                            TRUE ~ NA_character_)) |>
     dplyr::filter(!is.na(.data$sample_name)) |>
-    ggplot2::ggplot(aes(x = .data$z_plot, y = .data$sample_name, color = .data$keep_logi, shape = .data$overflow)) +
+    ggplot2::ggplot(aes(x = .data$z_plot, y = .data$sample_name, color = .data$keep, shape = .data$overflow)) +
     ggplot2::scale_color_manual(values = c("#666666", "#00AAAA")) +
     ggplot2::scale_shape_manual(values = c(16, NA)) +
     ggplot2::geom_text(aes(label = .data$label), size = 5) +
