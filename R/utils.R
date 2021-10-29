@@ -2,7 +2,7 @@
 #'
 #' @param sample_names a vector of sample names
 #' @return A sample name with up to one zero padded
-#' @keywords internal
+#' @export
 #' @examples
 #' c("blueberry", "Sample 1", "Sample 10", "sample 2", "john", "larry", "toxic waste", "Sample 02") |>
 #'   pad_zero()
@@ -33,4 +33,15 @@ pad_zero <- function(sample_names) {
                   new_names = ifelse(is.na(new_names), sample_names, new_names))
 
   name_frame$new_names
+}
+
+#' Recalcuate standard slope of quantity vs Ct
+#'
+#' @param tidy_pcr a object that has been tidied by `tidy_pcr`
+#'
+#' @return a tibble with an updated `slope` column
+#' @export
+pcr_calc_slope <- function(tidy_pcr) {
+  tidy_pcr$slope <- stats::lm(ct~log10(quantity), data = tidy_pcr)$coefficients[2] |> unname()
+  tidy_pcr
 }
