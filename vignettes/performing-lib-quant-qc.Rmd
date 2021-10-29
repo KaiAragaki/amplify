@@ -10,7 +10,11 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width=7, 
+  fig.height=4, 
+  out.width="100%", 
+  dpi = 200
 )
 ```
 
@@ -38,6 +42,31 @@ tidy_lib <- system.file("extdata", "untidy-standard-curve.xlsx", package = "ampl
 tidy_lib |> 
   select(1:10) |> 
   head()
+```
+
+By default, `pcr_tidy` assumes you have a standards serial dilution starting at 6.8, diluted by a factor of 10, going all the way down to 0.00068, and that you want all of them. There are a couple instances in which this might not be the case:
+
+1. You have a different serial dilution
+2. You want to remove some particularly heinous standards that will throw off slope calculation if included
+
+In that instance, you would supply a numeric vector to the `usr_standards` argument. If you wish to omit a given set of standards, simply do not include them in this vector:
+
+```{r}
+system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |> 
+  pcr_tidy(pad_zero = TRUE, usr_standards = c(6.8, .68, .068, .0068)) |> 
+  select(1:10) |> 
+  head()
+```
+This will automatically update the slope column of the dataframe as well. This can be called standalone (say, after manually removing a few standards replicates from your dataset) by running `pcr_calc_slope`:
+
+```{r}
+recalc <- tidy_lib |> 
+  filter(quantity > 0.0068 | task != "STANDARD") |> 
+  pcr_calc_slope()
+
+recalc$slope[1]
+tidy_lib$slope[1]
+
 ```
 
 
@@ -102,7 +131,12 @@ Thus, in a perfect world we expect to see a slope of -3.3, an $R^2$ of 1, and an
 
 Things are rarely perfect, however. 100% efficiency is an upper bound. Therefore, an efficiency >80% is considered acceptable. 
 
-If there is an outlier in your standards it may make the efficiency artificially low or high. In this instance, manually fitting the data without the outlier may be necessary to calculate an accurate slope and efficiency. If your samples are within the range that has not been 'tainted' by the outlier, you may be able to salvage your run (though manual calculations will be required).
+If there is an outlier in your standards it may make the efficiency artificially low or high. In some cases you can remove those standards and recalculate the slope to still get accurate concentrations, without having to redo the qPCR run:
+
+1. Standards much more dilute than your sample concentrations are outliers
+2. A technical replicate of a standard is an outlier
+
+One instances in which it is not recommended to simply remove the outliers: when standards that are within the range or above your sample concentrations. This is because a poor dilution done upstream of your samples will affect all concentrations downstream, making accurate determination of absolute library concentration impossible. If you are ever in doubt, you should probably bite the bullet and redo the qPCR.
 
 ## Plot Outliers
 
@@ -111,9 +145,23 @@ lib_qc |>
   pcr_lib_qc_plot_outliers()
 ```
 
-It's often best to remove technical replicate outliers in order to obtain an accurate estimate of concentration. A point is deemed an outlier if it is >3Z away from the mean of the other two. Shown above, the outliers are in gray, and the zone of inclusion is in blue. Particularly egregious outliers are shown with (<<<) or (>>>) and the number of standard deviations away they are. In the instance above, 463Z away!
+It's often best to remove technical replicate outliers in order to obtain an accurate estimate of concentration. A point is deemed an outlier if it is >3Z away from the mean of the other two. Shown above, the outliers are in gray, and the zone of inclusion is in blue. Particularly egregious outliers are shown with (<<<) or (>>>) and the number of standard deviations away they are. In the instance above, 463Z away! New estimates, sans these outliers, are found in the `quant_adj` column of `sample_summary`:
 
+```{r}
+lib_qc$sample_summary
+```
+These can be visualized using `pcr_lib_qc_conc`:
 
+```{r}
+lib_qc |> 
+  pcr_lib_qc_plot_conc()
+```
+This plot shows the unadjusted concentrations in gray, and the concentrations after outlier removal in blue.
 
+A full HTML report can be produced by running `pcr_lib_qc_report`:
 
+```{r, eval = FALSE}
+lib_qc |> 
+  amplify::pcr_lib_qc_report("path/to/file.html")
+```
 
