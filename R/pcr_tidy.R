@@ -131,7 +131,7 @@ pcr_tidy <- function(file_path, pad_zero = FALSE, usr_standards = NULL) {
       dat <- dat |>
         dplyr::filter(!is.na(sample_name) | task != "STANDARD")
       message(nrow(dropping), " rows of standards did not have a matching value in 'standards' and have been dropped")
-      dat$slope <- lm(ct~log10(quantity), data = dat)$coefficients[2]
+      dat <- pcr_calc_slope(dat)
     }
 
   }
