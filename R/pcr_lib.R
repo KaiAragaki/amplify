@@ -326,8 +326,11 @@ pcr_lib_qc_plot_outliers <- function(lib_qc) {
 #'   pcr_lib_qc_plot_conc()
 pcr_lib_qc_plot_conc <- function(lib_qc) {
   lib_qc$sample_summary |>
-    ggplot2::ggplot(aes(x = .data$sample_name, y = .data$concentration_mean)) +
-    ggplot2::geom_point(color = "#00AAAA", size = 5) +
+    tidyr::pivot_longer(cols = c("quantity_mean", "quant_adj")) |>
+    dplyr::arrange(desc(name)) |> # Puts blue (adj mean) on top of gray
+    ggplot2::ggplot(aes(x = .data$sample_name, y = .data$value, color = .data$name)) +
+    ggplot2::geom_point(size = 5, alpha = 0.8, shape = 16) +
+    ggplot2::scale_color_manual(values = c(quantity_mean = "#666666", quant_adj = "#00AAAA")) +
     ggplot2::theme(axis.title = element_blank(),
                    legend.position = "none",
                    axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5))
