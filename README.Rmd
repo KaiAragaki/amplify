@@ -69,6 +69,7 @@ Tidied results can be plotted using `pcr_plot`
 
 ```{r pcr_plot}
 tidy_pcr |> 
+  pcr_rq("RD1") |> 
   pcr_plot()
 ```
 
@@ -111,7 +112,7 @@ We can generate useful plots to determine the quality of the quantification run 
 ```{r}
 qc <- calc_lib |> 
   pcr_lib_qc()
-qc
+lapply(qc, head, n = 3)
 ```
 These data, by themselves, are not particularly useful. However, a suite of QC plotting functions can be used upon these data to give insight, such as:
 
