@@ -223,7 +223,7 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
     dplyr::filter(.data$name == "quant_actual") |>
     dplyr::mutate(line_start = 1/.data$value,
                   line_end = dplyr::lag(.data$line_start),
-                  dil = dplyr::lag(.data$dil)) |>
+                  dil = .data$dil) |>
     dplyr::arrange(dplyr::desc(value)) |>
     dplyr::filter(!is.na(.data$line_end)) |>
     dplyr::mutate(y = rep_len(c(1.1, 0.9), n_stans-1),
