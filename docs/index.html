@@ -154,8 +154,8 @@
 <p>Tidied results can be plotted using <code>pcr_plot</code></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tidy_pcr</span> |&gt; 
-  <span class="fu"><a href="reference/pcr_plot.html">pcr_plot</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 18 rows containing missing values (position_stack).</span></code></pre></div>
+  <span class="fu"><a href="reference/pcr_rq.html">pcr_rq</a></span><span class="op">(</span><span class="st">"RD1"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="reference/pcr_plot.html">pcr_plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-pcr_plot-1.png" width="100%"></p>
 <p>Additionally, overviews of plate features can be done using <code>pcr_plate</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -212,97 +212,58 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qc</span> <span class="op">&lt;-</span> <span class="va">calc_lib</span> |&gt; 
   <span class="fu"><a href="reference/pcr_lib_qc.html">pcr_lib_qc</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">qc</span>
+<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">qc</span>, <span class="va">head</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt; $standards</span>
-<span class="co">#&gt; # A tibble: 13 × 19</span>
-<span class="co">#&gt; # Groups:   sample_name [5]</span>
-<span class="co">#&gt;    sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Standard 01 STANDARD            NA            NA 6.80         6.80      0   </span>
-<span class="co">#&gt;  2 Standard 01 STANDARD            NA            NA 6.80         6.80      0   </span>
-<span class="co">#&gt;  3 Standard 01 STANDARD            NA            NA 6.80         6.80      0   </span>
-<span class="co">#&gt;  4 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27</span>
-<span class="co">#&gt;  5 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27</span>
-<span class="co">#&gt;  6 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 </span>
-<span class="co">#&gt;  7 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 </span>
-<span class="co">#&gt;  8 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 </span>
-<span class="co">#&gt;  9 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 </span>
-<span class="co">#&gt; 10 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 </span>
-<span class="co">#&gt; 11 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 </span>
-<span class="co">#&gt; 12 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 </span>
-<span class="co">#&gt; 13 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 </span>
+<span class="co">#&gt; # A tibble: 3 × 19</span>
+<span class="co">#&gt; # Groups:   sample_name [1]</span>
+<span class="co">#&gt;   sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Standard 01 STANDARD            NA            NA     6.80         6.80     0</span>
+<span class="co">#&gt; 2 Standard 01 STANDARD            NA            NA     6.80         6.80     0</span>
+<span class="co">#&gt; 3 Standard 01 STANDARD            NA            NA     6.80         6.80     0</span>
 <span class="co">#&gt; # … with 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;, r2 &lt;dbl&gt;, ct &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;, keep_temp &lt;lgl&gt;,</span>
 <span class="co">#&gt; #   mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $samples</span>
-<span class="co">#&gt; # A tibble: 42 × 19</span>
-<span class="co">#&gt; # Groups:   sample_name [16]</span>
-<span class="co">#&gt;    sample_name task    quantity_mean concentration quantity quant_actual   dil</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;           &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Sample 06   UNKNOWN          2.04         2039.     2.06         2.06    NA</span>
-<span class="co">#&gt;  2 Sample 06   UNKNOWN          2.04         2039.     2.12         2.12    NA</span>
-<span class="co">#&gt;  3 Sample 06   UNKNOWN          2.04         2039.     1.94         1.94    NA</span>
-<span class="co">#&gt;  4 Sample 12   UNKNOWN          1.89         1893.     1.93         1.93    NA</span>
-<span class="co">#&gt;  5 Sample 12   UNKNOWN          1.89         1893.     1.88         1.88    NA</span>
-<span class="co">#&gt;  6 Sample 12   UNKNOWN          1.89         1893.     1.87         1.87    NA</span>
-<span class="co">#&gt;  7 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA</span>
-<span class="co">#&gt;  8 Sample 04   UNKNOWN          1.69         1694.     1.84         1.84    NA</span>
-<span class="co">#&gt;  9 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA</span>
-<span class="co">#&gt; 10 Sample 16   UNKNOWN          1.49         1493.     1.46         1.46    NA</span>
-<span class="co">#&gt; # … with 32 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span>
-<span class="co">#&gt; #   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span>
+<span class="co">#&gt; # A tibble: 3 × 19</span>
+<span class="co">#&gt; # Groups:   sample_name [1]</span>
+<span class="co">#&gt;   sample_name task    quantity_mean concentration quantity quant_actual   dil</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;           &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Sample 06   UNKNOWN          2.04         2039.     2.06         2.06    NA</span>
+<span class="co">#&gt; 2 Sample 06   UNKNOWN          2.04         2039.     2.12         2.12    NA</span>
+<span class="co">#&gt; 3 Sample 06   UNKNOWN          2.04         2039.     1.94         1.94    NA</span>
+<span class="co">#&gt; # … with 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;, r2 &lt;dbl&gt;, ct &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;, keep_temp &lt;lgl&gt;,</span>
+<span class="co">#&gt; #   mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sample_summary</span>
-<span class="co">#&gt; # A tibble: 16 × 3</span>
-<span class="co">#&gt;    sample_name quantity_mean quant_adj</span>
-<span class="co">#&gt;    &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Sample 01           0.599     0.599</span>
-<span class="co">#&gt;  2 Sample 02           1.05      1.05 </span>
-<span class="co">#&gt;  3 Sample 03           1.37      1.39 </span>
-<span class="co">#&gt;  4 Sample 04           1.69      1.62 </span>
-<span class="co">#&gt;  5 Sample 05           0.903     0.888</span>
-<span class="co">#&gt;  6 Sample 06           2.04      2.09 </span>
-<span class="co">#&gt;  7 Sample 07           1.13      1.15 </span>
-<span class="co">#&gt;  8 Sample 08           1.09      1.09 </span>
-<span class="co">#&gt;  9 Sample 09           1.22      1.22 </span>
-<span class="co">#&gt; 10 Sample 10           1.07      1.07 </span>
-<span class="co">#&gt; 11 Sample 11           1.03      1.03 </span>
-<span class="co">#&gt; 12 Sample 12           1.89      1.87 </span>
-<span class="co">#&gt; 13 Sample 13           0.583     0.583</span>
-<span class="co">#&gt; 14 Sample 14           1.22      1.17 </span>
-<span class="co">#&gt; 15 Sample 15           0.713     0.713</span>
-<span class="co">#&gt; 16 Sample 16           1.49      1.42 </span>
+<span class="co">#&gt; # A tibble: 3 × 3</span>
+<span class="co">#&gt;   sample_name quantity_mean quant_adj</span>
+<span class="co">#&gt;   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Sample 01           0.599     0.599</span>
+<span class="co">#&gt; 2 Sample 02           1.05      1.05 </span>
+<span class="co">#&gt; 3 Sample 03           1.37      1.39 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $standard_summary</span>
-<span class="co">#&gt; # A tibble: 5 × 4</span>
+<span class="co">#&gt; # A tibble: 3 × 4</span>
 <span class="co">#&gt;   sample_name   dil quantity_mean quant_actual</span>
 <span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Standard 01  0         6.80         6.80    </span>
-<span class="co">#&gt; 2 Standard 02  9.27      0.680        0.734   </span>
-<span class="co">#&gt; 3 Standard 03 12.2       0.0680       0.0603  </span>
-<span class="co">#&gt; 4 Standard 04 10.6       0.00680      0.00568 </span>
-<span class="co">#&gt; 5 Standard 05 13.6       0.000680     0.000417</span>
+<span class="co">#&gt; 1 Standard 01  0           6.80         6.80  </span>
+<span class="co">#&gt; 2 Standard 02  9.27        0.680        0.734 </span>
+<span class="co">#&gt; 3 Standard 03 12.2         0.0680       0.0603</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outliers</span>
-<span class="co">#&gt; # A tibble: 58 × 19</span>
-<span class="co">#&gt; # Groups:   sample_name [22]</span>
-<span class="co">#&gt;    sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Standard 01 STANDARD         NA              NA      6.80         6.80     0</span>
-<span class="co">#&gt;  2 Standard 01 STANDARD         NA              NA      6.80         6.80     0</span>
-<span class="co">#&gt;  3 Standard 01 STANDARD         NA              NA      6.80         6.80     0</span>
-<span class="co">#&gt;  4 Sample 06   UNKNOWN           2.04         2039.     2.06         2.06    NA</span>
-<span class="co">#&gt;  5 Sample 06   UNKNOWN           2.04         2039.     2.12         2.12    NA</span>
-<span class="co">#&gt;  6 Sample 06   UNKNOWN           2.04         2039.     1.94         1.94    NA</span>
-<span class="co">#&gt;  7 Sample 12   UNKNOWN           1.89         1893.     1.93         1.93    NA</span>
-<span class="co">#&gt;  8 Sample 12   UNKNOWN           1.89         1893.     1.88         1.88    NA</span>
-<span class="co">#&gt;  9 Sample 12   UNKNOWN           1.89         1893.     1.87         1.87    NA</span>
-<span class="co">#&gt; 10 Sample 04   UNKNOWN           1.69         1694.     1.62         1.62    NA</span>
-<span class="co">#&gt; # … with 48 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span>
-<span class="co">#&gt; #   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 3 × 19</span>
+<span class="co">#&gt; # Groups:   sample_name [1]</span>
+<span class="co">#&gt;   sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Standard 01 STANDARD            NA            NA     6.80         6.80     0</span>
+<span class="co">#&gt; 2 Standard 01 STANDARD            NA            NA     6.80         6.80     0</span>
+<span class="co">#&gt; 3 Standard 01 STANDARD            NA            NA     6.80         6.80     0</span>
+<span class="co">#&gt; # … with 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;, r2 &lt;dbl&gt;, ct &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;, keep_temp &lt;lgl&gt;,</span>
+<span class="co">#&gt; #   mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></code></pre></div>
 <p>These data, by themselves, are not particularly useful. However, a suite of QC plotting functions can be used upon these data to give insight, such as:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qc</span> |&gt; <span class="fu"><a href="reference/pcr_lib_qc_plot_conc.html">pcr_lib_qc_plot_conc</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
