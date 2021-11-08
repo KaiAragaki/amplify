@@ -30,11 +30,9 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 
   tidy_pcr |>
     tidyr::nest(replicates = c("well", "well_position", "ct", "quantity",
-                               "well_row", "well_col",
-                               dplyr::starts_with("prfdrop"),
-                               dplyr::starts_with("baxrox"))) |>
+                               "well_row", "well_col", contains("badrox"), contains("prfdrop"))) |>
     dplyr::group_by(.data$task) |>
-    dplyr::arrange(.data$ct_mean) |>
+    dplyr::arrange(.data$task, .data$ct_mean) |>
     dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
                   dil = 2^.data$standard_diff,
                   quant_actual = max_standard/cumprod(.data$dil),
