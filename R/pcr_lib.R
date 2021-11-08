@@ -123,7 +123,7 @@ find_outliers <- function(dat) {
     dplyr::mutate(keep = dplyr::case_when(.data$no_po_mean - (3*.data$no_po_sd) < .data$ct & .data$no_po_mean + (3 * .data$no_po_sd) > .data$ct ~ TRUE,
                                           is.na(.data$no_po_sd) ~ TRUE,
                                           TRUE ~ FALSE),
-                  keep_temp = if_else(keep, keep, NA)) |>
+                  keep_temp = dplyr::if_else(keep, keep, NA)) |>
     dplyr::group_by(.data$sample_name) |>
     dplyr::mutate(mean_adj = mean(.data$keep_temp * .data$ct, na.rm = TRUE),
                   sd_adj   = stats::sd(.data$keep_temp * .data$ct, na.rm = TRUE),
