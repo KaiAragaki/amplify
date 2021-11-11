@@ -238,13 +238,9 @@ useable_plate_dims <- function(plate) {
 #'
 #' @keywords internal
 get_best_factor <- function(vol_to_add) {
-  if (vol_to_add < 1) {
-    exact_factor <- 1 / vol_to_add
-    best_factor <- ceiling(exact_factor/5) * 5 # Give something divisible by 5
-  } else {
-    best_factor <- 1
-  }
-  as.integer(best_factor)
+  dplyr::if_else(vol_to_add < 1, {
+    as.integer(ceiling((1 / vol_to_add)/5) * 5) # Give something divisible by 5
+  }, 1L)
 }
 
 denote_vlane <- function(plate, plate_dims, reps) {
