@@ -85,8 +85,8 @@ Tidied results can be plotted using `pcr_plot`
 
 ``` r
 tidy_pcr |> 
+  pcr_rq("RD1") |> 
   pcr_plot()
-#> Warning: Removed 18 rows containing missing values (position_stack).
 ```
 
 <img src="man/figures/README-pcr_plot-1.png" width="100%" />
@@ -157,97 +157,58 @@ quantification run by first using `pcr_lib_qc`:
 ``` r
 qc <- calc_lib |> 
   pcr_lib_qc()
-qc
+lapply(qc, head, n = 3)
 #> $standards
-#> # A tibble: 13 × 19
-#> # Groups:   sample_name [5]
-#>    sample_name task     quantity_mean concentration quantity quant_actual   dil
-#>    <chr>       <chr>            <dbl>         <dbl>    <dbl>        <dbl> <dbl>
-#>  1 Standard 01 STANDARD            NA            NA 6.80         6.80      0   
-#>  2 Standard 01 STANDARD            NA            NA 6.80         6.80      0   
-#>  3 Standard 01 STANDARD            NA            NA 6.80         6.80      0   
-#>  4 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27
-#>  5 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27
-#>  6 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 
-#>  7 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 
-#>  8 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 
-#>  9 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 
-#> 10 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 
-#> 11 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 
-#> 12 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 
-#> 13 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 
+#> # A tibble: 3 × 19
+#> # Groups:   sample_name [1]
+#>   sample_name task     quantity_mean concentration quantity quant_actual   dil
+#>   <chr>       <chr>            <dbl>         <dbl>    <dbl>        <dbl> <dbl>
+#> 1 Standard 01 STANDARD            NA            NA     6.80         6.80     0
+#> 2 Standard 01 STANDARD            NA            NA     6.80         6.80     0
+#> 3 Standard 01 STANDARD            NA            NA     6.80         6.80     0
 #> # … with 12 more variables: slope <dbl>, efficiency <dbl>, r2 <dbl>, ct <dbl>,
 #> #   no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>, keep_temp <lgl>,
 #> #   mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
 #> 
 #> $samples
-#> # A tibble: 42 × 19
-#> # Groups:   sample_name [16]
-#>    sample_name task    quantity_mean concentration quantity quant_actual   dil
-#>    <chr>       <chr>           <dbl>         <dbl>    <dbl>        <dbl> <dbl>
-#>  1 Sample 06   UNKNOWN          2.04         2039.     2.06         2.06    NA
-#>  2 Sample 06   UNKNOWN          2.04         2039.     2.12         2.12    NA
-#>  3 Sample 06   UNKNOWN          2.04         2039.     1.94         1.94    NA
-#>  4 Sample 12   UNKNOWN          1.89         1893.     1.93         1.93    NA
-#>  5 Sample 12   UNKNOWN          1.89         1893.     1.88         1.88    NA
-#>  6 Sample 12   UNKNOWN          1.89         1893.     1.87         1.87    NA
-#>  7 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA
-#>  8 Sample 04   UNKNOWN          1.69         1694.     1.84         1.84    NA
-#>  9 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA
-#> 10 Sample 16   UNKNOWN          1.49         1493.     1.46         1.46    NA
-#> # … with 32 more rows, and 12 more variables: slope <dbl>, efficiency <dbl>,
-#> #   r2 <dbl>, ct <dbl>, no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>,
-#> #   keep_temp <lgl>, mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
+#> # A tibble: 3 × 19
+#> # Groups:   sample_name [1]
+#>   sample_name task    quantity_mean concentration quantity quant_actual   dil
+#>   <chr>       <chr>           <dbl>         <dbl>    <dbl>        <dbl> <dbl>
+#> 1 Sample 06   UNKNOWN          2.04         2039.     2.06         2.06    NA
+#> 2 Sample 06   UNKNOWN          2.04         2039.     2.12         2.12    NA
+#> 3 Sample 06   UNKNOWN          2.04         2039.     1.94         1.94    NA
+#> # … with 12 more variables: slope <dbl>, efficiency <dbl>, r2 <dbl>, ct <dbl>,
+#> #   no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>, keep_temp <lgl>,
+#> #   mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
 #> 
 #> $sample_summary
-#> # A tibble: 16 × 3
-#>    sample_name quantity_mean quant_adj
-#>    <chr>               <dbl>     <dbl>
-#>  1 Sample 01           0.599     0.599
-#>  2 Sample 02           1.05      1.05 
-#>  3 Sample 03           1.37      1.39 
-#>  4 Sample 04           1.69      1.62 
-#>  5 Sample 05           0.903     0.888
-#>  6 Sample 06           2.04      2.09 
-#>  7 Sample 07           1.13      1.15 
-#>  8 Sample 08           1.09      1.09 
-#>  9 Sample 09           1.22      1.22 
-#> 10 Sample 10           1.07      1.07 
-#> 11 Sample 11           1.03      1.03 
-#> 12 Sample 12           1.89      1.87 
-#> 13 Sample 13           0.583     0.583
-#> 14 Sample 14           1.22      1.17 
-#> 15 Sample 15           0.713     0.713
-#> 16 Sample 16           1.49      1.42 
+#> # A tibble: 3 × 3
+#>   sample_name quantity_mean quant_adj
+#>   <chr>               <dbl>     <dbl>
+#> 1 Sample 01           0.599     0.599
+#> 2 Sample 02           1.05      1.05 
+#> 3 Sample 03           1.37      1.39 
 #> 
 #> $standard_summary
-#> # A tibble: 5 × 4
+#> # A tibble: 3 × 4
 #>   sample_name   dil quantity_mean quant_actual
 #>   <chr>       <dbl>         <dbl>        <dbl>
-#> 1 Standard 01  0         6.80         6.80    
-#> 2 Standard 02  9.27      0.680        0.734   
-#> 3 Standard 03 12.2       0.0680       0.0603  
-#> 4 Standard 04 10.6       0.00680      0.00568 
-#> 5 Standard 05 13.6       0.000680     0.000417
+#> 1 Standard 01  0           6.80         6.80  
+#> 2 Standard 02  9.27        0.680        0.734 
+#> 3 Standard 03 12.2         0.0680       0.0603
 #> 
 #> $outliers
-#> # A tibble: 58 × 19
-#> # Groups:   sample_name [22]
-#>    sample_name task     quantity_mean concentration quantity quant_actual   dil
-#>    <chr>       <chr>            <dbl>         <dbl>    <dbl>        <dbl> <dbl>
-#>  1 Standard 01 STANDARD         NA              NA      6.80         6.80     0
-#>  2 Standard 01 STANDARD         NA              NA      6.80         6.80     0
-#>  3 Standard 01 STANDARD         NA              NA      6.80         6.80     0
-#>  4 Sample 06   UNKNOWN           2.04         2039.     2.06         2.06    NA
-#>  5 Sample 06   UNKNOWN           2.04         2039.     2.12         2.12    NA
-#>  6 Sample 06   UNKNOWN           2.04         2039.     1.94         1.94    NA
-#>  7 Sample 12   UNKNOWN           1.89         1893.     1.93         1.93    NA
-#>  8 Sample 12   UNKNOWN           1.89         1893.     1.88         1.88    NA
-#>  9 Sample 12   UNKNOWN           1.89         1893.     1.87         1.87    NA
-#> 10 Sample 04   UNKNOWN           1.69         1694.     1.62         1.62    NA
-#> # … with 48 more rows, and 12 more variables: slope <dbl>, efficiency <dbl>,
-#> #   r2 <dbl>, ct <dbl>, no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>,
-#> #   keep_temp <lgl>, mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
+#> # A tibble: 3 × 19
+#> # Groups:   sample_name [1]
+#>   sample_name task     quantity_mean concentration quantity quant_actual   dil
+#>   <chr>       <chr>            <dbl>         <dbl>    <dbl>        <dbl> <dbl>
+#> 1 Standard 01 STANDARD            NA            NA     6.80         6.80     0
+#> 2 Standard 01 STANDARD            NA            NA     6.80         6.80     0
+#> 3 Standard 01 STANDARD            NA            NA     6.80         6.80     0
+#> # … with 12 more variables: slope <dbl>, efficiency <dbl>, r2 <dbl>, ct <dbl>,
+#> #   no_po_mean <dbl>, no_po_sd <dbl>, keep <lgl>, keep_temp <lgl>,
+#> #   mean_adj <dbl>, sd_adj <dbl>, quant_adj <dbl>, z <dbl>
 ```
 
 These data, by themselves, are not particularly useful. However, a suite

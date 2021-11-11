@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">amplify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -173,16 +173,16 @@
 <span class="co">#&gt; # Groups:   task [3]</span>
 <span class="co">#&gt;    task     sample_name concentration</span>
 <span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 STANDARD Standard 01           NA </span>
-<span class="co">#&gt;  2 STANDARD Standard 01           NA </span>
-<span class="co">#&gt;  3 STANDARD Standard 01           NA </span>
-<span class="co">#&gt;  4 UNKNOWN  Sample 06           2039.</span>
-<span class="co">#&gt;  5 UNKNOWN  Sample 06           2039.</span>
-<span class="co">#&gt;  6 UNKNOWN  Sample 06           2039.</span>
-<span class="co">#&gt;  7 UNKNOWN  Sample 12           1893.</span>
-<span class="co">#&gt;  8 UNKNOWN  Sample 12           1893.</span>
-<span class="co">#&gt;  9 UNKNOWN  Sample 12           1893.</span>
-<span class="co">#&gt; 10 UNKNOWN  Sample 04           1694.</span>
+<span class="co">#&gt;  1 NTC      &lt;NA&gt;                   NA</span>
+<span class="co">#&gt;  2 NTC      &lt;NA&gt;                   NA</span>
+<span class="co">#&gt;  3 NTC      &lt;NA&gt;                   NA</span>
+<span class="co">#&gt;  4 STANDARD Standard 01            NA</span>
+<span class="co">#&gt;  5 STANDARD Standard 01            NA</span>
+<span class="co">#&gt;  6 STANDARD Standard 01            NA</span>
+<span class="co">#&gt;  7 STANDARD Standard 02            NA</span>
+<span class="co">#&gt;  8 STANDARD Standard 02            NA</span>
+<span class="co">#&gt;  9 STANDARD Standard 03            NA</span>
+<span class="co">#&gt; 10 STANDARD Standard 03            NA</span>
 <span class="co">#&gt; # … with 48 more rows</span></code></pre></div>
 </div>
 <div id="generating-quality-control-data" class="section level1">
@@ -271,16 +271,16 @@
 <span class="co">#&gt; # Groups:   sample_name [22]</span>
 <span class="co">#&gt;    sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
 <span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Standard 01 STANDARD         NA              NA      6.80         6.80     0</span>
-<span class="co">#&gt;  2 Standard 01 STANDARD         NA              NA      6.80         6.80     0</span>
-<span class="co">#&gt;  3 Standard 01 STANDARD         NA              NA      6.80         6.80     0</span>
-<span class="co">#&gt;  4 Sample 06   UNKNOWN           2.04         2039.     2.06         2.06    NA</span>
-<span class="co">#&gt;  5 Sample 06   UNKNOWN           2.04         2039.     2.12         2.12    NA</span>
-<span class="co">#&gt;  6 Sample 06   UNKNOWN           2.04         2039.     1.94         1.94    NA</span>
-<span class="co">#&gt;  7 Sample 12   UNKNOWN           1.89         1893.     1.93         1.93    NA</span>
-<span class="co">#&gt;  8 Sample 12   UNKNOWN           1.89         1893.     1.88         1.88    NA</span>
-<span class="co">#&gt;  9 Sample 12   UNKNOWN           1.89         1893.     1.87         1.87    NA</span>
-<span class="co">#&gt; 10 Sample 04   UNKNOWN           1.69         1694.     1.62         1.62    NA</span>
+<span class="co">#&gt;  1 &lt;NA&gt;        NTC                 NA            NA  NA           NA      NA   </span>
+<span class="co">#&gt;  2 &lt;NA&gt;        NTC                 NA            NA  NA           NA      NA   </span>
+<span class="co">#&gt;  3 &lt;NA&gt;        NTC                 NA            NA  NA           NA      NA   </span>
+<span class="co">#&gt;  4 Standard 01 STANDARD            NA            NA   6.80         6.80    0   </span>
+<span class="co">#&gt;  5 Standard 01 STANDARD            NA            NA   6.80         6.80    0   </span>
+<span class="co">#&gt;  6 Standard 01 STANDARD            NA            NA   6.80         6.80    0   </span>
+<span class="co">#&gt;  7 Standard 02 STANDARD            NA            NA   0.680        0.734   9.27</span>
+<span class="co">#&gt;  8 Standard 02 STANDARD            NA            NA   0.680        0.734   9.27</span>
+<span class="co">#&gt;  9 Standard 03 STANDARD            NA            NA   0.0680       0.0603 12.2 </span>
+<span class="co">#&gt; 10 Standard 03 STANDARD            NA            NA   0.0680       0.0603 12.2 </span>
 <span class="co">#&gt; # … with 48 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span>
 <span class="co">#&gt; #   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></code></pre></div>
