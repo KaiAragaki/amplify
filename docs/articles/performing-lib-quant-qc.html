@@ -4,7 +4,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="amplify">
 <title>Performing Library Quantification QC • amplify</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -12,12 +13,11 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Performing Library Quantification QC">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Performing Library Quantification QC">
 <meta property="og:description" content="amplify">
 <meta property="og:image" content="https://kaiaragaki.github.io/amplify/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -25,106 +25,89 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">amplify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
-      </span>
-    </div>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">amplify</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-2">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
-    </li>
-    <li>
-      <a href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
-    </li>
-  </ul>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/analyzing-ddctqrtpcr.html">Analyzing ddCt qPCR with amplify</a>
+    <a class="dropdown-item" href="../articles/performing-lib-quant-qc.html">Performing Library Quantification QC</a>
+  </div>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav"></ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
-
-      </header><script src="performing-lib-quant-qc_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Performing Library Quantification QC</h1>
+<div class="row">
+  <main id="main"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Performing Library Quantification QC</h1>
             
       
       
-      <div class="hidden name"><code>performing-lib-quant-qc.Rmd</code></div>
-
+      <div class="d-none name"><code>performing-lib-quant-qc.Rmd</code></div>
     </div>
 
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">amplify</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">amplify</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></code></pre></div>
+<div class="section level1">
+<h1 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h1>
 <p>When RNA libraries are generated, their absolute concentrations need to be established so they can be evenly loaded onto the chip with the correct concentration. In order to measure RNA library concentration, qPCR with a standard curve is performed. amplify offers several functions to both:</p>
 <ol style="list-style-type: decimal">
 <li>Determine the quality of the assay and, if the assay went well,</li>
 <li>Determine the concentration of RNA libraries.</li>
 </ol>
 </div>
-<div id="reading-and-tidying-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#reading-and-tidying-data" class="anchor"></a>Reading and Tidying Data</h1>
+<div class="section level1">
+<h1 id="reading-and-tidying-data">Reading and Tidying Data<a class="anchor" aria-label="anchor" href="#reading-and-tidying-data"></a>
+</h1>
 <p>amplify takes ‘results’ (<code>.xls(x)</code>) files exported from QuantStudio. They can be tidied easily by providing a path to <code>pcr_tidy</code>. We also add <code>pad_zero = TRUE</code>, which changes the default value of, say <code>Sample 1</code> to <code>Sample 01</code>. This will help with out plotting order down the line.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tidy_lib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"untidy-standard-curve.xlsx"</span>, package <span class="op">=</span> <span class="st">"amplify"</span><span class="op">)</span> |&gt; 
+<code class="sourceCode R"><span class="va">tidy_lib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"untidy-standard-curve.xlsx"</span>, package <span class="op">=</span> <span class="st">"amplify"</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="../reference/pcr_tidy.html">pcr_tidy</a></span><span class="op">(</span>pad_zero <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">tidy_lib</span> |&gt; 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt; 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 × 10</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 x 10</span></span>
 <span class="co">#&gt;   well  well_position omit  sample_name target_name task     reporter quencher</span>
-<span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;         &lt;lgl&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   </span>
-<span class="co">#&gt; 1 1     A1            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
-<span class="co">#&gt; 2 2     A2            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
-<span class="co">#&gt; 3 3     A3            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
-<span class="co">#&gt; 4 5     A5            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
-<span class="co">#&gt; 5 6     A6            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
-<span class="co">#&gt; 6 8     A8            FALSE Sample 09   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
-<span class="co">#&gt; # … with 2 more variables: ct &lt;dbl&gt;, ct_mean &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1     A1            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2     A2            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3     A3            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5     A5            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 6     A6            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 8     A8            FALSE Sample 09   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 2 more variables: ct &lt;dbl&gt;, ct_mean &lt;dbl&gt;</span></span></code></pre></div>
 <p>By default, <code>pcr_tidy</code> assumes you have a standards serial dilution starting at 6.8, diluted by a factor of 10, going all the way down to 0.00068, and that you want all of them. There are a couple instances in which this might not be the case:</p>
 <ol style="list-style-type: decimal">
 <li>You have a different serial dilution</li>
@@ -132,25 +115,25 @@
 </ol>
 <p>In that instance, you would supply a numeric vector to the <code>usr_standards</code> argument. If you wish to omit a given set of standards, simply do not include them in this vector:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"untidy-standard-curve.xlsx"</span>, package <span class="op">=</span> <span class="st">"amplify"</span><span class="op">)</span> |&gt; 
-  <span class="fu"><a href="../reference/pcr_tidy.html">pcr_tidy</a></span><span class="op">(</span>pad_zero <span class="op">=</span> <span class="cn">TRUE</span>, usr_standards <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6.8</span>, <span class="fl">.68</span>, <span class="fl">.068</span>, <span class="fl">.0068</span><span class="op">)</span><span class="op">)</span> |&gt; 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt; 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"untidy-standard-curve.xlsx"</span>, package <span class="op">=</span> <span class="st">"amplify"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="../reference/pcr_tidy.html">pcr_tidy</a></span><span class="op">(</span>pad_zero <span class="op">=</span> <span class="cn">TRUE</span>, usr_standards <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6.8</span>, <span class="fl">.68</span>, <span class="fl">.068</span>, <span class="fl">.0068</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; 2 rows of standards did not have a matching value in 'standards' and have been dropped</span>
-<span class="co">#&gt; # A tibble: 6 × 10</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 x 10</span></span>
 <span class="co">#&gt;   well  well_position omit  sample_name target_name task     reporter quencher</span>
-<span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;         &lt;lgl&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   </span>
-<span class="co">#&gt; 1 1     A1            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
-<span class="co">#&gt; 2 2     A2            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
-<span class="co">#&gt; 3 3     A3            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
-<span class="co">#&gt; 4 5     A5            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
-<span class="co">#&gt; 5 6     A6            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
-<span class="co">#&gt; 6 8     A8            FALSE Sample 09   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
-<span class="co">#&gt; # … with 2 more variables: ct &lt;dbl&gt;, ct_mean &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1     A1            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2     A2            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3     A3            FALSE Standard 01 Target 1    STANDARD FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5     A5            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 6     A6            FALSE Sample 01   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> 8     A8            FALSE Sample 09   Target 1    UNKNOWN  FAM      NFQ-MGB </span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 2 more variables: ct &lt;dbl&gt;, ct_mean &lt;dbl&gt;</span></span></code></pre></div>
 <p>This will automatically update the slope column of the dataframe as well. This can be called standalone (say, after manually removing a few standards replicates from your dataset) by running <code>pcr_calc_slope</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">recalc</span> <span class="op">&lt;-</span> <span class="va">tidy_lib</span> |&gt; 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">quantity</span> <span class="op">&gt;</span> <span class="fl">0.0068</span> <span class="op">|</span> <span class="va">task</span> <span class="op">!=</span> <span class="st">"STANDARD"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">quantity</span> <span class="op">&gt;</span> <span class="fl">0.0068</span> <span class="op">|</span> <span class="va">task</span> <span class="op">!=</span> <span class="st">"STANDARD"</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="../reference/pcr_calc_slope.html">pcr_calc_slope</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">recalc</span><span class="op">$</span><span class="va">slope</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
@@ -158,36 +141,36 @@
 <span class="va">tidy_lib</span><span class="op">$</span><span class="va">slope</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
 <span class="co">#&gt; [1] -3.4827</span></code></pre></div>
 </div>
-<div id="calculating-library-concentration" class="section level1">
-<h1 class="hasAnchor">
-<a href="#calculating-library-concentration" class="anchor"></a>Calculating Library Concentration</h1>
+<div class="section level1">
+<h1 id="calculating-library-concentration">Calculating Library Concentration<a class="anchor" aria-label="anchor" href="#calculating-library-concentration"></a>
+</h1>
 <p>Before we can perform quality control, we first need to calculate the concentration of RNA library in our samples. We supply a dilution factor to calculate the concentration of the original libraries from the concentration of libraries in the assay (here we diluted them 1:1000).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_conc</span> <span class="op">&lt;-</span> <span class="va">tidy_lib</span> |&gt; 
   <span class="fu"><a href="../reference/pcr_lib_calc.html">pcr_lib_calc</a></span><span class="op">(</span>dil_factor <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
 
 <span class="va">lib_conc</span> |&gt;
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">sample_name</span>, <span class="va">concentration</span><span class="op">)</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_name</span>, <span class="va">concentration</span><span class="op">)</span>
 <span class="co">#&gt; Adding missing grouping variables: `task`</span>
-<span class="co">#&gt; # A tibble: 58 × 3</span>
-<span class="co">#&gt; # Groups:   task [3]</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 58 x 3</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># Groups:   task [3]</span></span>
 <span class="co">#&gt;    task     sample_name concentration</span>
-<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;               &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 NTC      &lt;NA&gt;                   NA</span>
-<span class="co">#&gt;  2 NTC      &lt;NA&gt;                   NA</span>
-<span class="co">#&gt;  3 NTC      &lt;NA&gt;                   NA</span>
-<span class="co">#&gt;  4 STANDARD Standard 01            NA</span>
-<span class="co">#&gt;  5 STANDARD Standard 01            NA</span>
-<span class="co">#&gt;  6 STANDARD Standard 01            NA</span>
-<span class="co">#&gt;  7 STANDARD Standard 02            NA</span>
-<span class="co">#&gt;  8 STANDARD Standard 02            NA</span>
-<span class="co">#&gt;  9 STANDARD Standard 03            NA</span>
-<span class="co">#&gt; 10 STANDARD Standard 03            NA</span>
-<span class="co">#&gt; # … with 48 more rows</span></code></pre></div>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> NTC      <span style="color: #BB0000;">NA</span>                     <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> NTC      <span style="color: #BB0000;">NA</span>                     <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> NTC      <span style="color: #BB0000;">NA</span>                     <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> STANDARD Standard 01            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> STANDARD Standard 01            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> STANDARD Standard 01            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> STANDARD Standard 02            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> STANDARD Standard 02            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> STANDARD Standard 03            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> STANDARD Standard 03            <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 48 more rows</span></span></code></pre></div>
 </div>
-<div id="generating-quality-control-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#generating-quality-control-data" class="anchor"></a>Generating Quality Control Data</h1>
+<div class="section level1">
+<h1 id="generating-quality-control-data">Generating Quality Control Data<a class="anchor" aria-label="anchor" href="#generating-quality-control-data"></a>
+</h1>
 <p>Quality control metrics also need to be calculated. We can do this by calling <code>pcr_lib_qc</code> on data output from <code>pcr_lib_calc</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_qc</span> <span class="op">&lt;-</span> <span class="va">lib_conc</span> |&gt; 
@@ -195,99 +178,99 @@
 
 <span class="va">lib_qc</span>
 <span class="co">#&gt; $standards</span>
-<span class="co">#&gt; # A tibble: 13 × 19</span>
-<span class="co">#&gt; # Groups:   sample_name [5]</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 x 19</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># Groups:   sample_name [5]</span></span>
 <span class="co">#&gt;    sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Standard 01 STANDARD            NA            NA 6.80         6.80      0   </span>
-<span class="co">#&gt;  2 Standard 01 STANDARD            NA            NA 6.80         6.80      0   </span>
-<span class="co">#&gt;  3 Standard 01 STANDARD            NA            NA 6.80         6.80      0   </span>
-<span class="co">#&gt;  4 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27</span>
-<span class="co">#&gt;  5 Standard 02 STANDARD            NA            NA 0.680        0.734     9.27</span>
-<span class="co">#&gt;  6 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 </span>
-<span class="co">#&gt;  7 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 </span>
-<span class="co">#&gt;  8 Standard 03 STANDARD            NA            NA 0.0680       0.0603   12.2 </span>
-<span class="co">#&gt;  9 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 </span>
-<span class="co">#&gt; 10 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 </span>
-<span class="co">#&gt; 11 Standard 04 STANDARD            NA            NA 0.00680      0.00568  10.6 </span>
-<span class="co">#&gt; 12 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 </span>
-<span class="co">#&gt; 13 Standard 05 STANDARD            NA            NA 0.000680     0.000417 13.6 </span>
-<span class="co">#&gt; # … with 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;, r2 &lt;dbl&gt;, ct &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;, keep_temp &lt;lgl&gt;,</span>
-<span class="co">#&gt; #   mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Standard 01 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 6.80         6.80      0   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Standard 01 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 6.80         6.80      0   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Standard 01 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 6.80         6.80      0   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Standard 02 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.680        0.734     9.27</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard 02 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.680        0.734     9.27</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Standard 03 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.068<span style="text-decoration: underline;">0</span>       0.060<span style="text-decoration: underline;">3</span>   12.2 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Standard 03 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.068<span style="text-decoration: underline;">0</span>       0.060<span style="text-decoration: underline;">3</span>   12.2 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Standard 03 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.068<span style="text-decoration: underline;">0</span>       0.060<span style="text-decoration: underline;">3</span>   12.2 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Standard 04 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.006<span style="text-decoration: underline;">80</span>      0.005<span style="text-decoration: underline;">68</span>  10.6 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Standard 04 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.006<span style="text-decoration: underline;">80</span>      0.005<span style="text-decoration: underline;">68</span>  10.6 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Standard 04 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.006<span style="text-decoration: underline;">80</span>      0.005<span style="text-decoration: underline;">68</span>  10.6 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Standard 05 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.000<span style="text-decoration: underline;">680</span>     0.000<span style="text-decoration: underline;">417</span> 13.6 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Standard 05 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span> 0.000<span style="text-decoration: underline;">680</span>     0.000<span style="text-decoration: underline;">417</span> 13.6 </span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;, r2 &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;, keep_temp &lt;lgl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $samples</span>
-<span class="co">#&gt; # A tibble: 42 × 19</span>
-<span class="co">#&gt; # Groups:   sample_name [16]</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 42 x 19</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># Groups:   sample_name [16]</span></span>
 <span class="co">#&gt;    sample_name task    quantity_mean concentration quantity quant_actual   dil</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;           &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Sample 06   UNKNOWN          2.04         2039.     2.06         2.06    NA</span>
-<span class="co">#&gt;  2 Sample 06   UNKNOWN          2.04         2039.     2.12         2.12    NA</span>
-<span class="co">#&gt;  3 Sample 06   UNKNOWN          2.04         2039.     1.94         1.94    NA</span>
-<span class="co">#&gt;  4 Sample 12   UNKNOWN          1.89         1893.     1.93         1.93    NA</span>
-<span class="co">#&gt;  5 Sample 12   UNKNOWN          1.89         1893.     1.88         1.88    NA</span>
-<span class="co">#&gt;  6 Sample 12   UNKNOWN          1.89         1893.     1.87         1.87    NA</span>
-<span class="co">#&gt;  7 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA</span>
-<span class="co">#&gt;  8 Sample 04   UNKNOWN          1.69         1694.     1.84         1.84    NA</span>
-<span class="co">#&gt;  9 Sample 04   UNKNOWN          1.69         1694.     1.62         1.62    NA</span>
-<span class="co">#&gt; 10 Sample 16   UNKNOWN          1.49         1493.     1.46         1.46    NA</span>
-<span class="co">#&gt; # … with 32 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span>
-<span class="co">#&gt; #   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Sample 06   UNKNOWN          2.04         <span style="text-decoration: underline;">2</span>039.     2.06         2.06    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Sample 06   UNKNOWN          2.04         <span style="text-decoration: underline;">2</span>039.     2.12         2.12    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Sample 06   UNKNOWN          2.04         <span style="text-decoration: underline;">2</span>039.     1.94         1.94    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Sample 12   UNKNOWN          1.89         <span style="text-decoration: underline;">1</span>893.     1.93         1.93    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Sample 12   UNKNOWN          1.89         <span style="text-decoration: underline;">1</span>893.     1.88         1.88    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Sample 12   UNKNOWN          1.89         <span style="text-decoration: underline;">1</span>893.     1.87         1.87    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Sample 04   UNKNOWN          1.69         <span style="text-decoration: underline;">1</span>694.     1.62         1.62    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Sample 04   UNKNOWN          1.69         <span style="text-decoration: underline;">1</span>694.     1.84         1.84    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Sample 04   UNKNOWN          1.69         <span style="text-decoration: underline;">1</span>694.     1.62         1.62    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Sample 16   UNKNOWN          1.49         <span style="text-decoration: underline;">1</span>493.     1.46         1.46    <span style="color: #BB0000;">NA</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 32 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $sample_summary</span>
-<span class="co">#&gt; # A tibble: 16 × 3</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 16 x 3</span></span>
 <span class="co">#&gt;    sample_name quantity_mean quant_adj</span>
-<span class="co">#&gt;    &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Sample 01           0.599     0.599</span>
-<span class="co">#&gt;  2 Sample 02           1.05      1.05 </span>
-<span class="co">#&gt;  3 Sample 03           1.37      1.39 </span>
-<span class="co">#&gt;  4 Sample 04           1.69      1.62 </span>
-<span class="co">#&gt;  5 Sample 05           0.903     0.888</span>
-<span class="co">#&gt;  6 Sample 06           2.04      2.09 </span>
-<span class="co">#&gt;  7 Sample 07           1.13      1.15 </span>
-<span class="co">#&gt;  8 Sample 08           1.09      1.09 </span>
-<span class="co">#&gt;  9 Sample 09           1.22      1.22 </span>
-<span class="co">#&gt; 10 Sample 10           1.07      1.07 </span>
-<span class="co">#&gt; 11 Sample 11           1.03      1.03 </span>
-<span class="co">#&gt; 12 Sample 12           1.89      1.87 </span>
-<span class="co">#&gt; 13 Sample 13           0.583     0.583</span>
-<span class="co">#&gt; 14 Sample 14           1.22      1.17 </span>
-<span class="co">#&gt; 15 Sample 15           0.713     0.713</span>
-<span class="co">#&gt; 16 Sample 16           1.49      1.42 </span>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Sample 01           0.599     0.599</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Sample 02           1.05      1.05 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Sample 03           1.37      1.39 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Sample 04           1.69      1.62 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Sample 05           0.903     0.888</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Sample 06           2.04      2.09 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Sample 07           1.13      1.15 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Sample 08           1.09      1.09 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Sample 09           1.22      1.22 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Sample 10           1.07      1.07 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Sample 11           1.03      1.03 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Sample 12           1.89      1.87 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Sample 13           0.583     0.583</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Sample 14           1.22      1.17 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">15</span> Sample 15           0.713     0.713</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">16</span> Sample 16           1.49      1.42 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $standard_summary</span>
-<span class="co">#&gt; # A tibble: 5 × 4</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 x 4</span></span>
 <span class="co">#&gt;   sample_name   dil quantity_mean quant_actual</span>
-<span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Standard 01  0         6.80         6.80    </span>
-<span class="co">#&gt; 2 Standard 02  9.27      0.680        0.734   </span>
-<span class="co">#&gt; 3 Standard 03 12.2       0.0680       0.0603  </span>
-<span class="co">#&gt; 4 Standard 04 10.6       0.00680      0.00568 </span>
-<span class="co">#&gt; 5 Standard 05 13.6       0.000680     0.000417</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Standard 01  0         6.80         6.80    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Standard 02  9.27      0.680        0.734   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Standard 03 12.2       0.068<span style="text-decoration: underline;">0</span>       0.060<span style="text-decoration: underline;">3</span>  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Standard 04 10.6       0.006<span style="text-decoration: underline;">80</span>      0.005<span style="text-decoration: underline;">68</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Standard 05 13.6       0.000<span style="text-decoration: underline;">680</span>     0.000<span style="text-decoration: underline;">417</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $outliers</span>
-<span class="co">#&gt; # A tibble: 58 × 19</span>
-<span class="co">#&gt; # Groups:   sample_name [22]</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 58 x 19</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># Groups:   sample_name [22]</span></span>
 <span class="co">#&gt;    sample_name task     quantity_mean concentration quantity quant_actual   dil</span>
-<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 &lt;NA&gt;        NTC                 NA            NA  NA           NA      NA   </span>
-<span class="co">#&gt;  2 &lt;NA&gt;        NTC                 NA            NA  NA           NA      NA   </span>
-<span class="co">#&gt;  3 &lt;NA&gt;        NTC                 NA            NA  NA           NA      NA   </span>
-<span class="co">#&gt;  4 Standard 01 STANDARD            NA            NA   6.80         6.80    0   </span>
-<span class="co">#&gt;  5 Standard 01 STANDARD            NA            NA   6.80         6.80    0   </span>
-<span class="co">#&gt;  6 Standard 01 STANDARD            NA            NA   6.80         6.80    0   </span>
-<span class="co">#&gt;  7 Standard 02 STANDARD            NA            NA   0.680        0.734   9.27</span>
-<span class="co">#&gt;  8 Standard 02 STANDARD            NA            NA   0.680        0.734   9.27</span>
-<span class="co">#&gt;  9 Standard 03 STANDARD            NA            NA   0.0680       0.0603 12.2 </span>
-<span class="co">#&gt; 10 Standard 03 STANDARD            NA            NA   0.0680       0.0603 12.2 </span>
-<span class="co">#&gt; # … with 48 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span>
-<span class="co">#&gt; #   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> <span style="color: #BB0000;">NA</span>          NTC                 <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>  <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> <span style="color: #BB0000;">NA</span>          NTC                 <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>  <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> <span style="color: #BB0000;">NA</span>          NTC                 <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>  <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Standard 01 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   6.80         6.80    0   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Standard 01 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   6.80         6.80    0   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Standard 01 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   6.80         6.80    0   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Standard 02 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   0.680        0.734   9.27</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Standard 02 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   0.680        0.734   9.27</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Standard 03 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   0.068<span style="text-decoration: underline;">0</span>       0.060<span style="text-decoration: underline;">3</span> 12.2 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Standard 03 STANDARD            <span style="color: #BB0000;">NA</span>            <span style="color: #BB0000;">NA</span>   0.068<span style="text-decoration: underline;">0</span>       0.060<span style="text-decoration: underline;">3</span> 12.2 </span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 48 more rows, and 12 more variables: slope &lt;dbl&gt;, efficiency &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   r2 &lt;dbl&gt;, ct &lt;dbl&gt;, no_po_mean &lt;dbl&gt;, no_po_sd &lt;dbl&gt;, keep &lt;lgl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   keep_temp &lt;lgl&gt;, mean_adj &lt;dbl&gt;, sd_adj &lt;dbl&gt;, quant_adj &lt;dbl&gt;, z &lt;dbl&gt;</span></span></code></pre></div>
 <p>This output is generally not useful by itself. Using <code>pcr_lib_qc_plot_*</code> functions on it, however, generates plots that display valuable visual QC summaries</p>
-<div id="standard-dilution-plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#standard-dilution-plot" class="anchor"></a>Standard Dilution Plot</h2>
+<div class="section level2">
+<h2 id="standard-dilution-plot">Standard Dilution Plot<a class="anchor" aria-label="anchor" href="#standard-dilution-plot"></a>
+</h2>
 <p>Making standard curve for libraries requires making a serial dilution of standards. It is important we determine that this serial dilution was diluted properly, or the results calculated from it will be unreliable. The standard dilution plot helps with this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_qc</span> |&gt; 
@@ -302,9 +285,9 @@
 </ol>
 <p>Determining efficiency issues vs consistently under-pipetting is impossible to determine with the data alone. Ensure you have calibrated pipettes and are practicing proper pipetting techniques to ensure not only consistent, but accurate volumes.</p>
 </div>
-<div id="standard-slope-plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#standard-slope-plot" class="anchor"></a>Standard Slope Plot</h2>
+<div class="section level2">
+<h2 id="standard-slope-plot">Standard Slope Plot<a class="anchor" aria-label="anchor" href="#standard-slope-plot"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_qc</span> |&gt; 
   <span class="fu"><a href="../reference/pcr_lib_qc_plot_slope.html">pcr_lib_qc_plot_slope</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -319,9 +302,9 @@
 </ol>
 <p>One instances in which it is not recommended to simply remove the outliers: when standards that are within the range or above your sample concentrations. This is because a poor dilution done upstream of your samples will affect all concentrations downstream, making accurate determination of absolute library concentration impossible. If you are ever in doubt, you should probably bite the bullet and redo the qPCR.</p>
 </div>
-<div id="plot-outliers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plot-outliers" class="anchor"></a>Plot Outliers</h2>
+<div class="section level2">
+<h2 id="plot-outliers">Plot Outliers<a class="anchor" aria-label="anchor" href="#plot-outliers"></a>
+</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_qc</span> |&gt; 
   <span class="fu"><a href="../reference/pcr_lib_qc_plot_outliers.html">pcr_lib_qc_plot_outliers</a></span><span class="op">(</span><span class="op">)</span>
@@ -331,25 +314,25 @@
 <p>It’s often best to remove technical replicate outliers in order to obtain an accurate estimate of concentration. A point is deemed an outlier if it is &gt;3Z away from the mean of the other two. Shown above, the outliers are in gray, and the zone of inclusion is in blue. Particularly egregious outliers are shown with (&lt;&lt;&lt;) or (&gt;&gt;&gt;) and the number of standard deviations away they are. In the instance above, 463Z away! New estimates, sans these outliers, are found in the <code>quant_adj</code> column of <code>sample_summary</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_qc</span><span class="op">$</span><span class="va">sample_summary</span>
-<span class="co">#&gt; # A tibble: 16 × 3</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 16 x 3</span></span>
 <span class="co">#&gt;    sample_name quantity_mean quant_adj</span>
-<span class="co">#&gt;    &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 Sample 01           0.599     0.599</span>
-<span class="co">#&gt;  2 Sample 02           1.05      1.05 </span>
-<span class="co">#&gt;  3 Sample 03           1.37      1.39 </span>
-<span class="co">#&gt;  4 Sample 04           1.69      1.62 </span>
-<span class="co">#&gt;  5 Sample 05           0.903     0.888</span>
-<span class="co">#&gt;  6 Sample 06           2.04      2.09 </span>
-<span class="co">#&gt;  7 Sample 07           1.13      1.15 </span>
-<span class="co">#&gt;  8 Sample 08           1.09      1.09 </span>
-<span class="co">#&gt;  9 Sample 09           1.22      1.22 </span>
-<span class="co">#&gt; 10 Sample 10           1.07      1.07 </span>
-<span class="co">#&gt; 11 Sample 11           1.03      1.03 </span>
-<span class="co">#&gt; 12 Sample 12           1.89      1.87 </span>
-<span class="co">#&gt; 13 Sample 13           0.583     0.583</span>
-<span class="co">#&gt; 14 Sample 14           1.22      1.17 </span>
-<span class="co">#&gt; 15 Sample 15           0.713     0.713</span>
-<span class="co">#&gt; 16 Sample 16           1.49      1.42</span></code></pre></div>
+<span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Sample 01           0.599     0.599</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Sample 02           1.05      1.05 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Sample 03           1.37      1.39 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Sample 04           1.69      1.62 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Sample 05           0.903     0.888</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Sample 06           2.04      2.09 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Sample 07           1.13      1.15 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Sample 08           1.09      1.09 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Sample 09           1.22      1.22 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Sample 10           1.07      1.07 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Sample 11           1.03      1.03 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Sample 12           1.89      1.87 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Sample 13           0.583     0.583</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Sample 14           1.22      1.17 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">15</span> Sample 15           0.713     0.713</span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">16</span> Sample 16           1.49      1.42</span></code></pre></div>
 <p>These can be visualized using <code>pcr_lib_qc_conc</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lib_qc</span> |&gt; 
@@ -361,31 +344,28 @@
   <span class="fu">amplify</span><span class="fu">::</span><span class="fu"><a href="../reference/pcr_lib_qc_report.html">pcr_lib_qc_report</a></span><span class="op">(</span><span class="st">"path/to/file.html"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p>Developed by Kai Aragaki.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p></p>
+<p>Developed by Kai Aragaki.</p>
 </div>
 
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+<div class="pkgdown-footer-right">
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
 
+  
 
   </body>
 </html>

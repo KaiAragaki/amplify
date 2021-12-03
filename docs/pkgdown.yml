@@ -1,11 +1,11 @@
 pandoc: 2.14.0.3
-pkgdown: 1.6.1
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   analyzing-ddctqrtpcr: analyzing-ddctqrtpcr.html
   performing-lib-quant-qc: performing-lib-quant-qc.html
-last_built: 2021-11-08T22:02Z
+last_built: 2021-12-03T14:01Z
 urls:
-  reference: https://kaiaragaki.github.io/amplify//reference
-  article: https://kaiaragaki.github.io/amplify//articles
+  reference: https://kaiaragaki.github.io/amplify/reference
+  article: https://kaiaragaki.github.io/amplify/articles
 

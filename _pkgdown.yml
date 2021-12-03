@@ -1,3 +1,6 @@
+template:
+  bootstrap: 5
+
 url: https://kaiaragaki.github.io/amplify/
 reference:
 - title: "Reading in Data"

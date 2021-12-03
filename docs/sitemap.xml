@@ -1,84 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//index.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/404.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/dummy_rna_conc.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/articles/analyzing-ddctqrtpcr.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/find_mean.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/find_outliers.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/articles/performing-lib-quant-qc.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/get_best_factor.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/authors.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/get_plate.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/index.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/get_sample_names.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pad_zero.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_calc_slope.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/dummy_rna_conc.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_control.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/find_mean.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_calc.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/find_outliers.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_qc.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/get_best_factor.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_qc_plot_conc.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/get_plate.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_qc_plot_dil.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/get_sample_names.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_qc_plot_outliers.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_qc_plot_slope.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pad_zero.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_lib_qc_report.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_calc_slope.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_plan.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_control.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_plan_report.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_calc.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_plate_view.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_qc.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_plot.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_qc_plot_conc.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_rq.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_qc_plot_dil.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/pcr_tidy.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_qc_plot_outliers.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/plate_template.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_qc_plot_slope.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//reference/useable_plate_dims.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_lib_qc_report.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//articles/analyzing-ddctqrtpcr.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_plan.html</loc>
   </url>
   <url>
-    <loc>https://kaiaragaki.github.io/amplify//articles/performing-lib-quant-qc.html</loc>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_plan_report.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_plate_view.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_plot.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_rq.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify/reference/pcr_tidy.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify/reference/plate_template.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/amplify/reference/useable_plate_dims.html</loc>
   </url>
 </urlset>
