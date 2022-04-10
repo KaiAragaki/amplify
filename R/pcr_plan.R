@@ -47,40 +47,34 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
   rna_per_well <- 2#uL Vol RNA/well
 
   # Runtime constants ----------------------------------------------------------
-  sample_names <- data |>
-    get_sample_names(has_names)
+  n_samples <- nrow(data)
 
-  if (!has_names) {
+  sample_names <- get_sample_names(data, has_names)
+
+  if (!has_names)
     data <- cbind(sample_names, data)
-  }
 
-  my_gp <- gp(wells = as.numeric(format))
-  if (exclude_border) {
-    my_gp <- my_gp |>
-      gp_sec("no_border", nrow = my_gp$nrow - 2, ncol = my_gp$ncol - 2, margin = 1)
-  }
+  plate <- gp(wells = as.numeric(format))
+
+  if (exclude_border)
+    plate <- gp_sec(plate, "no_border", nrow = plate$nrow - 2, ncol = plate$ncol - 2, margin = 1)
 
   # Primer names ---------------------------------------------------------------
   pn <- paste("Primer", 1:n_primers)
 
-  if (!missing(primer_names)) {
+  if (!missing(primer_names))
     pn[1:length(primer_names)] <- primer_names
-  }
 
-  n_samples <- nrow(data)
-
-  with_primers <- gp_sec(my_gp, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, labels = pn)
+  with_primers <- gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, labels = pn)
 
   max_sections <- max(with_primers$well_data$.sec, na.rm = TRUE)
 
   if (max_sections < n_primers) {
-    with_primers <- gp_sec(my_gp, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, wrap = TRUE, labels = pn)
+    with_primers <- gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, flow = "col", wrap = TRUE, labels = pn)
     max_sections_wrap <- max(with_primers$well_data$.sec, na.rm = TRUE)
 
-    if (max_sections_wrap < n_primers) {
+    if (max_sections_wrap < n_primers)
       rlang::abort("This experiment requires too many wells.")
-    }
-
   }
 
   # FIXME Make sure this supports supplied sample names less than total number of samples
@@ -108,7 +102,7 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     vol = c(6.25, .625, .5, 3.125) * (n_samples + ntc + 2) * reps
   )
 
-  list(mm_prep = mm, sample_prep = sample_prep, plate = plate,
+  list(mm_prep = mm, sample_prep = sample_prep, plate = with_samples,
        n_primers = n_primers, format = format, exclude_border = exclude_border,
        primer_names = primer_names)
 }
@@ -161,12 +155,8 @@ pcr_plan_report <- function(pcr_plan, file_path = NULL) {
 #'
 #' @keywords internal
 get_sample_names <- function(data, has_names) {
-  if (has_names) {
-    names <- data[[1]]
-  } else {
-    names <- paste("Sample", 1:nrow(data))
-  }
-  names <- c(names, "NTC")
+  names <- ifelse(has_names, data[[1]], paste("Sample", 1:nrow(data))) |>
+    c("NTC")
 }
 
 #' Calculate a sensible dilution factor
