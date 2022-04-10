@@ -26,6 +26,11 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     return(invisible())
   }
 
+  if (n_primers < length(primer_names)) {
+    cli::cli_warn("More primer names ({length(primer_names)}) than n_primers ({n_primers}) given. Only using the first {n_primers}.")
+    primer_names <- primer_names[1:n_primers]
+  }
+
   format <- match.arg(as.character(format), c("96", "384"))
 
   data <- dplyr::as_tibble(data) # Allows for vector input
@@ -49,26 +54,10 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     data <- cbind(sample_names, data)
   }
 
-  my_gp <- gp(wells = as.numeric(format)) |> gp_sec("primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE)
-
+  my_gp <- gp(wells = as.numeric(format))
   if (exclude_border) {
     my_gp <- my_gp |>
-      gp_sec("")
-  }
-
-  final_vol <- ((n_primers * reps) + safety_reps) * rna_per_well |> as.integer()
-  n_samples <- nrow(data)
-  section_area <- reps * (n_samples + ntc)
-  full_plate <- get_plate(format, no_border = FALSE)
-  this_plate <- get_plate(format, no_border = exclude_border)
-  plate_dims <- useable_plate_dims(this_plate)
-  max_sections_before_flow <- (plate_dims$cols %/% reps) * (plate_dims$rows %/% (n_samples + ntc)) # max_wide * max_tall
-  max_sections_after_flow <-((plate_dims$cols %/% reps) * plate_dims$rows) %/% (n_samples + ntc) # (max_wide * n_row) %/% tot_samples
-  max_sections_theoretical <- (plate_dims$rows * plate_dims$cols) %/% section_area
-
-  # Checks ---------------------------------------------------------------------
-  if(max_sections_theoretical < n_primers) {
-    stop("This experiment requires too many wells.")
+      gp_sec("no_border", nrow = my_gp$nrow - 2, ncol = my_gp$ncol - 2, margin = 1)
   }
 
   # Primer names ---------------------------------------------------------------
@@ -78,22 +67,27 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     pn[1:length(primer_names)] <- primer_names
   }
 
-  # Make sections --------------------------------------------------------------
-  if (n_primers > max_sections_before_flow) {
-    plate <- this_plate |>
-      denote_vlane(plate_dims, reps) |>
-      flow_lanes(n_primers, n_samples, ntc, reps)
-  } else {
-    plate <- this_plate |>
-      denote_vlane(plate_dims, reps) |>
-      denote_hlane(plate_dims, n_samples, ntc) |>
-      section_lanes(n_primers)
+  n_samples <- nrow(data)
+
+  with_primers <- gp_sec(my_gp, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, labels = pn)
+
+  max_sections <- max(with_primers$well_data$.sec, na.rm = TRUE)
+
+  if (max_sections < n_primers) {
+    with_primers <- gp_sec(my_gp, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, wrap = TRUE, labels = pn)
+    max_sections_wrap <- max(with_primers$well_data$.sec, na.rm = TRUE)
+
+    if (max_sections_wrap < n_primers) {
+      rlang::abort("This experiment requires too many wells.")
+    }
+
   }
 
-  plate <- plate |>
-    add_sample_names(reps, sample_names) |>
-    add_primer_names(pn) |>
-    dplyr::right_join(full_plate, by = c("col", "row"))
+  # FIXME Make sure this supports supplied sample names less than total number of samples
+  # Will need to roll in sample name arg. Not too hard!
+  with_samples <- gp_sec(with_primers, "samples", nrow = 1, wrap = TRUE, labels = sample_names)
+
+  final_vol <- ((n_primers * reps) + safety_reps) * rna_per_well |> as.integer()
 
   # Sample preparation  --------------------------------------------------------
   sample_prep <- data |>
@@ -167,70 +161,13 @@ pcr_plan_report <- function(pcr_plan, file_path = NULL) {
 #'
 #' @keywords internal
 get_sample_names <- function(data, has_names) {
-  if (has_names) data[[1]] else paste("Sample", 1:nrow(data))
-}
-
-#' Create a plate with given well format
-#'
-#' @param format integer. How many wells should this plate have?
-#' @param no_border logical. Will the user omit filling the edge wells of the
-#'   plate (to avoid edge effects)?
-#'
-#' @return A tibble with `col` (number, factor, denotes plate column from
-#'   left to right) and `row` (character, factor, denotes plate row from top to
-#'   bottom). If `no_border = TRUE`, the edges of the plate will not be included.
-#'
-#' @keywords internal
-get_plate <- function(format, no_border) {
-  plate <- if (format == 96) plate_template(8, 12) else plate_template(16, 24)
-  if (no_border & format == 96) {
-    plate <- plate |>
-      dplyr::filter(!(.data$col %in% c(1, 12) | .data$row %in% c("a", "h")))
-  } else if (no_border & format == 384) {
-    plate <- plate |>
-      dplyr::filter(!(.data$col %in% c(1, 24) | .data$row %in% c("a", "p")))
+  if (has_names) {
+    names <- data[[1]]
   } else {
-    plate
+    names <- paste("Sample", 1:nrow(data))
   }
-  plate
+  names <- c(names, "NTC")
 }
-
-#' Create a plate of given dimensions
-#'
-#' @param n_row integer. Number of rows plate should have.
-#' @param n_col integer. Number of columns plate should have.
-#'
-#' @return A tibble with `col` (a factor of numbers with the lowest being the
-#'   first and the highest being the last) and `row` (a factor of characters in
-#'   reverse alphabetical order, to mimic ordering in real world plates when
-#'   plotting)
-#'
-#' @keywords internal
-plate_template <- function(n_row, n_col) {
-  tidyr::expand_grid(col = 1:n_col,
-                     row = letters[1:n_row]) |>
-    dplyr::mutate(row = as.factor(.data$row) |> forcats::fct_rev(),
-                  col = as.factor(.data$col))
-}
-
-
-#' Get dimensions of plate that are allowed to be filled
-#'
-#' The 'useable' dimensions of the plate depends if the user has set
-#' `exclude_border` to be `TRUE` or `FALSE`. This calculates plate dimensions
-#' dependent on that.
-#'
-#' @param plate
-#'
-#' @return a named list, with integer values referring to the number of rows and
-#'   columns, respectively.
-#'
-#' @keywords internal
-useable_plate_dims <- function(plate) {
-  list(rows = length(unique(plate$row)),
-       cols = length(unique(plate$col)))
-}
-
 
 #' Calculate a sensible dilution factor
 #'
@@ -248,90 +185,4 @@ get_best_factor <- function(vol_to_add) {
   dplyr::if_else(vol_to_add < 1, {
     as.integer(ceiling((1 / vol_to_add)/5) * 5) # Give something divisible by 5
   }, 1L)
-}
-
-denote_vlane <- function(plate, plate_dims, reps) {
-  n_lanes <- plate_dims$cols %/% reps
-  wells_per_lane <- plate_dims$rows * reps
-  lanes <- rep(1:n_lanes, each = wells_per_lane)
-  length(lanes) <- nrow(plate) # Includes 'unusable' dims (ie borders of borderless)
-  dplyr::arrange(plate, .data$col, dplyr::desc(.data$row)) |>
-    dplyr::mutate(lane_v = lanes)
-}
-
-denote_hlane <- function(plate, plate_dims, n_samples, ntc) {
-  total_samples <- n_samples + ntc
-  num_lanes <-  plate_dims$rows %/% total_samples
-  wells_per_lane <- plate_dims$cols * total_samples
-  lanes <- rep(1:num_lanes, each = wells_per_lane)
-  length(lanes) <- nrow(plate)
-  dplyr::arrange(plate, dplyr::desc(.data$row), .data$col) |>
-    dplyr::mutate(lane_h = lanes)
-}
-
-flow_lanes <- function(plate, n_primers, n_samples, ntc, reps) {
-  total_samples <- n_samples + ntc
-  primers <- rep(1:n_primers, each = total_samples * reps)
-  length(primers) <- nrow(plate)
-  dplyr::arrange(plate, .data$lane_v, dplyr::desc(.data$row)) |>
-    dplyr::mutate(primer = primers,
-                  primer = dplyr::if_else(.data$primer <= n_primers,
-                                          .data$primer,
-                                          NA_integer_),
-                  available_well = TRUE)
-}
-
-section_lanes <- function(laned_plate, n_primers) {
-  laned_plate |>
-    dplyr::mutate(primer = .data$lane_h * 100 + .data$lane_v) |> # Numerical hierarchy for ordering
-    dplyr::arrange(.data$primer) |>
-    dplyr::group_by(.data$primer) |>
-    dplyr::mutate(primer = dplyr::if_else(dplyr::cur_group_id() <= n_primers,
-                                          dplyr::cur_group_id(),
-                                          NA_integer_),
-                  available_well = TRUE) |>
-    dplyr::ungroup()
-}
-
-add_sample_names <- function(plate, reps, sample_names) {
-  plate <- plate |>
-    dplyr::group_by(.data$primer) |>
-    dplyr::mutate(sample = (dplyr::row_number() + 2) %/% reps,
-                  sample = dplyr::if_else(!is.na(.data$primer), .data$sample, NA_real_)) |>
-    dplyr::group_by(.data$sample) |>
-    tidyr::nest() |>
-    dplyr::ungroup()
-
-  sample_names <- c(sample_names, "NTC")
-  plotting_names <- stringr::str_trunc(sample_names, width = 15, side = "center", ellipsis = "\U2026")
-  length(sample_names) <- nrow(plate)
-  length(plotting_names) <- nrow(plate)
-
-  plate |>
-    dplyr::mutate(sample_name = sample_names,
-                  plotting_name = plotting_names) |>
-    tidyr::unnest(cols = .data$data) |>
-    dplyr::group_by(sample, .data$primer) |>
-    dplyr::arrange(dplyr::desc(.data$row), .data$col) |>
-    dplyr::mutate(sample_name = dplyr::if_else(!is.na(.data$primer) & dplyr::row_number() == 2, .data$sample_name, NA_character_),
-                  plotting_name = dplyr::if_else(!is.na(.data$primer) & dplyr::row_number() == 2, .data$plotting_name, NA_character_),
-                  sample = as.factor(.data$sample))
-}
-
-add_primer_names <- function(plate, primer_names) {
-  plate <- plate |>
-    dplyr::group_by(.data$primer) |>
-    tidyr::nest() |>
-    dplyr::arrange(.data$primer) |>
-    dplyr::ungroup()
-
-  length(primer_names) <- nrow(plate) # Account for any NAs (that may or may not be present)
-
-  plate |>
-    dplyr::mutate(primer_name = primer_names) |>
-    tidyr::unnest(cols = .data$data) |>
-    dplyr::group_by(.data$primer) |>
-    dplyr::arrange(.data$lane_v, dplyr::desc(.data$row), .data$col) |>
-    dplyr::mutate(primer_name = dplyr::if_else(dplyr::row_number() == 2, .data$primer_name, NA_character_),
-                  primer = as.factor(.data$primer))
 }
