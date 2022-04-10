@@ -54,10 +54,10 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
   if (!has_names)
     data <- cbind(sample_names, data)
 
-  plate <- gp(wells = as.numeric(format))
+  plate <- gp::gp(wells = as.numeric(format))
 
   if (exclude_border)
-    plate <- gp_sec(plate, "no_border", nrow = plate$nrow - 2, ncol = plate$ncol - 2, margin = 1)
+    plate <- gp::gp_sec(plate, "no_border", nrow = plate$nrow - 2, ncol = plate$ncol - 2, margin = 1)
 
   # Primer names ---------------------------------------------------------------
   pn <- paste("Primer", 1:n_primers)
@@ -65,12 +65,12 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
   if (!missing(primer_names))
     pn[1:length(primer_names)] <- primer_names
 
-  with_primers <- gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, labels = pn)
+  with_primers <- gp::gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, labels = pn)
 
   max_sections <- max(with_primers$well_data$.sec, na.rm = TRUE)
 
   if (max_sections < n_primers) {
-    with_primers <- gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, flow = "col", wrap = TRUE, labels = pn)
+    with_primers <- gp::gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, flow = "col", wrap = TRUE, labels = pn)
     max_sections_wrap <- max(with_primers$well_data$.sec, na.rm = TRUE)
 
     if (max_sections_wrap < n_primers)
@@ -79,7 +79,7 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
 
   # FIXME Make sure this supports supplied sample names less than total number of samples
   # Will need to roll in sample name arg. Not too hard!
-  with_samples <- gp_sec(with_primers, "samples", nrow = 1, wrap = TRUE, labels = sample_names)
+  with_samples <- gp::gp_sec(with_primers, "samples", nrow = 1, wrap = TRUE, labels = sample_names)
 
   # Sample preparation  --------------------------------------------------------
   final_vol <- ((n_primers * reps) + safety_reps) * rna_per_well |> as.integer()
