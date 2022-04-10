@@ -49,6 +49,13 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
     data <- cbind(sample_names, data)
   }
 
+  my_gp <- gp(wells = as.numeric(format)) |> gp_sec("primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE)
+
+  if (exclude_border) {
+    my_gp <- my_gp |>
+      gp_sec("")
+  }
+
   final_vol <- ((n_primers * reps) + safety_reps) * rna_per_well |> as.integer()
   n_samples <- nrow(data)
   section_area <- reps * (n_samples + ntc)
