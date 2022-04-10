@@ -81,9 +81,9 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
   # Will need to roll in sample name arg. Not too hard!
   with_samples <- gp_sec(with_primers, "samples", nrow = 1, wrap = TRUE, labels = sample_names)
 
+  # Sample preparation  --------------------------------------------------------
   final_vol <- ((n_primers * reps) + safety_reps) * rna_per_well |> as.integer()
 
-  # Sample preparation  --------------------------------------------------------
   sample_prep <- data |>
     dplyr::mutate(vol_to_add = final_rna_conc * final_vol / data[[2]]) |>
     dplyr::rowwise() |>
