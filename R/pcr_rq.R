@@ -24,8 +24,8 @@ pcr_rq <- function(data, relative_sample) {
 
   data |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
-    dplyr::mutate(ct_mean = mean(.data$ct),
-                  ct_sd   = stats::sd(.data$ct),
+    dplyr::mutate(ct_mean = mean(.data$ct, na.rm = TRUE),
+                  ct_sd   = stats::sd(.data$ct, na.rm = TRUE),
                   rep     = dplyr::n()) |>
     dplyr::ungroup() |>
     tidyr::nest(sample_nest = c("ct", "well", "well_row", "well_col", "well_position",
