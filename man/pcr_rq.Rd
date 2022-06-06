@@ -4,10 +4,10 @@
 \alias{pcr_rq}
 \title{(Re)calculate rq for a given sample}
 \usage{
-pcr_rq(data, relative_sample)
+pcr_rq(pcr, relative_sample)
 }
 \arguments{
-\item{data}{A dataset output from pcr_tidy/pcr_control}
+\item{pcr}{A \code{pcr} object}
 
 \item{relative_sample}{A sample to set others relative to (eg my_dmso_sample)}
 }
