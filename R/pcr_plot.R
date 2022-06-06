@@ -1,6 +1,6 @@
 #' Plot qPCR results
 #'
-#' @param tidy_pcr output from the `pcr_tidy` function, or some derivative (eg `pcr_rq`) thereof
+#' @param pcr a tidy `pcr` object
 #'
 #' @return a `ggplot`
 #' @export
@@ -13,8 +13,11 @@
 #'   pcr_rq("RD1") |>
 #'   pcr_plot()
 
-pcr_plot <- function(tidy_pcr) {
-  tidy_pcr |>
+pcr_plot <- function(pcr) {
+
+  pcr <- tidy_if_not(pcr)
+
+  pcr$data |>
     dplyr::filter(!is.na(.data$sample_name)) |>
     dplyr::distinct(.data$target_name, .data$sample_name, .keep_all = T) |>
     ggplot2::ggplot(ggplot2::aes(x = .data$sample_name, y = .data$rq, fill = .data$target_name)) +

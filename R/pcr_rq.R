@@ -1,9 +1,9 @@
 #' (Re)calculate rq for a given sample
 #'
-#' @param data A dataset output from pcr_tidy/pcr_control
+#' @param pcr A `pcr` object
 #' @param relative_sample A sample to set others relative to (eg my_dmso_sample)
 #'
-#' @return A `tibble`
+#' @return A `pcr` object
 #' @export
 #'
 #' @importFrom rlang .data
@@ -18,11 +18,13 @@
 #' pcr_tidy(dat_path) |>
 #'   pcr_control("GAPDH") |>
 #'   pcr_rq("U6D1")
-pcr_rq <- function(data, relative_sample) {
+pcr_rq <- function(pcr, relative_sample) {
 
-  control_probe <- unique(data$control)
+  pcr <- tidy_if_not(pcr)
 
-  data |>
+  control_probe <- pcr$footer$value[which(pcr$footer$name == "Endogenous Control")]
+
+  pcr$data <- pcr$data |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
     dplyr::mutate(ct_mean = mean(.data$ct, na.rm = TRUE),
                   ct_sd   = stats::sd(.data$ct, na.rm = TRUE),
@@ -43,4 +45,6 @@ pcr_rq <- function(data, relative_sample) {
                   rq_min = 2^-(.data$delta_delta_ct + .data$t * .data$delta_ct_se),
                   rq_max = 2^-(.data$delta_delta_ct - .data$t * .data$delta_ct_se)) |>
     tidyr::unnest(.data$sample_nest)
+
+  pcr
 }

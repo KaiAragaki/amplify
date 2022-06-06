@@ -1,19 +1,23 @@
 #' (Re)calculate Delta Ct mean based on given control probe
 #'
-#' @param data A dataset output from `pcr_tidy`
+#' @param pcr A tidy `pcr` object
 #' @param control_probe A probe to be used as an endogenous control (eg GAPDH)
 #'
-#' @return A `tibble`
+#' @return A `pcr` object
 #' @export
 #'
 #' @importFrom rlang .data
-#'
 #' @examples
 #' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_control("GAPDH")
-pcr_control <- function(data, control_probe) {
-  data |>
+pcr_control <- function(pcr, control_probe) {
+
+  pcr <- tidy_if_not(pcr)
+
+  pcr$footer[which(pcr$footer$name == "Endogenous Control"), 2] <- control_probe
+
+  pcr$data <- pcr$data |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
     dplyr::mutate(ct_mean = mean(.data$ct),
                   ct_sd   = stats::sd(.data$ct),
@@ -27,7 +31,9 @@ pcr_control <- function(data, control_probe) {
                   delta_ct_sd  = sqrt(.data$ct_sd^2 + .data$ct_sd[.data$target_name == control_probe]^2),
                   delta_ct_se  = .data$delta_ct_sd/sqrt(.data$rep),
                   df           = max(1, .data$rep + .data$rep[.data$target_name == control_probe] - 2),
-                  t            = stats::qt(.05/2, .data$df, lower.tail = F)) |>
+                  t            = stats::qt(.05/2, .data$df, lower.tail = FALSE)) |>
     tidyr::unnest(.data$sample_nest) |>
     dplyr::ungroup()
+
+  pcr
 }
