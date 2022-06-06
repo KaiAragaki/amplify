@@ -14,16 +14,7 @@
 #'   pcr_tidy() |>
 #'   pcr_plate_view()
 
-pcr_plate_view <- function(tidy_pcr, fill = "target_name") {
-
-  if (sum(grepl("384", tidy_pcr$plate_type), na.rm = TRUE) > 0) {
-    x <- 2
-  } else if (sum(grepl("96", tidy_pcr$plate_type), na.rm = TRUE) > 0) {
-    x <- 1
-  }
-  ggplot2::ggplot(tidy_pcr, aes(x = .data$well_col, y = .data$well_row, fill = .data[[fill]])) +
-    ggplot2::geom_tile(size = 2) +
-    ggplot2::coord_cartesian(xlim = c(1,(x*12)), ylim = c((x*8), 1)) +
-    ggplot2::scale_y_continuous(breaks = 1:(x*8), labels = LETTERS[1:(x*8)]) +
-    ggplot2::scale_x_continuous(breaks = 1:(x*12), minor_breaks = NULL)
+pcr_plate_view <- function(pcr, fill = target_name) {
+  pcr <- tidy_if_not(pcr)
+  gp::gp_plot(pcr$data, {{fill}})
 }
