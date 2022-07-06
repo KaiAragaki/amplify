@@ -4,12 +4,12 @@
 \alias{pcr_plate_view}
 \title{View sample plating layout}
 \usage{
-pcr_plate_view(tidy_pcr, fill = "target_name")
+pcr_plate_view(pcr, fill = target_name)
 }
 \arguments{
-\item{tidy_pcr}{an output from the \code{pcr_tidy} function}
-
 \item{fill}{character. A column in \code{tidy_pcr} used to use to fill the geom_tiles}
+
+\item{tidy_pcr}{an output from the \code{pcr_tidy} function}
 }
 \value{
 a ggplot
