@@ -4,15 +4,15 @@
 \alias{pcr_control}
 \title{(Re)calculate Delta Ct mean based on given control probe}
 \usage{
-pcr_control(data, control_probe)
+pcr_control(pcr, control_probe)
 }
 \arguments{
-\item{data}{A dataset output from \code{pcr_tidy}}
+\item{pcr}{A tidy \code{pcr} object}
 
 \item{control_probe}{A probe to be used as an endogenous control (eg GAPDH)}
 }
 \value{
-A \code{tibble}
+A \code{pcr} object
 }
 \description{
 (Re)calculate Delta Ct mean based on given control probe

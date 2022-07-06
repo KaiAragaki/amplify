@@ -54,8 +54,8 @@ pcr_rq.pcr <- function(x, relative_sample, ...) {
 }
 
 pcr_rq.data.frame <- function(x, relative_sample, ...) {
-  control_probe <- pcr$footer$value[which(pcr$footer$name == "Endogenous Control")]
-
+  control_probe <- pcr$footer["Endogenous Control"]
+  pcr <- tidy_if_not(pcr)
   pcr$data <- pcr$data |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
     dplyr::mutate(ct_mean = mean(.data$ct, na.rm = TRUE),

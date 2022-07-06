@@ -4,10 +4,10 @@
 \alias{pcr_plot}
 \title{Plot qPCR results}
 \usage{
-pcr_plot(tidy_pcr)
+pcr_plot(pcr)
 }
 \arguments{
-\item{tidy_pcr}{output from the \code{pcr_tidy} function, or some derivative (eg \code{pcr_rq}) thereof}
+\item{pcr}{a tidy \code{pcr} object}
 }
 \value{
 a \code{ggplot}

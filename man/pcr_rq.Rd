@@ -2,20 +2,25 @@
 % Please edit documentation in R/pcr_rq.R
 \name{pcr_rq}
 \alias{pcr_rq}
-\title{(Re)calculate rq for a given sample}
+\alias{pcr_rq.pcr}
+\title{Recalculate relative quantities for a given experiment}
 \usage{
-pcr_rq(pcr, relative_sample)
+pcr_rq(x, relative_sample, ...)
+
+\method{pcr_rq}{pcr}(x, relative_sample, ...)
 }
 \arguments{
-\item{pcr}{A \code{pcr} object}
+\item{x}{A \code{pcr} or \code{data.frame}}
 
-\item{relative_sample}{A sample to set others relative to (eg my_dmso_sample)}
+\item{relative_sample}{A sample to set others relative to (eg \code{my_dmso_sample})}
+
+\item{...}{Arguments passed to respective method}
 }
 \value{
-A \code{tibble}
+An object of same class as \code{x}
 }
 \description{
-(Re)calculate rq for a given sample
+Recalculate relative quantities for a given experiment
 }
 \examples{
 dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
