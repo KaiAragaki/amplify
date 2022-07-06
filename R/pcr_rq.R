@@ -20,9 +20,8 @@
 #'   pcr_rq("U6D1")
 pcr_rq <- function(pcr, relative_sample) {
 
+  control_probe <- pcr$footer["Endogenous Control"]
   pcr <- tidy_if_not(pcr)
-
-  control_probe <- pcr$footer$value[which(pcr$footer$name == "Endogenous Control")]
 
   pcr$data <- pcr$data |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
