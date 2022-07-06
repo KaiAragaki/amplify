@@ -7,12 +7,13 @@
 #' @export
 #'
 #' @importFrom rlang .data
-#'
 #' @examples
 #' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
 #'   pcr_tidy() |>
 #'   pcr_control("GAPDH")
 pcr_control <- function(pcr, control_probe) {
+
+  pcr <- tidy_if_not(pcr)
 
   pcr$footer[which(pcr$footer$name == "Endogenous Control"), 2] <- control_probe
 

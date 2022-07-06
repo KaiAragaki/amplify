@@ -14,6 +14,9 @@
 #'   pcr_plot()
 
 pcr_plot <- function(pcr) {
+
+  pcr <- tidy_if_not(pcr)
+
   pcr$data |>
     dplyr::filter(!is.na(.data$sample_name)) |>
     dplyr::distinct(.data$target_name, .data$sample_name, .keep_all = T) |>
