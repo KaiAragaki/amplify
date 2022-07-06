@@ -24,6 +24,7 @@ pcr_rq <- function(pcr, relative_sample) {
   pcr <- tidy_if_not(pcr)
 
   pcr$data <- pcr$data |>
+    mop::scrub() |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
     dplyr::mutate(ct_mean = mean(.data$ct, na.rm = TRUE),
                   ct_sd   = stats::sd(.data$ct, na.rm = TRUE),
@@ -43,7 +44,8 @@ pcr_rq <- function(pcr, relative_sample) {
                   rq     = 2^-(.data$delta_delta_ct),
                   rq_min = 2^-(.data$delta_delta_ct + .data$t * .data$delta_ct_se),
                   rq_max = 2^-(.data$delta_delta_ct - .data$t * .data$delta_ct_se)) |>
-    tidyr::unnest(.data$sample_nest)
+    tidyr::unnest(.data$sample_nest) |>
+    mop::as_pcr()
 
   pcr
 }
