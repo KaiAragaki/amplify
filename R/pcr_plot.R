@@ -17,7 +17,8 @@ pcr_plot <- function(pcr) {
 
   pcr <- tidy_if_not(pcr)
 
-  pcr$data |>
+  pcr |>
+    mop::scrub() |>
     dplyr::filter(!is.na(.data$sample_name)) |>
     dplyr::distinct(.data$target_name, .data$sample_name, .keep_all = T) |>
     ggplot2::ggplot(ggplot2::aes(x = .data$sample_name, y = .data$rq, fill = .data$target_name)) +

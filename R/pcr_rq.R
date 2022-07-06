@@ -23,14 +23,14 @@ pcr_rq <- function(pcr, relative_sample) {
   control_probe <- pcr$footer["Endogenous Control"]
   pcr <- tidy_if_not(pcr)
 
-  pcr$data <- pcr$data |>
+  pcr |>
     mop::scrub() |>
     dplyr::group_by(.data$target_name, .data$sample_name) |>
     dplyr::mutate(ct_mean = mean(.data$ct, na.rm = TRUE),
                   ct_sd   = stats::sd(.data$ct, na.rm = TRUE),
                   rep     = dplyr::n()) |>
     dplyr::ungroup() |>
-    tidyr::nest(sample_nest = c("ct", "well", "well_row", "well_col", "well_position",
+    tidyr::nest(sample_nest = c("ct", "well", ".row", ".col", "well_position",
                                 "baseline_start", "baseline_end")) |>
     dplyr::group_by(.data$sample_name) |>
     dplyr::mutate(delta_ct     = .data$ct_mean - .data$ct_mean[.data$target_name == control_probe],
