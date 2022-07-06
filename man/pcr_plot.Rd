@@ -2,12 +2,18 @@
 % Please edit documentation in R/pcr_plot.R
 \name{pcr_plot}
 \alias{pcr_plot}
+\alias{pcr_plot.pcr}
+\alias{pcr_plot.data.frame}
 \title{Plot qPCR results}
 \usage{
-pcr_plot(pcr)
+pcr_plot(x, ...)
+
+\method{pcr_plot}{pcr}(x, ...)
+
+\method{pcr_plot}{data.frame}(x, ...)
 }
 \arguments{
-\item{pcr}{a tidy \code{pcr} object}
+\item{x}{a \code{pcr} object or \code{data.frame}}
 }
 \value{
 a \code{ggplot}

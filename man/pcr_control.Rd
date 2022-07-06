@@ -2,23 +2,29 @@
 % Please edit documentation in R/pcr_control.R
 \name{pcr_control}
 \alias{pcr_control}
-\title{(Re)calculate Delta Ct mean based on given control probe}
+\alias{pcr_control.pcr}
+\alias{pcr_control.data.frame}
+\title{Calculate Delta Ct mean based on given control probe}
 \usage{
-pcr_control(pcr, control_probe)
+pcr_control(x, control_probe)
+
+\method{pcr_control}{pcr}(x, control_probe, ...)
+
+\method{pcr_control}{data.frame}(x, control_probe, ...)
 }
 \arguments{
-\item{pcr}{A tidy \code{pcr} object}
+\item{x}{A \code{pcr} or \code{data.frame} object}
 
 \item{control_probe}{A probe to be used as an endogenous control (eg GAPDH)}
 }
 \value{
-A \code{pcr} object
+An object with class the same as input
 }
 \description{
-(Re)calculate Delta Ct mean based on given control probe
+Calculate Delta Ct mean based on given control probe
 }
 \examples{
 system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
-  pcr_tidy() |>
+  mop::read_pcr() |>
   pcr_control("GAPDH")
 }

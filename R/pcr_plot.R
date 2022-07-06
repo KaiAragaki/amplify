@@ -1,6 +1,6 @@
 #' Plot qPCR results
 #'
-#' @param pcr a tidy `pcr` object
+#' @param x a `pcr` object or `data.frame`
 #'
 #' @return a `ggplot`
 #' @export
@@ -12,13 +12,24 @@
 #'   pcr_tidy() |>
 #'   pcr_rq("RD1") |>
 #'   pcr_plot()
+pcr_plot <- function(x, ...) {
+  UseMethod("pcr_plot")
+}
 
-pcr_plot <- function(pcr) {
 
-  pcr <- tidy_if_not(pcr)
-
-  pcr |>
+#' @rdname pcr_plot
+#' @export
+pcr_plot.pcr <- function(x, ...) {
+  x |>
+    tidy_if_not() |>
     mop::scrub() |>
+    pcr_plot()
+}
+
+#' @rdname pcr_plot
+#' @export
+pcr_plot.data.frame <- function(x, ...) {
+  x |>
     dplyr::filter(!is.na(.data$sample_name)) |>
     dplyr::distinct(.data$target_name, .data$sample_name, .keep_all = T) |>
     ggplot2::ggplot(ggplot2::aes(x = .data$sample_name, y = .data$rq, fill = .data$target_name)) +
@@ -29,3 +40,5 @@ pcr_plot <- function(pcr) {
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5),
                    axis.title.x = ggplot2::element_blank())
 }
+
+

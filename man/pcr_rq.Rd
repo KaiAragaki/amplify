@@ -3,16 +3,21 @@
 \name{pcr_rq}
 \alias{pcr_rq}
 \alias{pcr_rq.pcr}
+\alias{pcr_rq.data.frame}
 \title{Recalculate relative quantities for a given experiment}
 \usage{
-pcr_rq(x, relative_sample, ...)
+pcr_rq(x, relative_sample, control_probe = NULL, ...)
 
-\method{pcr_rq}{pcr}(x, relative_sample, ...)
+\method{pcr_rq}{pcr}(x, relative_sample, control_probe = NULL, ...)
+
+\method{pcr_rq}{data.frame}(x, relative_sample, control_probe = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{pcr} or \code{data.frame}}
 
 \item{relative_sample}{A sample to set others relative to (eg \code{my_dmso_sample})}
+
+\item{control_probe}{Character. \code{target_name} to serve as endogenous control.}
 
 \item{...}{Arguments passed to respective method}
 }
