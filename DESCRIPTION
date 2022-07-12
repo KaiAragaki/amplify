@@ -20,6 +20,7 @@ Imports:
     gp,
     gt,
     knitr,
+    mop,
     purrr,
     readxl,
     rlang,
