@@ -21,16 +21,23 @@
 #'   pcr_lib_calc()
 
 pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
-  max_standard <- tidy_pcr |>
-    pcr_calc_slope() |>
+
+  tidy_pcr <- tidy_if_not(tidy_pcr)
+
+  tidy_pcr <- pcr_calc_slope(tidy_pcr)
+
+  wd <- tidy_pcr$data$well_data
+
+  max_standard <- wd |>
     dplyr::select(quantity, task) |>
     dplyr::filter(task == "STANDARD") |>
     dplyr::pull(quantity) |>
     max(na.rm = TRUE)
 
-  tidy_pcr |>
-    tidyr::nest(replicates = c("well", "well_position", "ct", "quantity",
-                               "well_row", "well_col", contains("badrox"), contains("prfdrop"))) |>
+  wd <- wd |>
+    tidyr::nest(replicates = c(dplyr::starts_with("."), "well", "well_position",
+                               "ct", "quantity", dplyr::contains("badrox"),
+                               dplyr::contains("prfdrop"), "amp_score", "cq_conf")) |>
     dplyr::group_by(.data$task) |>
     dplyr::arrange(.data$task, .data$ct_mean) |>
     dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
@@ -42,6 +49,10 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
                   standard_diff = dplyr::if_else(.data$task == "STANDARD", .data$standard_diff, NA_real_),
                   quant_actual = dplyr::if_else(.data$task == "STANDARD", .data$quant_actual, .data$quantity),
                   concentration = .data$quantity_mean * dil_factor)
+
+  tidy_pcr$data$well_data <- wd
+
+  tidy_pcr
 }
 
 #' Create library prep quality control data
@@ -71,9 +82,9 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 #'
 
 pcr_lib_qc <- function(lib_calc_pcr) {
-  dat <- lib_calc_pcr |>
+  dat <- lib_calc_pcr$data$well_data |>
     dplyr::select(c("task", "sample_name", "quantity_mean", "concentration", "quantity",
-                    "quant_actual", "dil", "slope", "efficiency", "r2", "ct"))
+                    "quant_actual", "dil", "slope", "efficiency", "r_superscript_2", "ct"))
 
   outliers <- find_outliers(dat)
 
@@ -363,7 +374,7 @@ pcr_lib_qc_plot_slope <- function(lib_qc) {
   slope_text <-
     dplyr::tibble(x = -2.5, y = 20,
                   label = paste(paste("Slope:", round(lib_qc$standards$slope[1], 2)),
-                                paste("R\u00B2:", round(lib_qc$standards$r2[1], 2)),
+                                paste("R\u00B2:", round(lib_qc$standards$r_superscript_2[1], 2)),
                                 paste0("Efficiency: ", round(lib_qc$standards$efficiency[1], 1), "%"),
                                 sep = "\n"))
 
