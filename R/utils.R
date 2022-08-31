@@ -1,3 +1,9 @@
+#' @export
+#' @rdname well_data
+well_data.pcr <- function(x, ...) {
+  x$data$well_data
+}
+
 #' Recalcuate standard slope of quantity vs Ct
 #'
 #' @param tidy_pcr a object that has been tidied by `tidy_pcr`
@@ -8,7 +14,6 @@ pcr_calc_slope <- function(tidy_pcr) {
   tidy_pcr$data$well_data$slope <- stats::lm(ct~log10(quantity), data = tidy_pcr$data$well_data)$coefficients[2] |> unname()
   tidy_pcr
 }
-
 
 tidy_if_not <- function(x) {
   if (!x$is_tidy) {
