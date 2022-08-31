@@ -24,7 +24,7 @@ pcr_lib_qc_plot_dil(df)
 
 
 ::: {style="flex-basis: 100px; flex-grow: 1"}
-Theoretical (perfectly diluted) samples are in gray, true dilutions are in blue. Samples are in red. Dilutions between standards shown in text.
+Theoretical (perfectly diluted) standards are in gray, true dilutions are in blue. Samples are in red. Dilutions between standards shown in text.
 :::
 
 ::::
