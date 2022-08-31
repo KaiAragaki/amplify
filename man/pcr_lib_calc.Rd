@@ -4,19 +4,24 @@
 \alias{pcr_lib_calc}
 \title{Calculate library PCR concentrations}
 \usage{
-pcr_lib_calc(tidy_pcr, dil_factor = 1000)
+pcr_lib_calc(pcr, dil_factor = 1000)
 }
 \arguments{
-\item{tidy_pcr}{an output of \code{pcr_tidy}}
+\item{pcr}{a \code{pcr} object. Will be tidied if not already.}
 
-\item{dil_factor}{integer. The factor to which the libraries were diluted for pcr}
+\item{dil_factor}{integer. The factor that the libraries were diluted for pcr}
 }
 \value{
-a \code{tibble}, containing the input columns as well as:
+a \code{pcr} object, with  the input columns as well as:
 \itemize{
-\item{\code{standard_diff}} {The difference between the \code{ct_mean} of a standard and one step up in the dilution (ie more concentrated, lower Ct). The most concentrated dilution has a value of 0}
-\item{\code{dil}} {2^(\code{standard_diff}). The accuracy of this metric assumes that the efficiency of the PCR is 100\%, which is likely good but not perfect!. In the case of the first standard, \code{dil} = 0}
-\item{\code{quant_actual}} {For standards, the presumed quantity of standard, calculated from \code{dil}. For samples, \code{quantity}}
+\item{\code{standard_diff}} {The difference between the \code{ct_mean} of a standard
+and one step up in the dilution (ie more concentrated, lower Ct). The most
+concentrated dilution has a value of 0}
+\item{\code{dil}} {2^(\code{standard_diff}). The accuracy of this metric assumes that
+the efficiency of the PCR is 100\%, which is likely good but not perfect!
+In the case of the first standard, \code{dil} = 0}
+\item{\code{quant_actual}} {For standards, the presumed quantity of standard,
+calculated from \code{dil}. For samples, \code{quantity}}
 \item{\code{concentration}} {The concentration of library, before dilution}
 }
 }
@@ -26,6 +31,6 @@ Calculate library PCR concentrations
 \examples{
 
 system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
-  pcr_tidy(pad_zero = TRUE) |>
+  read_pcr() |>
   pcr_lib_calc()
 }

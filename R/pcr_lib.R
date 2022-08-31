@@ -1,13 +1,18 @@
 #' Calculate library PCR concentrations
 #'
-#' @param tidy_pcr an output of `pcr_tidy`
-#' @param dil_factor integer. The factor to which the libraries were diluted for pcr
+#' @param pcr a `pcr` object. Will be tidied if not already.
+#' @param dil_factor integer. The factor that the libraries were diluted for pcr
 #'
-#' @return a `tibble`, containing the input columns as well as:
+#' @return a `pcr` object, with  the input columns as well as:
 #' \itemize{
-#'   \item{`standard_diff`} {The difference between the `ct_mean` of a standard and one step up in the dilution (ie more concentrated, lower Ct). The most concentrated dilution has a value of 0}
-#'   \item{`dil`} {2^(`standard_diff`). The accuracy of this metric assumes that the efficiency of the PCR is 100%, which is likely good but not perfect!. In the case of the first standard, `dil` = 0}
-#'   \item{`quant_actual`} {For standards, the presumed quantity of standard, calculated from `dil`. For samples, `quantity`}
+#'   \item{`standard_diff`} {The difference between the `ct_mean` of a standard
+#'   and one step up in the dilution (ie more concentrated, lower Ct). The most
+#'   concentrated dilution has a value of 0}
+#'   \item{`dil`} {2^(`standard_diff`). The accuracy of this metric assumes that
+#'    the efficiency of the PCR is 100%, which is likely good but not perfect!
+#'    In the case of the first standard, `dil` = 0}
+#'   \item{`quant_actual`} {For standards, the presumed quantity of standard,
+#'   calculated from `dil`. For samples, `quantity`}
 #'   \item{`concentration`} {The concentration of library, before dilution}
 #' }
 #' @export
@@ -17,12 +22,12 @@
 #' @examples
 #'
 #' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
-#'   pcr_tidy(pad_zero = TRUE) |>
+#'   read_pcr() |>
 #'   pcr_lib_calc()
 
-pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
+pcr_lib_calc <- function(pcr, dil_factor = 1000) {
 
-  tidy_pcr <- tidy_if_not(tidy_pcr)
+  tidy_pcr <- tidy_if_not(pcr)
 
   tidy_pcr <- pcr_calc_slope(tidy_pcr)
 
@@ -36,8 +41,12 @@ pcr_lib_calc <- function(tidy_pcr, dil_factor = 1000) {
 
   wd <- wd |>
     tidyr::nest(replicates = c(dplyr::starts_with("."), "well", "well_position",
-                               "ct", "quantity", dplyr::contains("badrox"),
-                               dplyr::contains("prfdrop"), "amp_score", "cq_conf")) |>
+                               "ct", "quantity",
+                               # Using 'contains' because columns may not exist
+                               dplyr::contains("badrox"),
+                               dplyr::contains("prfdrop"),
+                               dplyr::contains("amp_score"),
+                               dplyr::contains("cq_conf"))) |>
     dplyr::group_by(.data$task) |>
     dplyr::arrange(.data$task, .data$ct_mean) |>
     dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
