@@ -7,16 +7,19 @@
 pcr_lib_qc(lib_calc_pcr)
 }
 \arguments{
-\item{lib_calc_pcr}{an output from \code{pcr_lib_calc}}
+\item{lib_calc_pcr}{A \code{pcr} object, output from \code{pcr_lib_calc}}
 }
 \value{
-a named list with:
+a \code{pcr} object with  list with:
 \itemize{
-\item{standards} {Data for individual standards, including calculated dilutions, given and calculated quantities, raw Ct, etc.}
-\item{samples} {Data for individual samples, including calculated concentrations, raw Ct, etc.}
+\item{standards} {Data for individual standards, including calculated
+dilutions, given and calculated quantities, raw Ct, etc.}
+\item{samples} {Data for individual samples, including calculated
+concentrations, raw Ct, etc.}
 \item{sample_summary} {Summary statistics for samples grouped by replicates}
 \item{standard_summary} {Summary statistics for standards groupd by replicates}
-\item{outliers} {Data for individual samples and standards with and without their putative outliers (\code{po}) per replicate group}
+\item{outliers} {Data for individual samples and standards with and without
+their putative outliers (\code{po}) per replicate group}
 }
 }
 \description{

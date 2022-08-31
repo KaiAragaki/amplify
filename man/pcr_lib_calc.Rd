@@ -7,9 +7,9 @@
 pcr_lib_calc(pcr, dil_factor = 1000)
 }
 \arguments{
-\item{pcr}{a \code{pcr} object. Will be tidied if not already.}
+\item{pcr}{A \code{pcr} object. Will be tidied if not already.}
 
-\item{dil_factor}{integer. The factor that the libraries were diluted for pcr}
+\item{dil_factor}{Integer. The factor that the libraries were diluted for pcr.}
 }
 \value{
 a \code{pcr} object, with \code{well_data} containing the input columns as well
