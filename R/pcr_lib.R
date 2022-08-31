@@ -39,14 +39,10 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
     dplyr::pull(quantity) |>
     max(na.rm = TRUE)
 
+  original_column_order <- colnames(wd)
+
   wd <- wd |>
-    tidyr::nest(replicates = c(dplyr::starts_with("."), "well", "well_position",
-                               "ct", "quantity",
-                               # Using 'contains' because columns may not exist
-                               dplyr::contains("badrox"),
-                               dplyr::contains("prfdrop"),
-                               dplyr::contains("amp_score"),
-                               dplyr::contains("cq_conf"))) |>
+    tidyr::nest(replicates = -c(.data$sample_name, .data$task, .data$ct_mean)) |>
     dplyr::group_by(.data$task) |>
     dplyr::arrange(.data$task, .data$ct_mean) |>
     dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
@@ -57,7 +53,8 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
     dplyr::mutate(dil = dplyr::if_else(.data$task == "STANDARD", .data$dil, NA_real_),
                   standard_diff = dplyr::if_else(.data$task == "STANDARD", .data$standard_diff, NA_real_),
                   quant_actual = dplyr::if_else(.data$task == "STANDARD", .data$quant_actual, .data$quantity),
-                  concentration = .data$quantity_mean * dil_factor)
+                  concentration = .data$quantity_mean * dil_factor) |>
+    dplyr::relocate(dplyr::all_of(original_column_order))
 
   tidy_pcr$data$well_data <- wd
 
