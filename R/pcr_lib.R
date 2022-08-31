@@ -1,9 +1,10 @@
 #' Calculate library PCR concentrations
 #'
-#' @param pcr a `pcr` object. Will be tidied if not already.
-#' @param dil_factor integer. The factor that the libraries were diluted for pcr
+#' @param pcr A `pcr` object. Will be tidied if not already.
+#' @param dil_factor Integer. The factor that the libraries were diluted for pcr.
 #'
-#' @return a `pcr` object, with  the input columns as well as:
+#' @return a `pcr` object, with `well_data` containing the input columns as well
+#' as:
 #' \itemize{
 #'   \item{`standard_diff`} {The difference between the `ct_mean` of a standard
 #'   and one step up in the dilution (ie more concentrated, lower Ct). The most

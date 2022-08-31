@@ -12,7 +12,8 @@ pcr_lib_calc(pcr, dil_factor = 1000)
 \item{dil_factor}{integer. The factor that the libraries were diluted for pcr}
 }
 \value{
-a \code{pcr} object, with  the input columns as well as:
+a \code{pcr} object, with \code{well_data} containing the input columns as well
+as:
 \itemize{
 \item{\code{standard_diff}} {The difference between the \code{ct_mean} of a standard
 and one step up in the dilution (ie more concentrated, lower Ct). The most
