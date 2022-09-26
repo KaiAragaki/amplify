@@ -9,7 +9,7 @@
 #' @importFrom rlang .data
 #' @examples
 #' system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
-#'   mop::read_pcr() |>
+#'   read_pcr() |>
 #'   pcr_control("GAPDH")
 pcr_control <- function(x, control_probe) {
   UseMethod("pcr_control")
@@ -35,9 +35,8 @@ pcr_control.data.frame <- function(x, control_probe, ...) {
                   ct_sd   = stats::sd(.data$ct),
                   rep     = dplyr::n()) |>
     dplyr::ungroup() |>
-    tidyr::nest(sample_nest = c(.data$ct, .data$well, .data$.row,
-                                .data$.col, .data$well_position,
-                                .data$baseline_start, .data$baseline_end)) |>
+    tidyr::nest(sample_nest = c("ct", "well", ".row", ".col", "well_position",
+                                "baseline_start", "baseline_end")) |>
     dplyr::group_by(.data$sample_name) |>
     dplyr::mutate(delta_ct     = .data$ct_mean - .data$ct_mean[.data$target_name == endogenous_control],
                   delta_ct_sd  = sqrt(.data$ct_sd^2 + .data$ct_sd[.data$target_name == endogenous_control]^2),
