@@ -35,7 +35,6 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
   wd <- tidy_pcr$data$well_data
 
   max_standard <- wd |>
-    dplyr::select(quantity, task) |>
     dplyr::filter(task == "STANDARD") |>
     dplyr::pull(quantity) |>
     max(na.rm = TRUE)
@@ -43,17 +42,22 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
   original_column_order <- colnames(wd)
 
   wd <- wd |>
-    tidyr::nest(replicates = -c(.data$sample_name, .data$task, .data$ct_mean)) |>
+    tidyr::nest(replicates = -c("sample_name", "task", "ct_mean")) |>
     dplyr::group_by(.data$task) |>
     dplyr::arrange(.data$task, .data$ct_mean) |>
-    dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
+    dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean,
+                                                             default = .data$ct_mean[1]),
                   dil = 2^.data$standard_diff,
                   quant_actual = max_standard/cumprod(.data$dil),
                   dil = dplyr::if_else(.data$dil == 1, 0, .data$dil)) |>
     tidyr::unnest(cols = .data$replicates) |>
-    dplyr::mutate(dil = dplyr::if_else(.data$task == "STANDARD", .data$dil, NA_real_),
-                  standard_diff = dplyr::if_else(.data$task == "STANDARD", .data$standard_diff, NA_real_),
-                  quant_actual = dplyr::if_else(.data$task == "STANDARD", .data$quant_actual, .data$quantity),
+    dplyr::mutate(dplyr::across(c("dil", "standard_diff"),
+                                \(x) dplyr::if_else(.data$task == "STANDARD",
+                                                    x,
+                                                    NA_real_)),
+                  quant_actual = dplyr::if_else(.data$task == "STANDARD",
+                                                .data$quant_actual,
+                                                .data$quantity),
                   concentration = .data$quantity_mean * dil_factor) |>
     dplyr::relocate(dplyr::all_of(original_column_order))
 
@@ -64,14 +68,17 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
 
 #' Create library prep quality control data
 #'
-#' @param lib_calc_pcr an output from `pcr_lib_calc`
-#' @return a named list with:
+#' @param lib_calc_pcr A `pcr` object, output from `pcr_lib_calc`
+#' @return a `pcr` object with  list with:
 #' \itemize{
-#'   \item{standards} {Data for individual standards, including calculated dilutions, given and calculated quantities, raw Ct, etc.}
-#'   \item{samples} {Data for individual samples, including calculated concentrations, raw Ct, etc.}
+#'   \item{standards} {Data for individual standards, including calculated
+#'   dilutions, given and calculated quantities, raw Ct, etc.}
+#'   \item{samples} {Data for individual samples, including calculated
+#'   concentrations, raw Ct, etc.}
 #'   \item{sample_summary} {Summary statistics for samples grouped by replicates}
 #'   \item{standard_summary} {Summary statistics for standards groupd by replicates}
-#'   \item{outliers} {Data for individual samples and standards with and without their putative outliers (`po`) per replicate group}
+#'   \item{outliers} {Data for individual samples and standards with and without
+#'   their putative outliers (`po`) per replicate group}
 #' }
 #' @details While the output of this function on its own is can theoretically be
 #'   used to gauge library quality, it is best used in conjunction with a
