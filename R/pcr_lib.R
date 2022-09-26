@@ -160,6 +160,7 @@ find_outliers <- function(dat) {
 find_mean <- function(df) {
   cts <- df$ct
   if (nrow(df) >= 3 & !all(is.na(cts))) {
+    cts <- ifelse(is.na(cts), 0, cts)
     hc <- cts |> stats::dist() |> stats::hclust()
     possible_outlier <- hc$merge[nrow(df) - 1, 1] |> abs()
     cts <- cts[-possible_outlier]
