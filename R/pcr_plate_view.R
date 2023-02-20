@@ -16,5 +16,5 @@
 
 pcr_plate_view <- function(pcr, fill = target_name) {
   pcr <- tidy_if_not(pcr)
-  gp::gp_plot(pcr$data, {{fill}})
+  gplate::gp_plot(pcr$data, {{fill}})
 }

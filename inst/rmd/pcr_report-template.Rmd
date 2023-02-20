@@ -96,11 +96,11 @@ params$mm_prep |>
 
 # Mastermix Layout
 ```{r echo = F, fig.width=10, fig.height=7, out.width="100%"}
-gp::gp_plot(params$plate, primers)
+gplate::gp_plot(params$plate, primers)
 ```
 
 
 # Sample Layout
 ```{r echo = F, fig.width=10, fig.height=7, out.width="100%"}
-gp::gp_plot(params$plate, samples) 
+gplate::gp_plot(params$plate, samples) 
 ```
