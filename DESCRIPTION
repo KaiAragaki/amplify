@@ -31,7 +31,7 @@ Imports:
     utils,
     vctrs
 Remotes:
-    KaiAragaki/gplate
+    KaiAragaki/gplate,
     KaiAragaki/mop
 Depends: 
     R (>= 4.1.0)
