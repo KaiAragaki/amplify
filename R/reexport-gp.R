@@ -1,3 +1,3 @@
-#' @importFrom gp well_data
+#' @importFrom gplate well_data
 #' @export
 gplate::well_data
