@@ -25,6 +25,6 @@ Calculate Delta Ct mean based on given control probe
 }
 \examples{
 system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
-  mop::read_pcr() |>
+  read_pcr() |>
   pcr_control("GAPDH")
 }

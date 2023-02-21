@@ -15,7 +15,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{gp}{\code{\link[gp]{well_data}}}
+  \item{gplate}{\code{\link[gplate]{well_data}}}
 
   \item{mop}{\code{\link[mop]{as_pcr}}, \code{\link[mop]{read_pcr}}, \code{\link[mop]{scrub}}, \code{\link[mop]{tidy_lab}}}
 }}
