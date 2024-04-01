@@ -1,20 +1,19 @@
 #' Calculate library PCR concentrations
 #'
-#' @param pcr A `pcr` object. Will be tidied if not already.
-#' @param dil_factor Integer. The factor that the libraries were diluted for pcr.
+#' @param pcr a `pcr` object. Will be tidied if not already.
+#' @param dil_factor integer. The factor that the libraries were diluted for pcr
 #'
-#' @return a `pcr` object, with `well_data` containing the input columns as well
-#' as:
+#' @return a `pcr` object, containing the input columns as well as:
 #' \itemize{
-#'   \item{`standard_diff`} {The difference between the `ct_mean` of a standard
-#'   and one step up in the dilution (ie more concentrated, lower Ct). The most
-#'   concentrated dilution has a value of 0}
-#'   \item{`dil`} {2^(`standard_diff`). The accuracy of this metric assumes that
-#'    the efficiency of the PCR is 100%, which is likely good but not perfect!
-#'    In the case of the first standard, `dil` = 0}
-#'   \item{`quant_actual`} {For standards, the presumed quantity of standard,
-#'   calculated from `dil`. For samples, `quantity`}
-#'   \item{`concentration`} {The concentration of library, before dilution}
+#' \item{standard_diff} {The differences between the `ct_mean` of a standard
+#' and one step up in the dilution (ie more concentrated, lower Ct). The most
+#' concentrated dilution has a value of 0}
+#' \item{dil} {2^(standard_diff). The accuracy of this metric assumes that
+#' the efficiency of the PCR is 100%, which is likely good but not perfect! In
+#' the case of the first standard, `dil` = 0}
+#' \item{quant_actual} {For standards, the presumed quantity of standard,
+#' calculated from `dil`. For samples, `quantity`}
+#' \item{concentration}{The concentration of library, before dilution}
 #' }
 #' @export
 #'
@@ -25,9 +24,7 @@
 #' system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
 #'   read_pcr() |>
 #'   pcr_lib_calc()
-
 pcr_lib_calc <- function(pcr, dil_factor = 1000) {
-
   tidy_pcr <- tidy_if_not(pcr)
 
   tidy_pcr <- pcr_calc_slope(tidy_pcr)
@@ -35,31 +32,34 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
   wd <- tidy_pcr$data$well_data
 
   max_standard <- wd |>
-    dplyr::filter(task == "STANDARD") |>
-    dplyr::pull(quantity) |>
+    dplyr::select("quantity", "task") |>
+    dplyr::filter(.data$task == "STANDARD") |>
+    dplyr::pull(.data$quantity) |>
     max(na.rm = TRUE)
 
   original_column_order <- colnames(wd)
 
   wd <- wd |>
-    tidyr::nest(replicates = -c("sample_name", "task", "ct_mean")) |>
+    tidyr::nest(replicates = c(
+      dplyr::starts_with("."), "well", "well_position",
+      "ct", "quantity", dplyr::contains("badrox"),
+      dplyr::contains("prfdrop"), "amp_score", "cq_conf"
+    )) |>
     dplyr::group_by(.data$task) |>
     dplyr::arrange(.data$task, .data$ct_mean) |>
-    dplyr::mutate(standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean,
-                                                             default = .data$ct_mean[1]),
-                  dil = 2^.data$standard_diff,
-                  quant_actual = max_standard/cumprod(.data$dil),
-                  dil = dplyr::if_else(.data$dil == 1, 0, .data$dil)) |>
+    dplyr::mutate(
+      standard_diff = .data$ct_mean - dplyr::lag(.data$ct_mean, default = .data$ct_mean[1]),
+      dil = 2^.data$standard_diff,
+      quant_actual = max_standard / cumprod(.data$dil),
+      dil = dplyr::if_else(.data$dil == 1, 0, .data$dil)
+    ) |>
     tidyr::unnest(cols = .data$replicates) |>
-    dplyr::mutate(dplyr::across(c("dil", "standard_diff"),
-                                \(x) dplyr::if_else(.data$task == "STANDARD",
-                                                    x,
-                                                    NA_real_)),
-                  quant_actual = dplyr::if_else(.data$task == "STANDARD",
-                                                .data$quant_actual,
-                                                .data$quantity),
-                  concentration = .data$quantity_mean * dil_factor) |>
-    dplyr::relocate(dplyr::all_of(original_column_order))
+    dplyr::mutate(
+      dil = dplyr::if_else(.data$task == "STANDARD", .data$dil, NA_real_),
+      standard_diff = dplyr::if_else(.data$task == "STANDARD", .data$standard_diff, NA_real_),
+      quant_actual = dplyr::if_else(.data$task == "STANDARD", .data$quant_actual, .data$quantity),
+      concentration = .data$quantity_mean * dil_factor
+    )
 
   tidy_pcr$data$well_data <- wd
 
@@ -94,11 +94,12 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
 #'   pcr_lib_calc() |>
 #'   pcr_lib_qc()
 #'
-
 pcr_lib_qc <- function(lib_calc_pcr) {
   dat <- lib_calc_pcr$data$well_data |>
-    dplyr::select(c("task", "sample_name", "quantity_mean", "concentration", "quantity",
-                    "quant_actual", "dil", "slope", "efficiency", "r_superscript_2", "ct"))
+    dplyr::select(c(
+      "task", "sample_name", "quantity_mean", "concentration", "quantity",
+      "quant_actual", "dil", "slope", "efficiency", "r_superscript_2", "ct"
+    ))
 
   outliers <- find_outliers(dat)
 
@@ -107,24 +108,30 @@ pcr_lib_qc <- function(lib_calc_pcr) {
 
   standard_summary <- standards |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::summarize(dil = mean(.data$dil, na.rm = TRUE),
-                     quantity_mean = mean(.data$quantity, na.rm = TRUE),
-                     quant_actual = mean(.data$quant_actual, na.rm = TRUE))
+    dplyr::summarize(
+      dil = mean(.data$dil, na.rm = TRUE),
+      quantity_mean = mean(.data$quantity, na.rm = TRUE),
+      quant_actual = mean(.data$quant_actual, na.rm = TRUE)
+    )
 
   samples <- outliers |>
     dplyr::filter(.data$task == "UNKNOWN")
 
-  sample_summary <- samples  |>
+  sample_summary <- samples |>
     dplyr::select(sample_name, keep, quantity, quantity_mean, quant_adj) |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::summarize(quantity_mean = mean(.data$quantity_mean, na.rm = TRUE),
-                     quant_adj = mean(.data$quant_adj, na.rm = TRUE))
+    dplyr::summarize(
+      quantity_mean = mean(.data$quantity_mean, na.rm = TRUE),
+      quant_adj = mean(.data$quant_adj, na.rm = TRUE)
+    )
 
-  list(standards = standards,
-       samples = samples,
-       sample_summary = sample_summary,
-       standard_summary = standard_summary,
-       outliers = find_outliers(dat))
+  list(
+    standards = standards,
+    samples = samples,
+    sample_summary = sample_summary,
+    standard_summary = standard_summary,
+    outliers = find_outliers(dat)
+  )
 }
 
 #' Mark outliers and determine means and standard deviation without them
@@ -143,15 +150,21 @@ find_outliers <- function(dat) {
     dplyr::mutate(mean_wo_outlier = purrr::map(.data$data, find_mean)) |>
     tidyr::unnest_wider(.data$mean_wo_outlier) |>
     tidyr::unnest(cols = c(data)) |>
-    dplyr::mutate(keep = dplyr::case_when(.data$no_po_mean - (3*.data$no_po_sd) < .data$ct & .data$no_po_mean + (3 * .data$no_po_sd) > .data$ct ~ TRUE,
-                                          is.na(.data$no_po_sd) ~ TRUE,
-                                          TRUE ~ FALSE),
-                  keep_temp = dplyr::if_else(keep, keep, NA)) |>
+    dplyr::mutate(
+      keep = dplyr::case_when(
+        .data$no_po_mean - (3 * .data$no_po_sd) < .data$ct & .data$no_po_mean + (3 * .data$no_po_sd) > .data$ct ~ TRUE,
+        is.na(.data$no_po_sd) ~ TRUE,
+        TRUE ~ FALSE
+      ),
+      keep_temp = dplyr::if_else(keep, keep, NA)
+    ) |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::mutate(mean_adj = mean(.data$keep_temp * .data$ct, na.rm = TRUE),
-                  sd_adj   = stats::sd(.data$keep_temp * .data$ct, na.rm = TRUE),
-                  quant_adj = mean(.data$keep_temp * .data$quantity, na.rm = TRUE),
-                  z = (.data$ct-.data$mean_adj)/.data$sd_adj)
+    dplyr::mutate(
+      mean_adj = mean(.data$keep_temp * .data$ct, na.rm = TRUE),
+      sd_adj = stats::sd(.data$keep_temp * .data$ct, na.rm = TRUE),
+      quant_adj = mean(.data$keep_temp * .data$quantity, na.rm = TRUE),
+      z = (.data$ct - .data$mean_adj) / .data$sd_adj
+    )
 }
 
 #' Find mean of ct without putative outlier
@@ -167,8 +180,9 @@ find_outliers <- function(dat) {
 find_mean <- function(df) {
   cts <- df$ct
   if (nrow(df) >= 3 & !all(is.na(cts))) {
-    cts <- ifelse(is.na(cts), 0, cts)
-    hc <- cts |> stats::dist() |> stats::hclust()
+    hc <- cts |>
+      stats::dist() |>
+      stats::hclust()
     possible_outlier <- hc$merge[nrow(df) - 1, 1] |> abs()
     cts <- cts[-possible_outlier]
   }
@@ -191,19 +205,21 @@ find_mean <- function(df) {
 #'   pcr_lib_calc() |>
 #'   pcr_lib_qc() |>
 #'   pcr_lib_qc_report()
-
 pcr_lib_qc_report <- function(pcr_lib_qc, report_path = NULL) {
   report <- system.file("rmd", "pcr-lib-qc.Rmd", package = "amplify")
   if (missing(report_path)) {
-    report_path <- tempfile(pattern = paste(Sys.Date(), "pcr_lib_qc_report", sep = "_"),
-                            fileext = ".html")
+    report_path <- tempfile(
+      pattern = paste(Sys.Date(), "pcr_lib_qc_report", sep = "_"),
+      fileext = ".html"
+    )
   }
   output_dir <- stringr::str_remove(report_path, "[^/]*$")
   output_file <- stringr::str_extract(report_path, "[^/]*$")
   rmarkdown::render(report,
-                    output_dir = output_dir,
-                    output_file = output_file,
-                    params = list(data = pcr_lib_qc))
+    output_dir = output_dir,
+    output_file = output_file,
+    params = list(data = pcr_lib_qc)
+  )
   report_path
 }
 
@@ -247,48 +263,67 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
 
   dilution_lines <- ss |>
     dplyr::filter(.data$name == "quant_actual") |>
-    dplyr::mutate(line_start = 1/.data$value,
-                  line_end = dplyr::lag(.data$line_start),
-                  dil = .data$dil) |>
+    dplyr::mutate(
+      line_start = 1 / .data$value,
+      line_end = dplyr::lag(.data$line_start),
+      dil = .data$dil
+    ) |>
     dplyr::arrange(dplyr::desc(value)) |>
     dplyr::filter(!is.na(.data$line_end)) |>
-    dplyr::mutate(y = rep_len(c(1.1, 0.9), n_stans-1),
-                  y_text = rep_len(c(1.15, 0.85), n_stans-1)) |>
+    dplyr::mutate(
+      y = rep_len(c(1.1, 0.9), n_stans - 1),
+      y_text = rep_len(c(1.15, 0.85), n_stans - 1)
+    ) |>
     dplyr::rowwise() |>
     dplyr::mutate(mid = sqrt(.data$line_start * .data$line_end))
 
   vert_lines <-
     dplyr::tibble(x = c(dilution_lines$line_start, dilution_lines$line_end)) |>
     dplyr::arrange(.data$x) |>
-    dplyr::mutate(y = rep(rep(c(1.1, 0.9), length.out = n_stans - 1), each = 2),
-                  yend = rep(rep(c(1.05, 0.98), length.out = n_stans - 1), each = 2))
+    dplyr::mutate(
+      y = rep(rep(c(1.1, 0.9), length.out = n_stans - 1), each = 2),
+      yend = rep(rep(c(1.05, 0.98), length.out = n_stans - 1), each = 2)
+    )
 
   ss |>
-    ggplot2::ggplot(aes(x = 1/.data$value, y = 1, color = .data$name)) +
+    ggplot2::ggplot(aes(x = 1 / .data$value, y = 1, color = .data$name)) +
     ggplot2::geom_point(size = 10, alpha = 0.7) +
     ggplot2::scale_color_manual(values = c("#00AAAA", "#222222")) +
-    ggplot2::geom_segment(data = dilution_lines,
-                          aes(x = .data$line_start, xend = .data$line_end,
-                              y = .data$y, yend = .data$y),
-                          size = 1) +
-    ggplot2::geom_segment(data = vert_lines,
-                          aes(x = .data$x, xend = .data$x,
-                              y = .data$y, yend = .data$yend),
-                          color = "#00AAAA", size = 1) +
-    ggplot2::geom_text(data = dilution_lines,
-                       aes(label = round(.data$dil, 1),
-                           y = .data$y_text,
-                           x = .data$mid),
-                       size = 8) +
+    ggplot2::geom_segment(
+      data = dilution_lines,
+      aes(
+        x = .data$line_start, xend = .data$line_end,
+        y = .data$y, yend = .data$y
+      ),
+      size = 1
+    ) +
+    ggplot2::geom_segment(
+      data = vert_lines,
+      aes(
+        x = .data$x, xend = .data$x,
+        y = .data$y, yend = .data$yend
+      ),
+      color = "#00AAAA", size = 1
+    ) +
+    ggplot2::geom_text(
+      data = dilution_lines,
+      aes(
+        label = round(.data$dil, 1),
+        y = .data$y_text,
+        x = .data$mid
+      ),
+      size = 8
+    ) +
     ggplot2::scale_x_log10() +
     ggplot2::theme_minimal() +
-    ggplot2::theme(panel.grid = element_blank(),
-                   axis.title = element_blank(),
-                   axis.text = element_blank(),
-                   legend.position = "none") +
+    ggplot2::theme(
+      panel.grid = element_blank(),
+      axis.title = element_blank(),
+      axis.text = element_blank(),
+      legend.position = "none"
+    ) +
     ggplot2::coord_cartesian(ylim = c(0.8, 1.2)) +
-    ggplot2::geom_point(data = lib_qc$sample_summary, aes(x = 1/.data$quantity_mean, y = 1), color = "red")
-
+    ggplot2::geom_point(data = lib_qc$sample_summary, aes(x = 1 / .data$quantity_mean, y = 1), color = "red")
 }
 
 
@@ -313,30 +348,40 @@ pcr_lib_qc_plot_dil <- function(lib_qc) {
 pcr_lib_qc_plot_outliers <- function(lib_qc) {
   lib_qc$outliers |>
     dplyr::group_by(.data$sample_name) |>
-    dplyr::mutate(z = (.data$ct-.data$mean_adj)/.data$sd_adj,
-                  overflow = abs(.data$z) > 10,
-                  z_plot = dplyr::case_when(.data$z > 10 ~ 10,
-                                            .data$z < -10 ~ -10,
-                                            TRUE ~ .data$z),
-                  label = dplyr::case_when(.data$z > 10 ~ paste(as.character(round(.data$z, 0)),">>>"),
-                                           .data$z < -10 ~ paste("<<<", as.character(round(.data$z, 0))),
-                                           TRUE ~ NA_character_)) |>
+    dplyr::mutate(
+      z = (.data$ct - .data$mean_adj) / .data$sd_adj,
+      overflow = abs(.data$z) > 10,
+      z_plot = dplyr::case_when(
+        .data$z > 10 ~ 10,
+        .data$z < -10 ~ -10,
+        TRUE ~ .data$z
+      ),
+      label = dplyr::case_when(
+        .data$z > 10 ~ paste(as.character(round(.data$z, 0)), ">>>"),
+        .data$z < -10 ~ paste("<<<", as.character(round(.data$z, 0))),
+        TRUE ~ NA_character_
+      )
+    ) |>
     dplyr::filter(!is.na(.data$sample_name)) |>
     ggplot2::ggplot(aes(x = .data$z_plot, y = .data$sample_name, color = .data$keep, shape = .data$overflow)) +
     ggplot2::scale_color_manual(values = c("#666666", "#00AAAA")) +
     ggplot2::scale_shape_manual(values = c(16, NA)) +
     ggplot2::geom_text(aes(label = .data$label), size = 5) +
-    ggplot2::geom_rect(xmin = -3, xmax = 3, ymin = 0, ymax = nrow(lib_qc$outliers), fill = "#AACCCC",  alpha = 0.1,  color = NA) +
+    ggplot2::geom_rect(xmin = -3, xmax = 3, ymin = 0, ymax = nrow(lib_qc$outliers), fill = "#AACCCC", alpha = 0.1, color = NA) +
     ggplot2::geom_vline(xintercept = 0, color = "#555555") +
     ggplot2::geom_point(size = 5) +
     ggplot2::xlab("Z-score") +
-    ggplot2::coord_cartesian(xlim = c(-11.5, 11.5),
-                             ylim = c(0.5, length(unique(lib_qc$outliers$sample_name)) + 0.5),
-                             expand = FALSE) +
-    ggplot2::theme(panel.grid.major.x = element_blank(),
-                   axis.title.y = element_blank(),
-                   panel.grid.minor.x = element_blank(),
-                   legend.position = "none")
+    ggplot2::coord_cartesian(
+      xlim = c(-11.5, 11.5),
+      ylim = c(0.5, length(unique(lib_qc$outliers$sample_name)) + 0.5),
+      expand = FALSE
+    ) +
+    ggplot2::theme(
+      panel.grid.major.x = element_blank(),
+      axis.title.y = element_blank(),
+      panel.grid.minor.x = element_blank(),
+      legend.position = "none"
+    )
 }
 
 #' Plot concentration of libraries across samples
@@ -359,9 +404,11 @@ pcr_lib_qc_plot_conc <- function(lib_qc) {
     ggplot2::ggplot(aes(x = .data$sample_name, y = .data$value, color = .data$name)) +
     ggplot2::geom_point(size = 5, alpha = 0.8, shape = 16) +
     ggplot2::scale_color_manual(values = c(quantity_mean = "#666666", quant_adj = "#00AAAA")) +
-    ggplot2::theme(axis.title = element_blank(),
-                   legend.position = "none",
-                   axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5))
+    ggplot2::theme(
+      axis.title = element_blank(),
+      legend.position = "none",
+      axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5)
+    )
 }
 
 #' Plot the log of library quantities vs Ct
@@ -387,17 +434,20 @@ pcr_lib_qc_plot_conc <- function(lib_qc) {
 #'   pcr_lib_qc_plot_slope()
 pcr_lib_qc_plot_slope <- function(lib_qc) {
   slope_text <-
-    dplyr::tibble(x = -2.5, y = 20,
-                  label = paste(paste("Slope:", round(lib_qc$standards$slope[1], 2)),
-                                paste("R\u00B2:", round(lib_qc$standards$r_superscript_2[1], 2)),
-                                paste0("Efficiency: ", round(lib_qc$standards$efficiency[1], 1), "%"),
-                                sep = "\n"))
+    dplyr::tibble(
+      x = -2.5, y = 20,
+      label = paste(paste("Slope:", round(lib_qc$standards$slope[1], 2)),
+        paste("R\u00B2:", round(lib_qc$standards$r_superscript_2[1], 2)),
+        paste0("Efficiency: ", round(lib_qc$standards$efficiency[1], 1), "%"),
+        sep = "\n"
+      )
+    )
 
   lib_qc$standards |>
     ggplot2::ggplot(aes(x = log10(.data$quantity), y = .data$ct)) +
     ggplot2::geom_point(color = "#00AAAA", size = 5) +
     ggplot2::geom_smooth(method = "lm", se = F, color = "#666666", formula = "y ~ x") +
-    ggplot2::geom_text(data = slope_text, aes(x = .data$x,  y = .data$y, label = .data$label), size = 8) +
+    ggplot2::geom_text(data = slope_text, aes(x = .data$x, y = .data$y, label = .data$label), size = 8) +
     ggplot2::xlab("Log10(Quantity)") +
     ggplot2::ylab("CT")
 }
