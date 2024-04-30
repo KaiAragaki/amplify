@@ -103,7 +103,7 @@ get_control_probe <- function(df, control_probe) {
       stop("`control_probe` is NULL and `x$endogenous_control` does not exist")
     }
     control_probe <- na.omit(unique(df$endogenous_control))
-    if (length(control_probe != 1))
+    if (length(control_probe) != 1)
       stop("length(unique(probes)) in `endogenous_control` != 1.")
   }
   control_probe
