@@ -99,7 +99,7 @@ pcr_rq.data.frame <- function(x, relative_sample, control_probe = NULL, ...) {
 
 get_control_probe <- function(df, control_probe) {
   if (is.null(control_probe)) {
-    if (!"endogenous_control" %in% names) {
+    if (!"endogenous_control" %in% names(df)) {
       stop("`control_probe` is NULL and `x$endogenous_control` does not exist")
     }
     control_probe <- na.omit(unique(df$endogenous_control))
