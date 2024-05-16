@@ -101,7 +101,7 @@ pcr_lib_qc <- function(lib_calc_pcr) {
       "quant_actual", "dil", "slope", "efficiency", "r_superscript_2", "ct"
     ))
 
-  dat <- dplyr::filter(!is.na(.data$sample_name))
+  dat <- dplyr::filter(dat, !is.na(.data$sample_name))
 
   outliers <- find_outliers(dat)
 
