@@ -101,6 +101,8 @@ pcr_lib_qc <- function(lib_calc_pcr) {
       "quant_actual", "dil", "slope", "efficiency", "r_superscript_2", "ct"
     ))
 
+  dat <- dplyr::filter(!is.na(.data$sample_name))
+
   outliers <- find_outliers(dat)
 
   standards <- outliers |>
@@ -144,6 +146,7 @@ pcr_lib_qc <- function(lib_calc_pcr) {
 #' @importFrom rlang .data
 
 find_outliers <- function(dat) {
+
   dat |>
     dplyr::group_by(sample_name) |>
     tidyr::nest() |>
