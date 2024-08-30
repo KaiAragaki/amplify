@@ -2,6 +2,8 @@
 
 S3method(pcr_control,data.frame)
 S3method(pcr_control,pcr)
+S3method(pcr_plate_view,data.frame)
+S3method(pcr_plate_view,pcr)
 S3method(pcr_plot,data.frame)
 S3method(pcr_plot,pcr)
 S3method(pcr_rq,data.frame)
