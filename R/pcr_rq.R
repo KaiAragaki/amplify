@@ -18,11 +18,11 @@ pcr_rq <- function(x, relative_sample, control_probe = NULL, ...) {
 #' @examples
 #' dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 #'
-#' pcr_tidy(dat_path) |>
+#' read_pcr(dat_path) |>
 #'   pcr_rq("U6D1")
 #'
 #' # Can also be run after using pcr_control:
-#' pcr_tidy(dat_path) |>
+#' read_pcr(dat_path) |>
 #'   pcr_control("GAPDH") |>
 #'   pcr_rq("U6D1")
 pcr_rq.pcr <- function(x, relative_sample, control_probe = NULL, ...) {
@@ -61,40 +61,45 @@ pcr_rq.data.frame <- function(x, relative_sample, control_probe = NULL, ...) {
   used_wells <- x |>
     dplyr::filter(!is.na(.data$target_name), !is.na(.data$sample_name))
 
-  with_ct_summaries <- used_wells |>
-    dplyr::mutate(
+  ct_summaries <- used_wells |>
+    dplyr::summarize(
       ct_mean = mean(.data$ct, na.rm = TRUE),
       ct_sd = stats::sd(.data$ct, na.rm = TRUE),
       rep = dplyr::n(),
       .by = c("target_name", "sample_name")
     )
 
-  minimal_data <- with_ct_summaries |>
-    dplyr::select(
-      ".row", ".col", "ct_mean", "ct_sd", "target_name", "sample_name", "rep"
-    )
+  minimal_data <- ct_summaries |>
+    dplyr::select("ct_mean", "ct_sd", "target_name", "sample_name", "rep")
 
-  minimal_data_with_deltas <- minimal_data |>
-    dplyr::mutate(
-      delta_ct = .data$ct_mean - .data$ct_mean[.data$target_name == control_probe],
-      delta_ct_sd  = sqrt(.data$ct_sd^2 + .data$ct_sd[.data$target_name == control_probe]^2),
-      delta_ct_se  = .data$delta_ct_sd / sqrt(.data$rep),
-      df = max(1, .data$rep + .data$rep[.data$target_name == control_probe] - 2),
-      t = stats::qt(.05 / 2, .data$df, lower.tail = FALSE),
-      .by = "sample_name"
-    ) |>
-    dplyr::mutate(
-      delta_delta_ct = .data$delta_ct - .data$delta_ct[.data$sample_name == relative_sample],
-      rq = 2^-(.data$delta_delta_ct),
-      rq_min = 2^-(.data$delta_delta_ct + .data$t * .data$delta_ct_se),
-      rq_max = 2^-(.data$delta_delta_ct - .data$t * .data$delta_ct_se),
-      .by = "target_name"
-    )
+  calc_dct <- function(x) {
+    control <- dplyr::filter(x, .data$target_name == control_probe)
+    x$delta_ct <- x$ct_mean - control$ct_mean
+    x$delta_ct_sd <- sqrt(x$ct_sd^2 + control$ct_sd^2)
+    x$delta_ct_se <- x$delta_ct_sd / sqrt(x$rep)
+    x$df <- max(1, x$rep + control$rep - 2)
+    x$t <- stats::qt(0.05 / 2, x$df, lower.tail = FALSE)
+    x
+  }
 
-  left_join(
-    with_ct_summaries, minimal_data_with_deltas,
-    by = dplyr::all_of(colnames(minimal_data))
-  )
+  calc_rq <- function(x) {
+    relative <- dplyr::filter(x, .data$sample_name == relative_sample)
+    x$delta_delta_ct <- x$delta_ct - relative$delta_ct
+    x$rq <- 2^-(x$delta_delta_ct)
+    x$rq_min <- 2^-(x$delta_delta_ct + x$t * x$delta_ct_se)
+    x$rq_max <- 2^-(x$delta_delta_ct - x$t * x$delta_ct_se)
+    x
+  }
+
+  w_rq <- minimal_data |>
+    tapply(~sample_name, calc_dct) |>
+    array2DF() |>
+    dplyr::select(-1) |>
+    tapply(~target_name, calc_rq) |>
+    array2DF() |>
+    dplyr::select(-1)
+
+  dplyr::left_join(used_wells, w_rq, by = c("sample_name", "target_name"))
 }
 
 get_control_probe <- function(df, control_probe) {

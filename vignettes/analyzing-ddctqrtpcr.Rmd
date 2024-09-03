@@ -34,24 +34,24 @@ library(ggplot2)
 library(stringr)
 ```
 
-We have a particular advantage because although the data are untidy, they are untidy in a very specific way. Reading in data is as simple as running `pcr_tidy`, which is given a path to the pcr .xls(x) file. If no path is given, an interactive file explorer window will appear for the user to choose the file.
+We have a particular advantage because although the data are untidy, they are untidy in a very specific way. Reading in data is as simple as running `read_pcr` and `scrub` (re-exports from the [`mop`](https://github.com/KaiAragaki/mop) package), which is given a path to the pcr .xls(x) file. If no path is given, an interactive file explorer window will appear for the user to choose the file.
 
 ```{r read_in_data}
-dat <- 
-  system.file("extdata", "untidy-pcr-example-2.xlsx", package = "amplify") |> 
-  pcr_tidy()
+dat <- system.file("extdata", "untidy-pcr-example-2.xlsx", package = "amplify") |>
+  read_pcr() |>
+  scrub()
 dat
 ```
 
-The typical format of PCR data is woefully non-rectangular. `pcr_tidy` fixes this by skipping to the good bits, but also pulling out useful metadata supplied in the header and footer of the dataset - like the last few columns:
+The typical format of PCR data is woefully non-rectangular. `amplify` fixes this by skipping to the good bits, but also pulling out useful metadata supplied in the header and footer of the dataset - like the last few columns:
 
 ```{r}
-select(dat, plate_type:ref_samp)
+select(dat, analysis_type:reference_sample)
 ```
 
 # Plate Plotting with `pcr_plate_view`
 
-`pcr_tidy` also adds two features derived from the `well_position` feature into two separate features - `well_row` and `well_col`. This makes downstream plotting particularly easy. A built in function can do this automatically for us:
+`pcr_plate_view` makes it very easy to get a bird's-eye view of the plate:
 
 ```{r plot_plate_target}
 pcr_plate_view(dat)
@@ -68,15 +68,16 @@ pcr_plate_view(dat, "sample_name")
 We can also look at CT:
 
 ```{r plot_plate_ct}
-pcr_plate_view(dat, fill = "ct") + 
-  scale_fill_viridis_c()
+pcr_plate_view(dat, fill = ct) +
+  scale_color_viridis_c(end = 0.9)
 ```
 
 Looks like some didn't amplify at all. 
 You might consider looking at it with `rq` but...
 
 ```{r plot_plate_rq}
-pcr_plate_view(dat, fill = "rq") + scale_fill_viridis_c()
+pcr_plate_view(dat, fill = rq) +
+  scale_color_viridis_c()
 ```
 
 Immediately we see a loss of information: Not only are the scales between
@@ -99,16 +100,16 @@ We notice the differences between cell lines, but the large dynamic range makes 
 First, we need to extract the cell line from the sample name. Additionally, I don't like how it says "Zeb1" and "Zeb2" instead of "ZEB1" and "ZEB2" (the capitalization may mislead people into thinking this is murine, when it is in fact human). I'll change that here.
 
 ```{r}
-dat <- dat |> 
-  mutate(cell_line = str_extract(sample_name, "^.*(?=[:space:])")) |> 
+dat <- dat |>
+  mutate(cell_line = str_extract(sample_name, "^.*(?=[:space:])")) |>
   mutate(target_name = str_replace(target_name, "Zeb", "ZEB"))
 ```
 
 As an example, let's look at UC14:
 
 ```{r}
-uc14 <- dat |> 
-  filter(cell_line == "UC14") |> 
+uc14 <- dat |>
+  filter(cell_line == "UC14") |>
   pcr_rq("UC14 PBS")
 
 pcr_plot(uc14)
@@ -117,7 +118,7 @@ pcr_plot(uc14)
 I personally prefer it when the control is on the left and the experimental conditions are on the right - let's flip them. While we're at it, let's get rid of the legend - it doesn't tell us any extra information and is just taking up space.
 
 ```{r}
-uc14 <- uc14 |> 
+uc14 <- uc14 |>
   mutate(sample_name = factor(sample_name, levels = c("UC14 PBS", "UC14 Drug")))
 
 pcr_plot(uc14) +
@@ -141,10 +142,10 @@ Umm...it doesn't look any different. And that's what we should expect: the plott
 
 ```{r}
 wise <- uc14 |> 
-  filter(well_position != "C24") %>%
+  filter(well_position != "C24") |>
   pcr_rq("UC14 PBS")
 
 pcr_plot(wise)
 ```
 
-Now, we see that the ZEB1 values have updated to reflect the ommision we made.
+Now, we see that the ZEB1 values have updated to reflect the omission we made.

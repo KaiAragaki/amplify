@@ -30,11 +30,11 @@ Recalculate relative quantities for a given experiment
 \examples{
 dat_path <- system.file("extdata", "untidy-pcr-example.xls", package = "amplify")
 
-pcr_tidy(dat_path) |>
+read_pcr(dat_path) |>
   pcr_rq("U6D1")
 
 # Can also be run after using pcr_control:
-pcr_tidy(dat_path) |>
+read_pcr(dat_path) |>
   pcr_control("GAPDH") |>
   pcr_rq("U6D1")
 }

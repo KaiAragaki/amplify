@@ -19,6 +19,6 @@ View sample plating layout
 }
 \examples{
 system.file("extdata", "untidy-pcr-example.xls", package = "amplify") |>
-  pcr_tidy() |>
+  read_pcr() |>
   pcr_plate_view()
 }
