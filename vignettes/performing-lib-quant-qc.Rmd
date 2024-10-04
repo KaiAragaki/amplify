@@ -33,15 +33,15 @@ When RNA libraries are generated, their absolute concentrations need to be estab
 
 # Reading and Tidying Data
 
-amplify takes 'results' (`.xls(x)`) files exported from QuantStudio. They can be tidied easily by providing a path to `pcr_tidy`. We also add `pad_zero = TRUE`, which changes the default value of, say `Sample 1` to `Sample 01`. This will help with out plotting order down the line.
+amplify takes 'results' (`.xls(x)`) files exported from QuantStudio. They can be read in with `read_pcr` and tidied easily by providing a path to `tidy_lab`. We also add `pad_zero = TRUE`, which changes the default value of, say `Sample 1` to `Sample 01`. This will help with out plotting order down the line.
 
 ```{r tidy}
-tidy_lib <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |> 
-  pcr_tidy(pad_zero = TRUE)
+tidy_lib <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
+  read_pcr() |>
+  tidy_lab(pad_zero = TRUE)
 
-tidy_lib |> 
-  select(1:10) |> 
-  head()
+# scrub - from {mop} - turns an object into a data.frame
+scrub(tidy_lib)
 ```
 
 By default, `pcr_tidy` assumes you have a standards serial dilution starting at 6.8, diluted by a factor of 10, going all the way down to 0.00068, and that you want all of them. There are a couple instances in which this might not be the case:
@@ -52,23 +52,14 @@ By default, `pcr_tidy` assumes you have a standards serial dilution starting at 
 In that instance, you would supply a numeric vector to the `usr_standards` argument. If you wish to omit a given set of standards, simply do not include them in this vector:
 
 ```{r}
-system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |> 
-  pcr_tidy(pad_zero = TRUE, usr_standards = c(6.8, .68, .068, .0068)) |> 
-  select(1:10) |> 
-  head()
-```
-This will automatically update the slope column of the dataframe as well. This can be called standalone (say, after manually removing a few standards replicates from your dataset) by running `pcr_calc_slope`:
+custom_lib <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify") |>
+  read_pcr() |>
+  tidy_lab(pad_zero = TRUE, usr_standards = c(6.8, .68, .068, .0068))
 
-```{r}
-recalc <- tidy_lib |> 
-  filter(quantity > 0.0068 | task != "STANDARD") |> 
-  pcr_calc_slope()
-
-recalc$slope[1]
-tidy_lib$slope[1]
-
+scrub(custom_lib)
 ```
 
+This will automatically update the slope column of the dataframe as well. This can be called standalone (say, after manually removing a few standards replicates from your dataset) by running `pcr_calc_slope`
 
 # Calculating Library Concentration
 
@@ -80,6 +71,7 @@ lib_conc <- tidy_lib |>
   pcr_lib_calc(dil_factor = 1000)
 
 lib_conc |>
+  scrub() |>
   select(sample_name, concentration)
   
 ```

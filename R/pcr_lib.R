@@ -27,9 +27,7 @@
 pcr_lib_calc <- function(pcr, dil_factor = 1000) {
   tidy_pcr <- tidy_if_not(pcr)
 
-  tidy_pcr <- pcr_calc_slope(tidy_pcr)
-
-  wd <- tidy_pcr$data$well_data
+  wd <- pcr_calc_slope(tidy_pcr)
 
   max_standard <- wd |>
     dplyr::select("quantity", "task") |>
@@ -43,7 +41,8 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
     tidyr::nest(replicates = c(
       dplyr::starts_with("."), "well", "well_position",
       "ct", "quantity", dplyr::contains("badrox"),
-      dplyr::contains("prfdrop"), "amp_score", "cq_conf"
+      dplyr::contains("prfdrop"), dplyr::contains("amp_score"),
+      dplyr::contains("cq_conf")
     )) |>
     dplyr::group_by(.data$task) |>
     dplyr::arrange(.data$task, .data$ct_mean) |>

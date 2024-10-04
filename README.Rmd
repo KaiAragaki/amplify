@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-**amplify** automates routine pcr-based tasks - including plate planning, dilution making, visualizing, and analyzing - so rather than thinking about your experiments themselves, you can think about what your experiments *mean*.
+**amplify** automates routine pcr-based tasks - including plate planning, dilution making, visualizing, and analyzing.
 
 ## Installation
 
@@ -50,18 +50,20 @@ untidy_file_path |>
   head()
 ```
 
-amplify provides `pcr_tidy` to automatically tidy these files:
+amplify provides `read_pcr` to read in and `tidy_lab` (from {mop}) to automatically tidy these files. `scrub` (also from {mop}) can convert `tidy_lab` objects to `data.frame`s
 
 ```{r tidy_pcr}
 tidy_pcr <- untidy_file_path |> 
-  pcr_tidy()
+  read_pcr() |>
+  tidy_lab()
 
 tidy_pcr |>
+  scrub() |>
   select(1:10) |> 
   head()
 ```
 
-`pcr_tidy` works with both ddCt or standard curve result files.
+This works with both ddCt or standard curve result files.
 
 ## Plotting qPCR results
 
@@ -90,8 +92,10 @@ RNA library preparation results output from Quantstudio can be tidied using `pcr
 
 ```{r}
 untidy_lib_path <- system.file("extdata", "untidy-standard-curve.xlsx", package = "amplify")
-tidy_lib <- pcr_tidy(untidy_lib_path, pad_zero = TRUE) 
+tidy_lib <- read_pcr(untidy_lib_path) |>
+  tidy_lab(pad_zero = TRUE) 
 tidy_lib |>
+  scrub() |>
   select(1:10) |> 
   head()
 ```
@@ -101,8 +105,10 @@ Calculating the concentration of library (before dilution) can be performed usin
 ```{r}
 calc_lib <- pcr_lib_calc(tidy_lib) 
 
-calc_lib |> 
-  select(task, sample_name, concentration) |> 
+calc_lib |>
+  scrub() |>
+  filter(task == "UNKNOWN") |>
+  select(sample_name, concentration) |>
   head()
 ```
 ### Library preparation quantification quality control
