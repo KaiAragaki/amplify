@@ -1,13 +1,16 @@
 #' Recalculate relative quantities for a given experiment
 #'
 #' @param x A `pcr` or `data.frame`
-#' @param relative_sample A sample to set others relative to (eg `my_dmso_sample`)
+#' @param relative_sample A sample to set others relative to (eg
+#'   `my_dmso_sample`)
+#' @param group Character vector to specify columns used for subsetting data, where each
+#'   group will have its own relative_sample
 #' @param control_probe Character. `target_name` to serve as endogenous control.
 #' @param ... Arguments passed to respective method
 #'
 #' @return An object of same class as `x`
 #' @export
-pcr_rq <- function(x, relative_sample, control_probe = NULL, ...) {
+pcr_rq <- function(x, relative_sample, group = NULL, control_probe = NULL, ...) {
   UseMethod("pcr_rq")
 }
 
@@ -25,7 +28,7 @@ pcr_rq <- function(x, relative_sample, control_probe = NULL, ...) {
 #' read_pcr(dat_path) |>
 #'   pcr_control("GAPDH") |>
 #'   pcr_rq("U6D1")
-pcr_rq.pcr <- function(x, relative_sample, control_probe = NULL, ...) {
+pcr_rq.pcr <- function(x, relative_sample, group = NULL, control_probe = NULL, ...) {
 
   pcr_clean <- tidy_if_not(x)
 
@@ -35,15 +38,15 @@ pcr_rq.pcr <- function(x, relative_sample, control_probe = NULL, ...) {
 
   pcr_clean |>
     mop::scrub() |>
-    pcr_rq.data.frame(relative_sample, control_probe) |>
+    pcr_rq.data.frame(relative_sample, group, control_probe) |>
     mop::as_pcr()
 }
 
 #' @export
 #' @rdname pcr_rq
-pcr_rq.data.frame <- function(x, relative_sample, control_probe = NULL, ...) {
+pcr_rq.data.frame <- function(x, relative_sample, group = NULL, control_probe = NULL, ...) {
   control_probe <- get_control_probe(x, control_probe)
-
+  x <- make_group_col(x, group)
   # Minimally required columns
   stopifnot(
     all(c(".row", ".col", "ct", "target_name", "sample_name") %in% colnames(x))
@@ -66,40 +69,32 @@ pcr_rq.data.frame <- function(x, relative_sample, control_probe = NULL, ...) {
       ct_mean = mean(.data$ct, na.rm = TRUE),
       ct_sd = stats::sd(.data$ct, na.rm = TRUE),
       rep = dplyr::n(),
-      .by = c("target_name", "sample_name")
+      .by = c("target_name", "sample_name", "..group")
     )
 
   minimal_data <- ct_summaries |>
-    dplyr::select("ct_mean", "ct_sd", "target_name", "sample_name", "rep")
+    dplyr::select(
+      "ct_mean", "ct_sd", "target_name", "sample_name", "rep", "..group"
+    )
 
-  calc_dct <- function(x) {
-    control <- dplyr::filter(x, .data$target_name == control_probe)
-    x$delta_ct <- x$ct_mean - control$ct_mean
-    x$delta_ct_sd <- sqrt(x$ct_sd^2 + control$ct_sd^2)
-    x$delta_ct_se <- x$delta_ct_sd / sqrt(x$rep)
-    x$df <- max(1, x$rep + control$rep - 2)
-    x$t <- stats::qt(0.05 / 2, x$df, lower.tail = FALSE)
-    x
-  }
+  minimal_data <- tidyr::unite(
+    minimal_data, "sample_group", c("sample_name", "..group"), remove = FALSE
+  )
 
-  calc_rq <- function(x) {
-    relative <- dplyr::filter(x, .data$sample_name == relative_sample)
-    x$delta_delta_ct <- x$delta_ct - relative$delta_ct
-    x$rq <- 2^-(x$delta_delta_ct)
-    x$rq_min <- 2^-(x$delta_delta_ct + x$t * x$delta_ct_se)
-    x$rq_max <- 2^-(x$delta_delta_ct - x$t * x$delta_ct_se)
-    x
-  }
+  minimal_data <- tidyr::unite(
+    minimal_data, "target_group", c("target_name", "..group"), remove = FALSE
+  )
 
   w_rq <- minimal_data |>
-    tapply(~sample_name, calc_dct) |>
+    tapply(~sample_group, \(x) calc_dct(x, control_probe)) |>
     array2DF() |>
     dplyr::select(-1) |>
-    tapply(~target_name, calc_rq) |>
+    tapply(~target_group, \(x) calc_rq(x, relative_sample)) |>
     array2DF() |>
     dplyr::select(-1)
 
-  dplyr::left_join(used_wells, w_rq, by = c("sample_name", "target_name"))
+
+  dplyr::left_join(used_wells, w_rq, by = c("sample_name", "target_name", "..group"))
 }
 
 get_control_probe <- function(df, control_probe) {
@@ -112,4 +107,32 @@ get_control_probe <- function(df, control_probe) {
       stop("length(unique(probes)) in `endogenous_control` != 1.")
   }
   control_probe
+}
+
+make_group_col <- function(data, group) {
+  if (is.null(group)) {
+    data$..group <- 1
+    return(data)
+  }
+  stopifnot(all(group %in% colnames(data)))
+  tidyr::unite(data, "..group", dplyr::all_of(group), remove = FALSE)
+}
+
+calc_dct <- function(x, control_probe) {
+  control <- dplyr::filter(x, .data$target_name == control_probe)
+  x$delta_ct <- x$ct_mean - control$ct_mean
+  x$delta_ct_sd <- sqrt(x$ct_sd^2 + control$ct_sd^2)
+  x$delta_ct_se <- x$delta_ct_sd / sqrt(x$rep)
+  x$df <- max(1, x$rep + control$rep - 2)
+  x$t <- stats::qt(0.05 / 2, x$df, lower.tail = FALSE)
+  x
+}
+
+calc_rq <- function(x, relative_sample) {
+  relative <- dplyr::filter(x, .data$sample_name == relative_sample)
+  x$delta_delta_ct <- x$delta_ct - relative$delta_ct
+  x$rq <- 2^-(x$delta_delta_ct)
+  x$rq_min <- 2^-(x$delta_delta_ct + x$t * x$delta_ct_se)
+  x$rq_max <- 2^-(x$delta_delta_ct - x$t * x$delta_ct_se)
+  x
 }
