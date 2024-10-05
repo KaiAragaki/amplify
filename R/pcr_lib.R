@@ -58,7 +58,8 @@ pcr_lib_calc <- function(pcr, dil_factor = 1000) {
       standard_diff = dplyr::if_else(.data$task == "STANDARD", .data$standard_diff, NA_real_),
       quant_actual = dplyr::if_else(.data$task == "STANDARD", .data$quant_actual, .data$quantity),
       concentration = .data$quantity_mean * dil_factor
-    )
+    ) |>
+    dplyr::ungroup()
 
   tidy_pcr$data$well_data <- wd
 
