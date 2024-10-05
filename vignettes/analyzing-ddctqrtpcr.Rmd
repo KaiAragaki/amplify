@@ -62,7 +62,7 @@ This high level overview lets us see there's something curious going on with A1.
 What about the *sample* layout?
 
 ```{r plot_plate_sample}
-pcr_plate_view(dat, "sample_name")
+pcr_plate_view(dat, sample_name)
 ```
 
 We can also look at CT:
