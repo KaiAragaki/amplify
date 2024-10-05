@@ -67,11 +67,11 @@ pcr_plan <- function(data, n_primers, format = 384, exclude_border = TRUE,
 
   with_primers <- gplate::gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, labels = pn)
 
-  max_sections <- max(with_primers$well_data$.sec, na.rm = TRUE)
+  max_sections <- max(as.numeric(with_primers$well_data$.sec), na.rm = TRUE)
 
   if (max_sections < n_primers) {
     with_primers <- gplate::gp_sec(plate, "primers", nrow = n_samples + ntc, ncol = reps, break_sections = FALSE, flow = "col", wrap = TRUE, labels = pn)
-    max_sections_wrap <- max(with_primers$well_data$.sec, na.rm = TRUE)
+    max_sections_wrap <- max(as.numeric(with_primers$well_data$.sec), na.rm = TRUE)
 
     if (max_sections_wrap < n_primers)
       rlang::abort("This experiment requires too many wells.")
