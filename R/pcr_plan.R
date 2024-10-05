@@ -155,8 +155,8 @@ pcr_plan_report <- function(pcr_plan, file_path = NULL) {
 #'
 #' @keywords internal
 get_sample_names <- function(data, has_names) {
-  names <- ifelse(has_names, data[[1]], paste("Sample", 1:nrow(data))) |>
-    c("NTC")
+  if (has_names) return(c(data[[1]], "NTC"))
+  c(paste("Sample", seq_len(nrow(data))), "NTC")
 }
 
 #' Calculate a sensible dilution factor
